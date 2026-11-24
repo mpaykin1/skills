@@ -1,0 +1,7 @@
+{
+ "session_lock":"session.json", "hands_reference":"hands.png", "weapon_reference":"weapon.png",
+ "hands_mode":"visible", "angle_source":"visual",
+ "frames":[{"file":"frames/000.png","yaw":0,"pitch":0,"ms":40}],
+ "keys":{"CENTER":0,"UP":0,"DOWN":0,"CENTER_RETURN":0,"RIGHT":0,"LEFT":0},
+ "review":{"all_views":false,"full_silhouette":false,"same_hands":false,"same_weapon":false,"smooth_and_seamless":false,"outward":false,"frame_digest":"","weapon_sha256":""}
+}

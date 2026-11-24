@@ -1,0 +1,63 @@
+{
+  "schema": "meta-skills/1",
+  "packages": [
+    {
+      "name": "sprite-stacking-grunge",
+      "version": "0.1.0",
+      "files": 2,
+      "skill": "packages/sprite-stacking-grunge/skills/sprite-stacking-grunge/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    },
+    {
+      "name": "gif-asset-animator",
+      "version": "0.1.0",
+      "files": 2,
+      "skill": "packages/gif-asset-animator/skills/gif-asset-animator/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    },
+    {
+      "name": "grange",
+      "version": "0.1.12",
+      "files": 15,
+      "skill": "packages/grange/skills/grange/SKILL.md",
+      "excluded": [
+        "references/car-style.png (binary, rights not checked)"
+      ],
+      "status": "source snapshot"
+    },
+    {
+      "name": "gif-outside",
+      "version": "1.0.0",
+      "files": 2,
+      "skill": "packages/gif-outside/skills/gif-outside/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    },
+    {
+      "name": "ghost-gif-interior",
+      "version": "1.0.0",
+      "files": 2,
+      "skill": "packages/ghost-gif-interior/skills/ghost-gif-interior/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    },
+    {
+      "name": "gif-space",
+      "version": "1.0.0",
+      "files": 2,
+      "skill": "packages/gif-space/skills/gif-space/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    },
+    {
+      "name": "fantasy-weapon-gif",
+      "version": "0.1.0",
+      "files": 3,
+      "skill": "packages/fantasy-weapon-gif/skills/fantasy-weapon-gif/SKILL.md",
+      "excluded": [],
+      "status": "source snapshot"
+    }
+  ]
+}
