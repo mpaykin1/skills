@@ -106,6 +106,54 @@
       "skill": "packages/png-living-3d-city/skills/png-living-3d-city/SKILL.md",
       "excluded": [],
       "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "living-image-animator",
+      "version": "0.37.0",
+      "files": 19,
+      "skill": "packages/living-image-animator/skills/living-image-animator/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "skill-synergy-manager",
+      "version": "0.8.2",
+      "files": 18,
+      "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "meta-game-fusion",
+      "version": "2.4.0",
+      "files": 20,
+      "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "blender-model-animation-enhancer",
+      "version": "1.9.2",
+      "files": 20,
+      "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "game-style-forge",
+      "version": "1.10.3",
+      "files": 12,
+      "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "voxel-atmosphere-engine",
+      "version": "0.10.2",
+      "files": 3,
+      "skill": "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md",
+      "excluded": [],
+      "status": "partial source snapshot; additional files and dependencies not imported"
     }
   ]
 }
