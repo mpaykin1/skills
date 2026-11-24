@@ -178,6 +178,14 @@
       "skill": "packages/hero-animator/skills/hero-animator/SKILL.md",
       "excluded": [],
       "status": "partial source snapshot; additional files and dependencies not imported"
+    },
+    {
+      "name": "sprite-stacking-cover-pack",
+      "version": "0.1.0",
+      "files": 1,
+      "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
+      "excluded": [],
+      "status": "instruction skill; requires asset-generation runtime"
     }
   ]
 }
