@@ -162,10 +162,13 @@
     {
       "name": "voxel-atmosphere-engine",
       "version": "0.10.2",
-      "files": 3,
+      "files": 6,
       "skill": "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "pending_source_modules": [
+        "FastNoiseLite 1.1.1 — MIT, original JS runtime and shared fog adapter; plugin release not updated"
+      ]
     },
     {
       "name": "casual-game-studio",
