@@ -200,6 +200,16 @@
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "excluded": [],
       "status": "Complete skill instructions and author scripts; external engines, weights and dependencies must be acquired as documented; execution not verified in automations"
+    },
+    {
+      "name": "blockwild-evolution",
+      "version": "0.1.0",
+      "files": 11,
+      "skill": "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md",
+      "excluded": [
+        "Original BLOCKWILD game binaries and source assets (not redistributed)"
+      ],
+      "status": "author skill, read-only diagnosis verified on source ZIP and HTML v9; optional OSS dependencies not installed"
     }
   ]
 }
