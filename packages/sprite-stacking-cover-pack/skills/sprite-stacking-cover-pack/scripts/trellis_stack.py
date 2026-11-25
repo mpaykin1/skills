@@ -94,6 +94,9 @@ def generate(args):
     rgba=np.concatenate((attrs[:,mesh.layout['base_color']],attrs[:,mesh.layout['alpha']]),axis=1)
     step=float(mesh.voxel_size)
     np.savez_compressed(out/'native_grid.npz',coords=coords,rgba=rgba,attrs=attrs,voxel_size=step,origin=np.array([-.5]*3),layout=np.array(json.dumps({k:[v.start,v.stop] for k,v in mesh.layout.items()})))
+    # Exact native mesh, before optional GLB postprocess/normalization.
+    np.savez_compressed(out/'native_mesh.npz',vertices=mesh.vertices.detach().float().cpu().numpy(),faces=mesh.faces.detach().cpu().numpy())
+    (out/'geometry-source.json').write_text(json.dumps({name:hashlib.sha256((out/name).read_bytes()).hexdigest() for name in ('native_grid.npz','native_mesh.npz')},indent=2))
     export_stack(coords,rgba,step,out,args.size,args.up)
     (out/'provenance.json').write_text(json.dumps({'upstream':'https://github.com/microsoft/TRELLIS.2','model':args.model,'seed':args.seed,'pipeline':args.pipeline,'referenceSHA256':hashlib.sha256(Path(args.image).read_bytes()).hexdigest(),'status':'prototype; visual fidelity and animation unverified'},indent=2))
     if args.glb:
