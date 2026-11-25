@@ -192,11 +192,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.5.0",
-      "files": 9,
+      "version": "0.6.0",
+      "files": 11,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "OpenVDB sparse RGBA and density adapters; CPU orientation and opacity conversions checked; OpenVDB runtime and GPU inference unverified"
+      "status": "Infinigen exporter bridge and textured mesh CPU slicing/merge verified on authored GLB fixtures; Infinigen, Open3D, OpenVDB and GPU inference runtimes unverified"
     },
     {
       "name": "music-skill",
