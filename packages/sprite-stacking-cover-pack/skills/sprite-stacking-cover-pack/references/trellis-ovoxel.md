@@ -8,3 +8,5 @@ Official upstream: https://github.com/microsoft/TRELLIS.2 and https://github.com
 4. Run the existing Sprite Stacking Grunge Horror renderer from these exact layers. Render 360-degree preview and independent movement poses; import into scene.json with scale, bounds, collisions and lighting; render cover from the same scene, compare with approved sketch, then publish only if all original quality gates pass. Adapter outputs prototype, no automatic readiness. No model inference or animation is implied by CPU export.
 
 5. Native mesh and grid now also share a hash-bound geometry-source.json. Use [Open3D](open3d.md) to audit the exact native geometry, not a transformed GLB; optional opaque solid candidate is separate and never overwrites source slices.
+
+After Open3D, [OpenVDB](openvdb.md) can archive the exact PNG RGBA layers with sparse channel grids; keep the native O-Voxel material attributes in NPZ and original geometry. Never treat opacity as density or discard the original stack.
