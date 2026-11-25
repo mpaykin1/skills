@@ -337,3 +337,6 @@ bitECS is MPL-2.0; retain `vendor/bitecs/LICENSE`, preserve upstream-source
 access and comply with notices when distributing minified executable bundles.
 The npm package is NOT bundled and must not be represented as installed.
 No browser PASS without actual browser execution in portrait and landscape.
+
+## Module 25 — ROT.js 2.2.1 (source snapshot)
+Use the original BSD-3-Clause ROT.js distribution in `runtime/rot/vendor/rot.min.js` and its license. Pinned v2.2.1 blob c22e0094262a36cae711562d6805242928242661. `runtime/rot/rot-maze-core.js` exports createLinkedMaze(ROT, originalPlan, {losses,deaths,circle}); it preserves the original plan for a fresh player, otherwise calls real EllerMaze and AStar and exposes the existing wall/open/bfs/sol contract. In browsers import the UMD once and pass globalThis.ROT; Node uses CommonJS. Ink/Nit supply narrative inputs; ROT provides topology, existing Sprite Stacking rendering and collision consume the same walls, Recast can build from physical static geometry, Music can consume narrative state and route metrics. Never replace authored art, physics or input. No guarantee of monotonic turn count; exact +1-turn constraint still needs refinement. Five isolated connectivity checks passed. Browser integration not proven. SYMPHONIA PR #450.

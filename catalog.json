@@ -134,10 +134,13 @@
     {
       "name": "meta-game-fusion",
       "version": "2.4.0",
-      "files": 20,
+      "files": 23,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "pending_source_modules": [
+        "ROT.js 2.2.1 — local runtime, linked maze adapter; installed release remains 2.4.0"
+      ]
     },
     {
       "name": "blender-model-animation-enhancer",
