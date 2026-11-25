@@ -1,0 +1,14 @@
+{
+  "schema":"blockwild-evolution.routes/1",
+  "routes": [
+    {"gap":"managed_gameplay","skill":"godot-game-to-html","module":"unity-mono-code-recovery","input":"BW.Runtime.dll","output":"decompiled C# -> reviewed gameplay mapping","note":"No automatic C# -> JS parity"},
+    {"gap":"unity_assets","skill":"godot-game-to-html","module":"godot-game-to-html","input":"Unity *.assets / *.bundle","output":"original texture/mesh/animation manifest"},
+    {"gap":"world_streaming","skill":"voxel-game-creator","module":"voxel-game-creator","input":"source voxel chunk records","output":"indexed visible chunks + original voxel palettes"},
+    {"gap":"sprite_stack_fidelity","skill":"sprite-stacking-grunge","module":"sprite-stacking-grunge","input":"verified original GLB or volume","output":"stack.json + aligned RGBA XY slices"},
+    {"gap":"renderer_unification","skill":"meta-game-fusion","module":"sprite-stacking-primary","input":"stack.json + scene/colliders","output":"single Three.js/WebGL2 runtime"},
+    {"gap":"actor_animation","skill":"hero-animator","module":"frame-by-frame-characters","input":"approved original full-body poses","output":"8-direction full-pose atlas"},
+    {"gap":"geometry_optimization","skill":"blender-model-animation-enhancer","module":"blender-model-animation-enhancer","input":"original GLB/mesh","output":"identity-preserving optimized GLB"},
+    {"gap":"environment","skill":"voxel-atmosphere-engine","module":"voxel-atmosphere-engine","input":"verified scene + weather config","output":"fog/weather/postFX on same RAF"},
+    {"gap":"interop","skill":"skill-synergy-manager","module":"skill-synergy-manager","input":"asset provenance + content hash","output":"verified bridge to existing skills"}
+  ]
+}
