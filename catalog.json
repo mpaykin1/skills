@@ -186,6 +186,14 @@
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
       "status": "instruction skill; requires asset-generation runtime"
+    },
+    {
+      "name": "music-skill",
+      "version": "0.5.0",
+      "files": 10,
+      "skill": "packages/music-skill/skills/music/SKILL.md",
+      "excluded": [],
+      "status": "Complete skill instructions and author scripts; external engines, weights and dependencies must be acquired as documented; execution not verified in automations"
     }
   ]
 }
