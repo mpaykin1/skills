@@ -117,18 +117,21 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "1.0.0",
-      "files": 22,
+      "version": "1.1.0",
+      "files": 25,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; actual project execution needs fresh repo access, installed skills and runtime verification",
+      "status": "partial source snapshot; automation oversight requires authorized Automations tools and actual run evidence; isolated OSS installer needs approved hash-locked requirements",
       "additional_skills": [
         "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
-        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md"
+        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md"
       ],
       "scripts": [
         "packages/skill-synergy-manager/scripts/oss_upgrade_gate.py",
-        "packages/skill-synergy-manager/scripts/nexus_catalog_sync.py"
+        "packages/skill-synergy-manager/scripts/nexus_catalog_sync.py",
+        "packages/skill-synergy-manager/scripts/nexus_automation_audit.py",
+        "packages/skill-synergy-manager/scripts/nexus_oss_venv.py"
       ]
     },
     {
