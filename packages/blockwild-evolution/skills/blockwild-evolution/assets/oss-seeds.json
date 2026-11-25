@@ -1,0 +1,9 @@
+{
+  "schema":"blockwild-evolution.oss/1",
+  "candidates":[
+    {"repo":"icsharpcode/ILSpy","purpose":"managed_gameplay","license":"MIT","link":"https://github.com/icsharpcode/ILSpy","notes":"Decompile authorized BW.Runtime.dll as C#; game logic must still be ported","verified_license_source":"https://github.com/icsharpcode/ILSpy/blob/master/LICENSE"},
+    {"repo":"K0lb3/UnityPy","purpose":"unity_assets","license":"MIT","link":"https://github.com/K0lb3/UnityPy","notes":"Read Texture2D, Sprite, Mesh, serialized structures from Unity assets","verified_license_source":"https://github.com/K0lb3/UnityPy/blob/master/LICENSE"},
+    {"repo":"AssetRipper/AssetRipper","purpose":"unity_assets","license":"GPL-3.0","link":"https://github.com/AssetRipper/AssetRipper","notes":"Use as isolated extraction tool; do not embed GPL sources into HTML without rights analysis","verified_license_source":"https://github.com/AssetRipper/AssetRipper"},
+    {"repo":"zeux/meshoptimizer","purpose":"geometry_optimization","license":"MIT","link":"https://github.com/zeux/meshoptimizer","notes":"Optimize validated original GLB/mesh derivatives and maintain decoder for offline HTML","verified_license_source":"https://github.com/zeux/meshoptimizer/blob/master/LICENSE.md"}
+  ]
+}
