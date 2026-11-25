@@ -119,6 +119,19 @@ def generate(args):
         subprocess.run(cmd,check=True)
     write_json(out/'generation.json',{'segmentsSHA256':digest(root/'segments.json'),'assets':selection,'status':'prototype; visual fidelity and animation unverified'})
 
+def refine(args):
+    root=Path(args.generated).resolve(); manifest=read_json(root/'generation.json'); ids=manifest['assets']; out=Path(args.out).resolve()
+    if out.exists() or root in out.parents: raise ValueError('Use a separate new output directory')
+    solid=set(read_json(args.solid_ids)) if args.solid_ids else set()
+    if not all(ID.fullmatch(i) for i in ids) or not solid.issubset(ids): raise ValueError('Invalid asset IDs')
+    out.mkdir(parents=True)
+    script=Path(__file__).with_name('open3d_stack.py'); records=[]
+    for i in ids:
+        mode='solid' if i in solid else 'audit'
+        subprocess.run([args.python,str(script),'--asset',str(root/i),'--out',str(out/i),'--mode',mode],check=True)
+        records.append({'id':i,'mode':mode,'source':str(root/i),'output':i})
+    write_json(out/'refinement.json',{'generationSHA256':digest(root/'generation.json'),'assets':records,'status':'prototype'})
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='command',required=True)
     for mode in ('sam2','import'):
@@ -126,5 +139,6 @@ def main():
         if mode=='sam2':
             s.add_argument('--checkpoint',required=True);s.add_argument('--config',default='configs/sam2.1/sam2.1_hiera_t.yaml');s.add_argument('--device',choices=['cpu','cuda'],default='cpu');s.add_argument('--points-per-side',type=int,default=24);s.add_argument('--max-candidates',type=int,default=40)
     s=sub.add_parser('generate');s.add_argument('--segments',required=True);s.add_argument('--selection',required=True);s.add_argument('--out',required=True);s.add_argument('--python',default=sys.executable);s.add_argument('--size',type=int,choices=[128,256,512,1024],default=256);s.add_argument('--up',choices=['y','z'],required=True);s.add_argument('--seed',type=int,default=42);s.add_argument('--glb',action='store_true')
-    a=p.parse_args();generate(a) if a.command=='generate' else segment(a)
+    s=sub.add_parser('refine');s.add_argument('--generated',required=True);s.add_argument('--out',required=True);s.add_argument('--python',default=sys.executable);s.add_argument('--solid-ids')
+    a=p.parse_args();{'generate':generate,'refine':refine}.get(a.command,segment)(a)
 if __name__=='__main__':main()
