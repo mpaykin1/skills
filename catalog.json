@@ -187,11 +187,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.3.0",
-      "files": 5,
+      "version": "0.4.0",
+      "files": 7,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "SAM 2.1 adapter and TRELLIS.2 bridge; mask import and O-Voxel CPU exports verified, model inference unverified"
+      "status": "Open3D audit and optional opaque solid adapter; syntax checked; Open3D runtime and GPU inference unverified"
     },
     {
       "name": "music-skill",
