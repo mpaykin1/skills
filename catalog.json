@@ -181,11 +181,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.2.0",
-      "files": 3,
+      "version": "0.3.0",
+      "files": 5,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "native O-Voxel RGBA exporter CPU verified; TRELLIS.2 GPU inference unverified"
+      "status": "SAM 2.1 adapter and TRELLIS.2 bridge; mask import and O-Voxel CPU exports verified, model inference unverified"
     },
     {
       "name": "music-skill",
