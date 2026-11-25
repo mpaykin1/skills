@@ -117,11 +117,17 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "0.8.2",
-      "files": 18,
+      "version": "0.9.0",
+      "files": 20,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; OSS integration actions require authorized tools, original dependencies and independent quality gates",
+      "additional_skills": [
+        "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md"
+      ],
+      "scripts": [
+        "packages/skill-synergy-manager/scripts/oss_upgrade_gate.py"
+      ]
     },
     {
       "name": "meta-game-fusion",
