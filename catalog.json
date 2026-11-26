@@ -186,7 +186,7 @@
     {
       "name": "skill-synergy-manager",
       "version": "1.2.0",
-      "files": 46,
+      "files": 48,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
       "status": "Author skill text and scripts; two repository-only files retained from earlier revisions, not part of plugin release 1.2.0; external dependencies and runtime not verified",
@@ -334,14 +334,14 @@
     },
     {
       "name": "music-skill",
-      "version": "0.14.0",
-      "files": 28,
+      "version": "0.15.0",
+      "files": 29,
       "skill": "packages/music-skill/skills/music/SKILL.md",
-      "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified",
       "skills": [
         "packages/music-skill/skills/music/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "blockwild-evolution",
