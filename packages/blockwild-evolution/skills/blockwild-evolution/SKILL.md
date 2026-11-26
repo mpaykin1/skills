@@ -3,7 +3,7 @@ name: blockwild-evolution
 description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOCKWILD → standalone HTML game using existing authored skills; identify bottlenecks, research compatible open-source, integrate real improvements, improve this skill's own reproducible pipeline. Sprite stacking first, original-content protection and measurable progress."
 ---
 
-# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.1.0
+# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.2.0
 
 ## Триггеры
 «Улучши BLOCKWILD», «продолжи перенос ZIP в HTML», «сделай максимум через sprite stacking», «найди следующий open-source для BLOCKWILD», «повышай процент», «развивай свой скилл». Используй самые свежие исходные ZIP, HTML и правки владельца. Не создавай новую игрушку с тем же названием вместо восстановления текущей.
@@ -47,3 +47,6 @@ description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOC
 - Запрещены платные сервисы, чужие исходники без прав, GPL-перенос внутрь закрытого HTML без анализа лицензии, неавторизованные бинарные ZIP/Unity данные в публичных репозиториях.
 - Один реальный герой, управляется игроком; действующие NPC, отдельная фаза каждого, без подмены фигурами и без паттернов. Мобильный UI заполняет viewport, joystick закреплён на экране.
 - Только обоснованные проценты: `source files archived`, `voxel records addressable`, `assets actually extracted`, `playable logic restored`, `sprite-stacking coverage`, `browser-verified behavior` — независимые величины.
+
+## Визуальный конвейер Sunlit Courtyard (v0.2.0)
+При запросах «улучши графику под солнечную изометрическую диораму» прочитай `references/SUNLIT_SPRITE_STACKING.md`. Его исполняемые стадии: `scripts/build_sunlit_volume_sprites.py` (оригинальные послойные объёмы), `scripts/stackstrip_bridge.py` (реальный PNG slice strip interop с `danielwh2/sprite-stacking`), `templates/sunlit_courtyard.js` (сцена без внешних CDN), `scripts/assemble_sunlit_html.py` (исходный HTML + слои → новая автономная версия). **Графический стиль v12 отличается от оригинала Unity; это дополнительный режим, а не реконструкция исходных персонажей.** Не заменять встроенные исходные бинарные данные или код. Процент 18.0 относится только к расстоянию цветового распределения до предоставленного пользователем эскиза. Для следующего этапа рекомендуется оригинальная GLB/мультиракурсная авторская графика и реальная реконструкция срезов четырёх видов — пока не реализовано.
