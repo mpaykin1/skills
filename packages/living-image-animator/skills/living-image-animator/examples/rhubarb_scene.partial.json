@@ -1,0 +1,10 @@
+{
+  "pixi": {
+    "audio": {"sounds": [
+      {"id":"healer_voice","file":"audio/healer.wav","mode":"actor","actor_id":"healer","loop":false,"volume":0.7}
+    ]},
+    "lipsync": {"speakers": [
+      {"actor_id":"healer","sound_id":"healer_voice","viseme_dir":"visemes/healer","mouth_roi":[18,8,10,7],"recognizer":"phonetic"}
+    ]}
+  }
+}

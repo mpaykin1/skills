@@ -109,11 +109,11 @@
     },
     {
       "name": "living-image-animator",
-      "version": "0.37.0",
-      "files": 19,
+      "version": "0.42.0",
+      "files": 181,
       "skill": "packages/living-image-animator/skills/living-image-animator/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "Author skill text and scripts; vendor sources, external dependencies and runtime not verified"
     },
     {
       "name": "skill-synergy-manager",

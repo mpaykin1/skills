@@ -1,0 +1,13 @@
+FFmpeg — https://ffmpeg.org/ ; official source https://github.com/FFmpeg/FFmpeg
+
+FFmpeg is primarily LGPL-2.1-or-later, but optional features and linked
+libraries can cause an installed build to be GPL-2.0-or-later or subject to
+other obligations. The binary used to build this video is NOT redistributed
+with the Living Image Animator plugin or the exported video ZIP.
+
+Use `ffmpeg -version` and the FFmpeg licensing documentation to identify
+the licensing of your specific installed build:
+https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md
+
+The input pictures, characters and original audio retain their own licensing.
+Using FFmpeg to transcode an author-owned clip does not license unrelated work.

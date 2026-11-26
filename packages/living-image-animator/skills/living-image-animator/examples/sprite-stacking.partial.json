@@ -1,0 +1,49 @@
+{
+  "sprite_stacking": {
+    "mode": "maximal",
+    "minimum_coverage": 0.9,
+    "azimuth_deg": 35,
+    "elevation_deg": 32,
+    "max_atlas_memory_mb": 110,
+    "clean_plate": "environment/clean_plate.png",
+    "inventory": [
+      {"id": "hero", "category": "actor"},
+      {"id": "monster", "category": "actor"},
+      {"id": "gate", "category": "door"},
+      {"id": "car", "category": "vehicle"}
+    ],
+    "actors": [
+      {"actor_id": "hero", "reference_view": "front", "views_root": "stack_views/hero", "slices": 32},
+      {"actor_id": "monster", "reference_view": "side", "views_root": "stack_views/monster", "slices": 40}
+    ],
+    "objects": [
+      {
+        "id": "gate", "position": [320, 260], "slices": 48, "step_px": 1,
+        "open_trigger": "gate_sensor", "collider": [310, 242, 20, 36],
+        "states": {
+          "closed": {
+            "top": "stack_views/gate/closed_top.png",
+            "side": "stack_views/gate/closed_side.png",
+            "front": "stack_views/gate/closed_front.png",
+            "back": "stack_views/gate/closed_back.png"
+          },
+          "open": {
+            "top": "stack_views/gate/open_top.png",
+            "side": "stack_views/gate/open_side.png",
+            "front": "stack_views/gate/open_front.png",
+            "back": "stack_views/gate/open_back.png"
+          }
+        }
+      },
+      {
+        "id": "car", "position": [120, 225], "slices": 48, "step_px": 1,
+        "views": {
+          "top": "stack_views/car/top.png",
+          "side": "stack_views/car/side.png",
+          "front": "stack_views/car/front.png",
+          "back": "stack_views/car/back.png"
+        }
+      }
+    ]
+  }
+}
