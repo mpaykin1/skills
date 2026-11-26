@@ -186,8 +186,8 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "1.3.0",
-      "files": 52,
+      "version": "1.4.0",
+      "files": 54,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "skills": [
         "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
@@ -202,6 +202,7 @@
         "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-progress-guard/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-renderdoc-bridge/SKILL.md",
         "packages/skill-synergy-manager/skills/png-architecture-multiview-guard/SKILL.md",
         "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md"
       ],
