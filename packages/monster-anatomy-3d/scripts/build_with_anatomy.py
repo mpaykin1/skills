@@ -69,6 +69,8 @@ def main():
     p.add_argument('--sprite-xy-size',type=int,choices=(64,96,128,192,256),default=96)
     p.add_argument('--sprite-z-slices',type=int,choices=(32,48,64,96,128),default=64)
     p.add_argument('--sprite-allow-open',action='store_true')
+    p.add_argument('--sprite-roughness',type=float,default=0.76)
+    p.add_argument('--no-hybrid',action='store_true',help='Legacy sprite-only output; disables real 3D attachments/shadow rig')
     p.add_argument('--output-dir', default='build/monster-anatomy')
     p.add_argument('--offline', action='store_true', help='Only use existing source files; do not download')
     p.add_argument('--skip-mpfb', action='store_true', help='Produce the original two-tool scene without MPFB')
@@ -104,12 +106,15 @@ def main():
                  '--clip',args.sprite_clip,'--fps','12',
                  '--xy-size',str(args.sprite_xy_size),'--z-slices',str(args.sprite_z_slices)]
         if args.sprite_allow_open:command.append('--allow-open')
+        if args.no_hybrid:command.append('--no-hybrid')
+        command+=['--roughness',str(args.sprite_roughness)]
         run(command)
         return
     if args.meshoptimizer and args.gltf_optimize and args.gltf_mode!='safe':p.error('glTF-Transform meshopt output cannot be fed into gltfpack; use --gltf-mode safe')
     if args.gltf_mode!='safe' and not args.gltf_optimize:p.error('--gltf-mode requires --gltf-optimize')
     if args.gltf_validate_strict_warnings and not args.gltf_validate:p.error('--gltf-validate-strict-warnings needs --gltf-validate')
     if args.trimesh_strict and not args.trimesh_audit:p.error('--trimesh-strict requires --trimesh-audit')
+    if not 0.05<=args.sprite_roughness<=1:p.error('--sprite-roughness must be 0.05..1')
     if args.manifold_objects and not args.manifold_cpu:p.error('--manifold-objects requires --manifold-cpu')
     if args.mocap_video and args.mocap_landmarks:p.error('Choose video OR landmarks, never both')
     if args.mocap_side_video and not args.mocap_video:p.error('Side video requires a front video')
@@ -132,6 +137,8 @@ def main():
         cmd+=['--sprite-clip',args.sprite_clip,'--sprite-frames',str(args.sprite_frames),
               '--sprite-xy-size',str(args.sprite_xy_size),'--sprite-z-slices',str(args.sprite_z_slices)]
         if args.sprite_allow_open:cmd+=['--sprite-allow-open']
+        cmd+=['--sprite-roughness',str(args.sprite_roughness)]
+        if args.no_hybrid:cmd+=['--no-hybrid']
         if args.scipy_skin_smooth:cmd+=['--scipy-skin-smooth','--scipy-python',args.scipy_python,'--scipy-iterations',str(args.scipy_iterations),'--scipy-strength',str(args.scipy_strength)]
         if args.manifold_cpu:cmd+=['--manifold-cpu','--manifold-python',args.manifold_python]
         if args.manifold_objects:cmd+=['--manifold-objects',args.manifold_objects]
@@ -174,6 +181,7 @@ def main():
     if args.pbr_cpu and not args.xatlas_uv:p.error('--pbr-cpu requires --xatlas-uv')
     if not 0<=args.pbr_wetness<=1:p.error('--pbr-wetness must be 0..1')
     if args.trimesh_strict and not args.trimesh_audit:p.error('--trimesh-strict requires --trimesh-audit')
+    if not 0.05<=args.sprite_roughness<=1:p.error('--sprite-roughness must be 0.05..1')
     if args.trellis_glb and args.trellis_input:
         p.error('Specify --trellis-glb OR --trellis-input, never both')
     if args.pose_shape_keys_zip and not args.pose_shape_keys:
@@ -352,6 +360,7 @@ def main():
         if args.trimesh_strict:guard.append('--strict')
         run(guard)
     if args.gltf_validate:validate_glb(glb)
+    original_hybrid_rig=glb
     if args.gltf_optimize:
         dest=out/('monster_final_meshopt.glb' if args.gltf_mode=='meshopt' else 'monster_final_safe.glb')
         installed=ROOT/'vendor'/'gltf-transform-node'/'node_modules'/'.bin'/(
@@ -380,8 +389,11 @@ def main():
                  '--frames',str(args.sprite_frames),'--xy-size',str(args.sprite_xy_size),
                  '--z-slices',str(args.sprite_z_slices)]
         if args.sprite_allow_open:command.append('--allow-open')
+        command+=['--roughness',str(args.sprite_roughness)]
+        if args.no_hybrid:command.append('--no-hybrid')
+        else:command+=['--hybrid-glb',str(original_hybrid_rig)]
         run(command)
-        print('PRIMARY sprite stack:',sprite_dir/'stack'/'clip.json')
+        print('PRIMARY hybrid sprite stack:',sprite_dir/'library.json')
     print('Editable anatomy scene:',final_scene)
     print('Game GLB:',glb)
     if trellis_glb:print('Static high-poly TRELLIS reference GLB:',trellis_glb)

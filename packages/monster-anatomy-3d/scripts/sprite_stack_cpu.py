@@ -164,7 +164,7 @@ def compute_grid(frames, xy_size, z_slices):
     return [xy_size,xy_size,z_slices],[xy_pitch,xy_pitch,z_pitch],pivot
 
 
-def save_stack(folder, volume, dims, spacing, pivot, metadata, label):
+def save_stack(folder, volume, dims, spacing, pivot, metadata, label, *, surface_maps=True, roughness=0.76):
     import numpy as np
     from PIL import Image
     folder.mkdir(parents=True,exist_ok=False)
@@ -180,12 +180,19 @@ def save_stack(folder, volume, dims, spacing, pivot, metadata, label):
         pngs.append(name)
         atlas.paste(im,((z%atlas_cols)*nx,(z//atlas_cols)*ny))
     atlas.save(folder/'stack.atlas.png',optimize=True)
+    if surface_maps:
+        from hybrid_surface_cpu import surface_atlas
+        surface_atlas(volume, spacing, roughness=roughness).save(folder/'stack.surface.png',optimize=True)
     meta={'format':'monster-sprite-stack-v2','axes':'+X-right,+Y-top-of-png,+Z-up',
           'layers':pngs,'atlas':'stack.atlas.png','atlasCols':atlas_cols,'atlasRows':atlas_rows,
           'spacing':spacing,'pivot':pivot,'size':nx,'dimensions':dims,
           'source_label':label,'source_kind':'original triangle geometry, CPU voxelized',
           'objects':metadata,'alpha':'binary occupied-volume cells',
           'volume_sha256':hashlib.sha256(volume.tobytes()).hexdigest()}
+    if surface_maps:
+        meta['surfaceAtlas']='stack.surface.png'
+        meta['surfaceChannels']='rgb=outward-normal-xyz;alpha=roughness'
+        meta['surfaceRoughness']=roughness
     (folder/'stack.json').write_text(json.dumps(meta,indent=2),encoding='utf8')
     return meta
 
@@ -203,6 +210,9 @@ def main(argv=None):
     p.add_argument('--clip',default='IDLE_BREATH')
     p.add_argument('--allow-open',action='store_true',help='Explicitly use thin-surface voxelization for open meshes')
     p.add_argument('--orbit-gif',action='store_true')
+    p.add_argument('--no-surface-maps',action='store_true',help='Legacy diffuse-only stack')
+    p.add_argument('--roughness',type=float,default=0.76,help='Original-author controlled surface roughness, 0.05..1')
+    p.add_argument('--pose-timing',help='Blender poses.json metadata for exact animation phase (optional)')
     args=p.parse_args(argv)
     out=Path(args.output).expanduser().resolve()
     if out.exists():p.error('Output already exists; choose another destination (approved assets never overwritten)')
@@ -232,17 +242,36 @@ def main(argv=None):
     else:
         dims,spacing,pivot=compute_grid(frames,args.xy_size,args.z_slices)
     out.mkdir(parents=True)
+    pose_timing=[]
+    action_duration=None
+    if args.pose_timing:
+        times=json.loads(Path(args.pose_timing).resolve().read_text(encoding='utf8'))
+        info=times.get('clips',{}).get(args.clip)
+        if info is None or len(info)!=len(files):raise ValueError('Pose timestamps do not match actual baked geometry frames')
+        source_fps=float(times['source_fps'])
+        if not math.isfinite(source_fps) or source_fps<=0:raise ValueError('Invalid source FPS')
+        begin=float(info[0]['frame'])
+        pose_timing=[(float(row['frame'])-begin)/source_fps for row in info]
+        duration_frames=float(times['durations_frames'][args.clip])
+        action_duration=duration_frames/source_fps
+        if action_duration<=0 or any(t<0 or t>=action_duration+1e-5 for t in pose_timing):
+            raise ValueError('Invalid authoritative Blender action timing')
     items=[]
     for k, (f,records) in enumerate(zip(files,frames)):
         vol,objects=build_volume(records,dims,spacing,pivot,allow_open=args.allow_open)
         sub=f'pose_{k:03d}'
-        meta=save_stack(out/sub,vol,dims,spacing,pivot,objects,f.stem)
-        items.append({'path':sub+'/stack.json','atlas':sub+'/stack.atlas.png','label':f.stem,'cells':int((vol[...,3]>0).sum())})
+        meta=save_stack(out/sub,vol,dims,spacing,pivot,objects,f.stem,
+                        surface_maps=not args.no_surface_maps,roughness=args.roughness)
+        item={'path':sub+'/stack.json','atlas':sub+'/stack.atlas.png','label':f.stem,'cells':int((vol[...,3]>0).sum())}
+        if pose_timing:item['timeSeconds']=round(pose_timing[k],7)
+        items.append(item)
         print('[sprite stacking]',sub,'filled cells:',items[-1]['cells'])
     mainmeta={'format':'monster-sprite-stack-clip-v2','version':'2.0.0','clip':args.clip,
               'fps':args.fps,'frames':items,'dimensions':dims,'spacing':spacing,'pivot':pivot,
               'animation':'independent geometry-baked full stack per sampled pose',
               'runtime':'runtime/sprite_stack_three.js'}
+    if action_duration is not None:mainmeta['durationSeconds']=round(action_duration,7)
+    if not args.no_surface_maps:mainmeta['surfaceMaps']='normal-roughness-RGBA-volume'
     (out/'clip.json').write_text(json.dumps(mainmeta,indent=2),encoding='utf8')
     if args.orbit_gif:
         import subprocess

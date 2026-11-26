@@ -61,6 +61,8 @@ def main():
     p.add_argument('--sprite-xy-size',type=int,choices=(64,96,128,192,256),default=96)
     p.add_argument('--sprite-z-slices',type=int,choices=(32,48,64,96,128),default=64)
     p.add_argument('--sprite-allow-open',action='store_true',help='Opt in to thin open mesh shell voxelization')
+    p.add_argument('--sprite-roughness',type=float,default=0.76,help='Hybrid surface roughness for CPU-baked normals')
+    p.add_argument('--no-hybrid',action='store_true',help='Disable 3D shadow rig and bone attachments; keep plain stacks')
     p.add_argument('--workbench-copies',action='store_true')
     p.add_argument('--skip-morphs',action='store_true',help='Keep existing shapes intact; bypass muscle morph generation')
     p.add_argument('--mocap-video',default='',help='CPU Open Mocap body-motion video')
@@ -75,6 +77,7 @@ def main():
     if a.manifold_objects and not a.manifold_cpu:p.error('--manifold-objects requires --manifold-cpu')
     if a.pbr_cpu and not a.xatlas_uv:p.error('--pbr-cpu requires --xatlas-uv (no ambiguous pre-existing UV use)')
     if not 0<=a.pbr_wetness<=1:p.error('--pbr-wetness must be 0..1')
+    if not 0.05<=a.sprite_roughness<=1:p.error('--sprite-roughness must be 0.05..1')
     if a.meshoptimizer and a.gltf_optimize and a.gltf_mode!='safe':p.error('glTF-Transform meshopt output cannot be fed into gltfpack; use --gltf-mode safe')
     if a.gltf_mode!='safe' and not a.gltf_optimize:p.error('--gltf-mode requires --gltf-optimize')
     if a.gltf_validate_strict_warnings and not a.gltf_validate:p.error('--gltf-validate-strict-warnings needs --gltf-validate')
@@ -166,6 +169,7 @@ def main():
              '--texture-dir',output/'monster_cpu_pbr_textures',
              '--python-bin',a.pbr_python,'--size',a.pbr_size,'--wetness',a.pbr_wetness)
         final,glb=pbr_blend,pbr_glb
+    original_hybrid_rig=glb
     def validate_glb(asset):
         command=[sys.executable,BASE/'gltf_validator_worker.py','--input',asset]
         if a.gltf_validator_package:command+=['--package-dir',a.gltf_validator_package]
@@ -208,8 +212,11 @@ def main():
              '--clip',a.sprite_clip,'--frames',a.sprite_frames,
              '--xy-size',a.sprite_xy_size,'--z-slices',a.sprite_z_slices]
         if a.sprite_allow_open:cmd.append('--allow-open')
+        cmd+=['--roughness',str(a.sprite_roughness)]
+        if a.no_hybrid:cmd+=['--no-hybrid']
+        else:cmd+=['--hybrid-glb',str(original_hybrid_rig)]
         call(*cmd)
-        print('PRIMARY sprite stack:',sprite_dir/'stack'/'clip.json')
+        print('PRIMARY hybrid sprite stack:',sprite_dir/'library.json')
     print('CPU Blender scene:',final)
     print('CPU rigged GLB:',glb)
 

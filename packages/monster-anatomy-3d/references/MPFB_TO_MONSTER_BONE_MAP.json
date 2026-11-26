@@ -1,0 +1,19 @@
+{
+  "Root": "root",
+  "pelvis": "pelvis",
+  "spine_02": "spine",
+  "neck_01": "neck",
+  "head": "head",
+  "upperarm_l": "upperarm_L",
+  "upperarm_r": "upperarm_R",
+  "lowerarm_l": "forearm_L",
+  "lowerarm_r": "forearm_R",
+  "hand_l": "hand_L",
+  "hand_r": "hand_R",
+  "thigh_l": "thigh_L",
+  "thigh_r": "thigh_R",
+  "calf_l": "shin_L",
+  "calf_r": "shin_R",
+  "foot_l": "foot_L",
+  "foot_r": "foot_R"
+}

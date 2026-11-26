@@ -5,6 +5,14 @@ description: "Create expressive sprite-stacked volumetric 3D horror monsters wit
 
 # Monster Anatomy 3D — hard rules
 
+## HYBRID 3D + SPRITE STACKING — mandatory by default (v2.1.0)
+
+**Read `references/HYBRID_3D_SPRITE_STACKING.md` first** for ALL new game monsters. Visible flesh/skin/muscles are true volumetric sprite stacks generated from the same animated Blender `MONSTER_RIG`, not billboards. The original GLB skeleton is kept hidden from the main color pass but continues driving genuine 3D attachments, projected real-time skinned mesh shadows and collider geometry. Do NOT render a duplicated visible body. 3D horns/claws/eyes/weapon FX are **allowed** when actual authored mesh/effect assets exist; never synthesize unrelated replacement objects. One character, one pivot, one animation timeline.
+
+The CPU build defaults to hybrid: `python scripts/build_with_anatomy.py --blender blender --output-dir build/monster-hybrid`. For an existing GLB use `python scripts/build_sprite_stacking.py --input-glb monster.glb --output build/monster-hybrid`; animated source `.blend` needs a matching `--hybrid-glb`. This generates geometry-true RGBA stacks, normal/roughness atlas, original GLB copy and runtime JS together. Blender/GLB action time synchronization is strict: missing source action fails closed. Runtime uses `runtime/hybrid_monster_three.js` and only renders objects prefixed `HYBRID_3D_` as actual 3D attachments. For shadow visuals the game must enable WebGL2 and Three.js shadow mapping.
+
+Never confuse **CPU-only asset generation** with **GPU-free WebGL** — Three.js requires a graphics renderer. All prior 18+ integrations remain part of the mesh/rig/material/stack input, not redundant replacement systems. Fallback `--no-hybrid` is only an explicit legacy choice.
+
 ## V2.0 PRIMARY TECH: TRUE SPRITE STACKING (mandatory by default)
 
 Read `references/SPRITE_STACKING_PRIMARY.md` before every creation or revision. The visible monster, muscles, outer skin and authored move states **must use true volumetric horizontal sprite stacking wherever possible**. The same 3D mesh and rig determine all rendered perspectives: +X right, +Y forward, +Z up, RGBA slices ordered bottom-to-top; user reference silhouettes and uneven physical anatomy remain unchanged. Do not use flat planes, billboard sprites, extruded 2D art, stand-in pixel blocks or unrelated rotation images. Never replace the existing hero during animation.

@@ -1,3 +1,17 @@
+# Monster Anatomy 3D v2.1.0 — HYBRID 3D + SPRITE STACKING
+
+Visible muscle/skin/body = true sprite-stacked 3D volume, UV/PBR-based input; invisible original MONSTER_RIG + GLB = animated shadow proxy, actual 3D horns/claws/weapons and physics source. Both synchronized by source-action phase. CPU-baked XYZ surface-normal/roughness maps improve GLSL lighting. All previous source systems preserved.
+
+**Default:** `python scripts/build_with_anatomy.py --blender blender --output-dir build/monster-hybrid`
+**Existing GLB:** `python scripts/build_sprite_stacking.py --input-glb original.glb --output build/hybrid`
+**Existing animated source:** `python scripts/build_sprite_stacking.py --input-blend monster.blend --hybrid-glb monster.glb --output build/hybrid`
+
+Runtime: `runtime/hybrid_monster_three.js` with local Three.js/GLTFLoader; authored 3D-only details are named `HYBRID_3D_*`. Imported GLB must have exact matching action names or explicit clipMap. Actual WebGL2 uses the end-user device GPU; *asset generation* remains CPU-only. No installed Blender/Three runtime was available to verify animated hybrid playback.
+
+Read `references/HYBRID_3D_SPRITE_STACKING.md` for full usage, output schema and limits.
+
+---
+
 # Monster Anatomy 3D v2.0.0 — SPRITE STACKING FIRST / CPU
 
 **True horizontal sprite stacking is the primary visible game representation.** The unchanged anatomical 3D monster and its Blender rig produce independently posed RGB-alpha volume layers for every real motion action (idle, stalk, attack, plus captured real motions). Runtime Three.js/WebGL2 raymarches those volumes from arbitrary 3D viewpoints rather than substituting a billboard, GIF, or primitive mesh. This preserves anatomy and the original model across every pose. Source `.blend`/`.glb` remains available for authoring, physics, and fallback.

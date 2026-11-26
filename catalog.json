@@ -93,11 +93,11 @@
     },
     {
       "name": "monster-anatomy-3d",
-      "version": "2.0.0",
-      "files": 20,
+      "version": "2.1.0",
+      "files": 83,
       "skill": "packages/monster-anatomy-3d/skills/monster-anatomy-3d/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "Author skill text and scripts; binary assets, vendor sources, external dependencies and runtime not verified"
     },
     {
       "name": "png-living-3d-city",

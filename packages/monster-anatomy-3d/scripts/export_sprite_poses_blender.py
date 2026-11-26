@@ -53,7 +53,7 @@ def main():
     if not actions:raise ValueError('No real rig Actions available to bake')
     if rig.animation_data is None:rig.animation_data_create()
     animation=rig.animation_data
-    bad_tokens=('NON_EXPORT','WORKBENCH','Z_ANATOMY','ZA_','MPFB','TRELLIS_REFERENCE','DONOR','GUIDE','RIGGER_CTRL')
+    bad_tokens=('NON_EXPORT','WORKBENCH','Z_ANATOMY','ZA_','MPFB','TRELLIS_REFERENCE','DONOR','GUIDE','RIGGER_CTRL','HYBRID_3D_','HYBRID_ATTACHMENTS','COLLIDER_','SHADOW_PROXY_')
     candidates=[]
     for obj in bpy.data.objects:
         if obj.type!='MESH' or obj.hide_render:continue
@@ -64,6 +64,7 @@ def main():
     if not candidates:raise ValueError('No creature game meshes to bake')
     dest.mkdir(parents=True)
     outputs={}
+    duration_frames={}
     scene=bpy.context.scene
     for action in actions:
         if not re.fullmatch(r'[a-zA-Z0-9_.-]{1,64}',action.name):
@@ -73,6 +74,7 @@ def main():
         begin,end=map(float,action.frame_range)
         if end-begin<2:raise ValueError('Action range too short: '+action.name)
         clipdir=dest/action.name;clipdir.mkdir()
+        duration_frames[action.name]=end-begin
         frames=[]
         for i in range(args.frames):
             frame=begin+(end-begin)*i/args.frames
@@ -94,6 +96,8 @@ def main():
         print('[sprite stacking] posed clip:',action.name,'frames:',len(frames))
     (dest/'poses.json').write_text(json.dumps({'source_blend':str(src),'clips':outputs,
                            'mesh_names':[o.name for o in candidates],
+                           'durations_frames':duration_frames,
+                           'source_fps':scene.render.fps/scene.render.fps_base,
                            'origin':'Blender evaluated posed geometry'},indent=2),encoding='utf8')
 
 if __name__=='__main__':main()
