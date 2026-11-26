@@ -1,0 +1,11 @@
+{
+  "name": "meta-games-visual-parity-guard",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Pinned build-time screenshot fidelity guard for original Godot/Unity/Three.js/PixiJS assets",
+  "dependencies": {
+    "pixelmatch": "8.0.0",
+    "pngjs": "7.0.0"
+  }
+}

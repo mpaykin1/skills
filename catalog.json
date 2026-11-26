@@ -69,11 +69,11 @@
     },
     {
       "name": "godot-game-to-html",
-      "version": "1.17.0",
-      "files": 20,
+      "version": "1.24.0",
+      "files": 103,
       "skill": "packages/godot-game-to-html/skills/godot-game-to-html/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified"
     },
     {
       "name": "meta-games-catalog-updater",

@@ -1,0 +1,12 @@
+{
+  "name": "meta-original-three-glb-viewer",
+  "private": true,
+  "version": "1.2.0",
+  "type": "module",
+  "description": "Offline GLB with built-in Basis Universal transcoder, Khronos glTF validation",
+  "dependencies": {
+    "three": "0.187.0",
+    "esbuild": "0.25.5",
+    "gltf-validator": "2.0.0-dev.3.10"
+  }
+}

@@ -1,0 +1,13 @@
+# Sprite stacking interoperability and implementation
+
+Source-authoring skill: `skills://plugins/sprite-stacking-grunge/sprite-stacking-grunge/skill.md` and its `scripts/render_stack.py`. Compatible JSON structure: `{"layers":["layers/000.png",...],"spacing":[dx,dy,dz],"pivot":[x,y,z],"size":384}`. Layers bottom to top. World axis +X image right, +Y image up, +Z slice index up; PNG row zero top, volume row increases with +Y. `stack_to_html.py` flips the pixel rows when writing WebGL3D bytes.
+
+Third-party source: `https://github.com/mikedh/trimesh` (MIT), `https://github.com/scipy/scipy` (BSD-style), `https://github.com/python-pillow/Pillow` (HPND); Three.js `https://github.com/mrdoob/three.js` (MIT). Three.js is bundled offline at build time, not redistributed from a CDN. Python implementations are direct interoperable adapters: they do not vendor any upstream library source.
+
+**True source geometry slicing**: `stack_from_glb.py` loads a real GLB, rejects GLB animations/skins, voxels original watertight meshes or original thin shells, and surface-colors voxels from closest UV/vertex color/barycentric triangle. Each PNG is a different XY cross-section at a different Z. This is a voxel approximation, NOT an exact shaded mesh rasterization or inferred back side from a single photo. Thin features below voxel pitch may be lost; use higher resolution with explicit memory budgets and original visual A/B comparisons.
+
+**True 360° renderer**: each RGBA slice is assembled into a single `Data3DTexture`; 3D DDA traverses occupied 3D voxels along camera rays, including strictly edge-on and pole views. A ray hits the nearest occupied voxel, writes its real fragment depth for inter-object occlusion, and samples color from the author-supplied material. Transparent/semirefractive shells are unsupported by binary occupancy and should retain original shaders. WebGL2 required. For 2D views without depth use PixiJS instead.
+
+**Authoring pose-stack animations**: different full-volumes per pose, no warps or deformations. A scene item `frames` list is checked to match original grid/pivot and switches entire 3D textures at the specified FPS; timing does not imply AI or gameplay motion. Source identity, accepted rig poses, physics hitboxes and pivot remain authoritative from the original game.
+
+**Typical world policy**: foreground rubble/props, middleground architecture and scenery, deep distant static objects stack-first. VFX fog/lightning/rain/dust remain camera-aware effects; UI separate screen layer. Doors/gates use separate rigid stack parts controlled by the original game engine. For complex single-object material variants or KTX2-only sources use original GLB until a faithful volume bake is available.
