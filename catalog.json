@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.14.0",
-      "files": 30,
+      "version": "0.15.0",
+      "files": 32,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Official Khronos validator adapter and fail-closed mesh optimization gates; report/hash checks verified with synthetic fixtures; actual validator npm dependency unavailable due DNS; prior external runtimes unverified",
+      "status": "Explicit Cycles CPU OIDN adapter and matched-frame LPIPS/alpha/temporal residual approval gate; syntax and alpha/residual checks verified; actual Blender/OIDN/LPIPS and previous external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
