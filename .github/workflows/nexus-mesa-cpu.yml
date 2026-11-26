@@ -1,0 +1,24 @@
+name: Nexus Mesa CPU rendering
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/mesa-cpu-render-bridge/**'
+      - '.github/workflows/nexus-mesa-cpu.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mesa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install signed Mesa CPU packages
+        run: |
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1 libgl1-mesa-dri
+          dpkg-query -W libegl-mesa0 libgl1-mesa-dri
+      - name: Native llvmpipe draw and readback
+        run: python3 packages/skill-synergy-manager/skills/mesa-cpu-render-bridge/scripts/cpu_probe.py
