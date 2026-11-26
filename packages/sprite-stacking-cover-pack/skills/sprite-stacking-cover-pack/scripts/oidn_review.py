@@ -28,6 +28,8 @@ def paired(reference, candidate):
         raise ValueError('Unexpected OIDN settings')
     for k in ('seed','adaptiveSampling','device','viewTransform'):
         if k not in rs or rs[k]!=cs.get(k): raise ValueError('Different sampling/color setup: '+k)
+    for k in ('colorManagement','outputEncoding'):
+        if rs.get(k)!=cs.get(k): raise ValueError('Different OCIO color setup: '+k)
     if rs['device']!='CPU' or rs['adaptiveSampling'] is not False or not 1<=cs['samples']<=rs['samples']<=512:
         raise ValueError('Require CPU fixed sampling and a reference at least as dense')
     if rt!=ct or len(rf)!=len(cf) or any(x.size!=y.size for x,y in zip(rf,cf)):
