@@ -1,6 +1,7 @@
 """Build optional Meshoptimizer GLB candidates; never replace canonical volumes."""
 import argparse, hashlib, json, math, shutil, struct, subprocess
 from pathlib import Path
+from gltf_validation import validate as validate_khronos
 
 SUPPORTED = {'KHR_lights_punctual','KHR_materials_anisotropy','KHR_materials_clearcoat','KHR_materials_diffuse_transmission','KHR_materials_dispersion','KHR_materials_emissive_strength','KHR_materials_ior','KHR_materials_iridescence','KHR_materials_sheen','KHR_materials_specular','KHR_materials_transmission','KHR_materials_unlit','KHR_materials_variants','KHR_materials_volume','KHR_mesh_quantization','KHR_texture_basisu','KHR_texture_transform','EXT_mesh_gpu_instancing','EXT_meshopt_compression','EXT_texture_webp','KHR_meshopt_compression'}
 
@@ -58,6 +59,7 @@ def check_candidate(src,d):
 
 def build(a):
     source=Path(a.source).resolve();src=inspect(source);check_source(src)
+    source_validation=validate_khronos(source)
     out=Path(a.out).resolve()
     if out.exists(): raise FileExistsError(out)
     if not math.isfinite(a.ratio) or not 0<a.ratio<=1: raise ValueError('Ratio must be in (0,1]')
@@ -69,8 +71,11 @@ def build(a):
     # No texture conversion: the Basis atlas stage is independent.
     subprocess.run(command,check=True)
     candidate=out/'candidate.glb';d=inspect(candidate);n=check_candidate(src,d)
+    candidate_validation=validate_khronos(candidate)
+    if digest(original)!=source_validation['sha256']: raise ValueError('Source changed during optimization')
     version=subprocess.run([exe,'-v'],capture_output=True,text=True)
     metadata={'schema':'cover-pack-runtime-mesh/1','source':{'path':'source.glb','sha256':digest(original),'bytes':original.stat().st_size,'triangles':triangles(src)},'candidate':{'path':'candidate.glb','sha256':digest(candidate),'bytes':candidate.stat().st_size,'triangles':n},'requestedTriangleRatio':a.ratio,'gltfpackVersion':(version.stdout+version.stderr).strip(),'encoderSHA256':digest(exe),'flags':command[5:],'status':'review-required','approved':False,'note':'Static GLB derivative only; original RGBA, pivot, PBR and collisions unchanged. Requires actual decoded rendering and LPIPS/manual approval.'}
+    metadata['khronosValidation']={'source':source_validation,'candidate':candidate_validation}
     (out/'runtime-mesh.json').write_text(json.dumps(metadata,indent=2)+'\n',encoding='utf-8')
 
 def main():
