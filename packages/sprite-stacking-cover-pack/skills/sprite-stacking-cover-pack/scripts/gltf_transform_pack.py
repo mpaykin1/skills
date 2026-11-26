@@ -3,6 +3,7 @@ No automatic approval, no edits to canonical sprite layers, no network installat
 """
 import argparse, hashlib, json, shutil, struct, subprocess, tempfile
 from pathlib import Path
+from gltf_validation import validate as validate_khronos
 from meshopt_pack import inspect, digest, SUPPORTED
 
 COMP = {5120:1,5121:1,5122:2,5123:2,5125:4,5126:4}
@@ -73,6 +74,7 @@ def require_equal(a,b):
 
 def build(a):
     source=Path(a.source).resolve(); exact=signature(source); structural=signature(source,False)
+    source_validation=validate_khronos(source)
     exe=shutil.which(a.cli)
     if not exe: raise RuntimeError('Install official @gltf-transform/cli in the authorized runtime; no mock encoder')
     out=Path(a.out).resolve()
@@ -84,16 +86,20 @@ def build(a):
         dedup=root/'dedup.glb'
         subprocess.run([exe,'dedup',str(original),str(dedup),'--materials','false','--meshes','false','--skins','false','--textures','false'],check=True)
         require_equal(exact,signature(dedup))
+        validate_khronos(dedup)
         candidate=root/'candidate.glb'
         if a.meshopt:
             subprocess.run([exe,'meshopt',str(dedup),str(candidate),'--level','medium'],check=True)
             if not (set(inspect(candidate).get('extensionsUsed',[])) & {'EXT_meshopt_compression'}): raise ValueError('Expected supported EXT_meshopt_compression output')
             require_equal(structural,signature(candidate,False))
         else: shutil.copyfile(dedup,candidate)
+        candidate_validation=validate_khronos(candidate)
+        if digest(original)!=source_validation['sha256']: raise ValueError('Source changed during optimization')
         if candidate.stat().st_size>=original.stat().st_size: raise ValueError('No size saving; retain source')
         version=subprocess.run([exe,'--version'],capture_output=True,text=True,check=True).stdout.strip()
         def record(p): return {'path':p.name,'sha256':digest(p),'bytes':p.stat().st_size}
         m={'schema':'cover-pack-runtime-mesh/1','source':record(original),'candidate':record(candidate),'encoder':'glTF Transform','version':version,'mode':'dedup+meshopt' if a.meshopt else 'dedup-accessors','status':'review-required','approved':False,'exactDedupAccessorCheck':True,'candidateCheck':'structural only; decoded animation and visual review required' if a.meshopt else 'conservative exact accessor audit; decoded visual review required'}
+        m['khronosValidation']={'source':source_validation,'candidate':candidate_validation}
         out.mkdir();shutil.copyfile(original,out/original.name);shutil.copyfile(candidate,out/candidate.name)
         (out/'runtime-mesh.json').write_text(json.dumps(m,indent=2)+'\n')
 
