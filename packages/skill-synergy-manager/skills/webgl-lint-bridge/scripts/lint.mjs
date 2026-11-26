@@ -1,5 +1,5 @@
 import {chromium} from "playwright";
-import {fileURLToPath} from "node:url";
+import {readFile} from "node:fs/promises";
 const [url, selector="#game"]=process.argv.slice(2);
 const u=new URL(url);
 if(!["http:","https:"].includes(u.protocol)||!["127.0.0.1","localhost","[::1]"].includes(u.hostname)||u.username||u.password)throw Error("local authorized URL only");
@@ -11,9 +11,10 @@ try{
  const page=await context.newPage();
  page.on("pageerror",e=>failures.push(e.message));
  page.on("console",m=>{if(m.text().includes("webgl-lint running"))active=true;if(m.type()==="error")failures.push(m.text())});
- await page.addInitScript({path:fileURLToPath(new URL("../vendor/webgl-lint.js",import.meta.url))});
+ const lint=await readFile(new URL("../vendor/webgl-lint.js",import.meta.url),"utf8");
  // Observe contexts created by the application, never create one on its behalf.
- await page.addInitScript(()=>{window.__nexusLintContexts=[];const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(...args){const gl=get.apply(this,args);if(gl&&/^webgl|experimental-webgl$/.test(String(args[0]))){const ext=gl.getExtension("GMAN_debug_helper");window.__nexusLintContexts.push({canvas:this,active:!!ext});if(ext)ext.setConfiguration({maxDrawCalls:0,throwOnError:true});}return gl;}});
+ const observe=()=>{window.__nexusLintContexts=[];const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(...args){const gl=get.apply(this,args);if(gl&&/^(webgl2?|experimental-webgl)$/.test(String(args[0]))){const ext=gl.getExtension("GMAN_debug_helper");window.__nexusLintContexts.push({canvas:this,active:!!ext});if(ext)ext.setConfiguration({maxDrawCalls:0,throwOnError:true});}return gl;}};
+ await page.addInitScript({content:lint+"\n;("+observe.toString()+")();"});
  await page.goto(u.href,{waitUntil:"domcontentloaded",timeout:30000});
  await page.locator(selector).waitFor({state:"visible",timeout:15000});
  await page.waitForTimeout(1500);
