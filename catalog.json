@@ -346,11 +346,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.11.0",
-      "files": 22,
+      "version": "0.12.0",
+      "files": 25,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Basis Universal adapter and Three.js KTX2/PNG loader; 55 RGBA layers exact paginated repacking verified; basisu encoding, browser/mobile, LPIPS and prior external runtimes unverified",
+      "status": "Meshoptimizer static GLB adapter and Three.js source fallback; GLB preflight and animation rejection verified; gltfpack encoding, browser, LPIPS and prior external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
