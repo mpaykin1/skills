@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+project(meta_embree_bake LANGUAGES CXX)
+find_package(embree 4 REQUIRED)
+add_executable(meta_embree_bake bake.cpp)
+target_compile_features(meta_embree_bake PRIVATE cxx_std_17)
+target_link_libraries(meta_embree_bake PRIVATE embree)
