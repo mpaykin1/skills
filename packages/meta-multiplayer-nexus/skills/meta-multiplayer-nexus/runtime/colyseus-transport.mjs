@@ -1,8 +1,11 @@
 import {createAvatarBuffer, validInput, valid, validGameId} from './protocol.mjs';
-export async function createServerTransport({client,gameId,roomId,sampleInput,onState,onLeave,onError=()=>{},onSelf=()=>{},onDisconnect=()=>{}}){
+export async function createServerTransport({client,gameId,roomId,accountRoom=false,matchmaking=false,sampleInput,onState,onLeave,onError=()=>{},onSelf=()=>{},onDisconnect=()=>{}}){
  if(!validGameId(gameId)||typeof sampleInput!=='function')throw Error('Invalid server options');
- const opts={gameId,protocol:1};
- const room=roomId?await client.joinById(roomId,opts):await client.create('meta-v1',opts);
+ if(matchmaking&&!accountRoom)throw Error('Account-backed matchmaking requires Nakama');
+ const opts={gameId,protocol:1,...(accountRoom?{queue:matchmaking?'public':'invite'}:{})};
+ const name=accountRoom?'meta-account-v1':'meta-v1';
+ const room=roomId?await client.joinById(roomId,opts):matchmaking?await client.joinOrCreate(name,opts):await client.create(name,opts);
+ if(room.name!==name){await room.leave();throw Error('Room type mismatch');}
  const buffer=createAvatarBuffer({onState,onLeave});let seq=0,closed=false,lastTick=-1;const seen=new Set();
  room.onMessage('snapshot-v1',msg=>{
   if(closed||!msg||!Number.isSafeInteger(msg.tick)||msg.tick<=lastTick||!Array.isArray(msg.players)||msg.players.length>4)return;
