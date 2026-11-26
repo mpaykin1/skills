@@ -336,11 +336,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.10.0",
-      "files": 19,
+      "version": "0.11.0",
+      "files": 22,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Cycles renderer adapter; CPU native layer/atlas input validation checked; Blender/Cycles rendering and external ML inference unverified; per-voxel PBR sidecars retained but not shaded",
+      "status": "Basis Universal adapter and Three.js KTX2/PNG loader; 55 RGBA layers exact paginated repacking verified; basisu encoding, browser/mobile, LPIPS and prior external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
