@@ -132,8 +132,8 @@
     },
     {
       "name": "seo-site-engineer",
-      "version": "1.2.0",
-      "files": 6,
+      "version": "1.3.0",
+      "files": 9,
       "skill": "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md",
       "skills": [
         "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md"
@@ -218,7 +218,7 @@
     {
       "name": "meta-game-fusion",
       "version": "2.4.9",
-      "files": 125,
+      "files": 130,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
       "skills": [
         "packages/meta-game-fusion/skills/animated-world-guard/SKILL.md",
@@ -227,6 +227,7 @@
         "packages/meta-game-fusion/skills/freemocap-hybrid/SKILL.md",
         "packages/meta-game-fusion/skills/mantaflow-fire/SKILL.md",
         "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
+        "packages/meta-game-fusion/skills/nanovdb-fire/SKILL.md",
         "packages/meta-game-fusion/skills/opensubdiv-hybrid/SKILL.md",
         "packages/meta-game-fusion/skills/openvdb-fire/SKILL.md",
         "packages/meta-game-fusion/skills/png-multiview-meta-game-fusion/SKILL.md",
@@ -240,7 +241,7 @@
     {
       "name": "blender-model-animation-enhancer",
       "version": "1.9.11",
-      "files": 77,
+      "files": 84,
       "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
       "skills": [
         "packages/blender-model-animation-enhancer/skills/animated-world-guard/SKILL.md",
@@ -249,6 +250,7 @@
         "packages/blender-model-animation-enhancer/skills/effekseer-combat/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/freemocap-hybrid/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/mantaflow-fire/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/nanovdb-fire/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/opensubdiv-hybrid/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/openvdb-fire/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/png-multiview-blender-model-animation-enhancer/SKILL.md",
@@ -261,13 +263,14 @@
     {
       "name": "game-style-forge",
       "version": "1.10.8",
-      "files": 53,
+      "files": 58,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
       "skills": [
         "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
         "packages/game-style-forge/skills/effekseer-combat/SKILL.md",
         "packages/game-style-forge/skills/game-style-forge/SKILL.md",
         "packages/game-style-forge/skills/mantaflow-fire/SKILL.md",
+        "packages/game-style-forge/skills/nanovdb-fire/SKILL.md",
         "packages/game-style-forge/skills/opensubdiv-hybrid/SKILL.md",
         "packages/game-style-forge/skills/openvdb-fire/SKILL.md",
         "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
@@ -358,8 +361,8 @@
     },
     {
       "name": "music-skill",
-      "version": "0.21.0",
-      "files": 40,
+      "version": "0.22.0",
+      "files": 42,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "skills": [
         "packages/music-skill/skills/music-audacity-bridge/SKILL.md",
@@ -385,7 +388,7 @@
     {
       "name": "animation-quality",
       "version": "0.12.0",
-      "files": 47,
+      "files": 51,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "skills": [
         "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
@@ -397,6 +400,7 @@
         "packages/animation-quality/skills/mantaflow-fire-quality/SKILL.md",
         "packages/animation-quality/skills/mediapipe-pose-quality/SKILL.md",
         "packages/animation-quality/skills/mujoco-motion-quality/SKILL.md",
+        "packages/animation-quality/skills/nanovdb-fire/SKILL.md",
         "packages/animation-quality/skills/opensim-motion-quality/SKILL.md",
         "packages/animation-quality/skills/opensubdiv-hybrid/SKILL.md",
         "packages/animation-quality/skills/openvdb-fire/SKILL.md",
