@@ -224,29 +224,36 @@
     },
     {
       "name": "blender-model-animation-enhancer",
-      "version": "1.9.2",
-      "files": 20,
+      "version": "1.9.8",
+      "files": 64,
       "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/blender-model-animation-enhancer/skills/animated-world-guard/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/animation-layers-hybrid/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
-        "packages/blender-model-animation-enhancer/skills/png-multiview-blender-model-animation-enhancer/SKILL.md"
-      ]
+        "packages/blender-model-animation-enhancer/skills/effekseer-combat/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/freemocap-hybrid/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/mantaflow-fire/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/png-multiview-blender-model-animation-enhancer/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/rigify-hybrid/SKILL.md"
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "game-style-forge",
-      "version": "1.10.3",
-      "files": 12,
+      "version": "1.10.6",
+      "files": 46,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
+        "packages/game-style-forge/skills/effekseer-combat/SKILL.md",
         "packages/game-style-forge/skills/game-style-forge/SKILL.md",
+        "packages/game-style-forge/skills/mantaflow-fire/SKILL.md",
         "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "voxel-atmosphere-engine",
@@ -338,14 +345,21 @@
     },
     {
       "name": "animation-quality",
-      "version": "0.7.0",
-      "files": 10,
+      "version": "0.9.1",
+      "files": 30,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
-      "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified",
       "skills": [
-        "packages/animation-quality/skills/animation-quality/SKILL.md"
-      ]
+        "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
+        "packages/animation-quality/skills/animation-quality/SKILL.md",
+        "packages/animation-quality/skills/effekseer-combat/SKILL.md",
+        "packages/animation-quality/skills/freemocap-hybrid/SKILL.md",
+        "packages/animation-quality/skills/gltf-quality-gate/SKILL.md",
+        "packages/animation-quality/skills/mantaflow-fire-quality/SKILL.md",
+        "packages/animation-quality/skills/mediapipe-pose-quality/SKILL.md",
+        "packages/animation-quality/skills/rigify-hybrid/SKILL.md"
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     }
   ]
 }
