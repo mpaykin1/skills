@@ -16,3 +16,7 @@ The canonical dispatcher and registry live in https://github.com/mpaykin1/skills
 6. Promote only actual outputs through existing lab/FINISH gates, never alter meta6. Keep original files immutable. Update the registry and GitHub/ChatGPT parity only after verification.
 
 Stages: architecture = dispatcher and registry; installation = separate pinned dependencies per worker; integration = successful real artifact chain; automation readiness = actual successful automation run. Do not conflate stages.
+
+
+## Godot CLI
+Use godot-cli-bridge in Godot Game to HTML. Installer scripts/install_godot_cli.sh and .github/workflows/nexus-godot.yml; source immutable, native gameplay and browser visual guards retained. Do not claim runtime readiness until native export and browser verification.
