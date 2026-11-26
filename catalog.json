@@ -154,13 +154,13 @@
     {
       "name": "png-living-3d-city",
       "version": "1.5.0",
-      "files": 5,
+      "files": 18,
       "skill": "packages/png-living-3d-city/skills/png-living-3d-city/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/png-living-3d-city/skills/png-living-3d-city/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; vendor sources, external dependencies, binary resources and execution not verified"
     },
     {
       "name": "living-image-animator",

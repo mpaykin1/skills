@@ -1,0 +1,26 @@
+{
+  "name": "png-living-3d-city-effects-runtime",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline-vendored original 3 CSG/Quarks/postprocessing source libraries with pre-transpiled Quarks and reproducible Three.js build",
+  "scripts": {
+    "verify:vendor": "node ./verify-vendor.mjs",
+    "verify": "node ./verify-vendor.mjs && node ./verify-dependencies.mjs",
+    "build": "npm run verify && esbuild ./advanced_effects.mjs --bundle --format=esm --platform=browser --target=es2022 --outfile=./dist/advanced_effects.bundle.mjs"
+  },
+  "dependencies": {
+    "three": "0.187.0",
+    "three-mesh-bvh": "0.9.18",
+    "three-bvh-csg": "file:./vendor/three-bvh-csg",
+    "quarks.core": "file:./vendor/quarks.core",
+    "three.quarks": "file:./vendor/three.quarks",
+    "postprocessing": "file:./vendor/postprocessing"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

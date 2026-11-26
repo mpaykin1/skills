@@ -1,0 +1,30 @@
+[
+  {
+    "package": "three-bvh-csg",
+    "archive": "three-bvh-csg-0.0.18.zip",
+    "zip_sha256": "94df4cac0c5099292d0986ebc12db5f4fd2497dc633ce3aa3827b51edb6cbd7e",
+    "files": 41,
+    "location": "runtime/vendor/three-bvh-csg"
+  },
+  {
+    "package": "postprocessing",
+    "archive": "postprocessing-main.zip",
+    "zip_sha256": "95c81303e7cbbe431cd7c425a185152ff26725d7970eb2835e938bec26c1cbb0",
+    "files": 250,
+    "location": "runtime/vendor/postprocessing"
+  },
+  {
+    "package": "three.quarks",
+    "archive": "three.quarks-master.zip",
+    "zip_sha256": "0babe43dedf3ebdeda5df19792ad35ce893af028eca9bfaf6ad92e52095b01e1",
+    "files": 47,
+    "location": "runtime/vendor/three.quarks"
+  },
+  {
+    "package": "quarks.core",
+    "archive": "three.quarks-master.zip",
+    "zip_sha256": "0babe43dedf3ebdeda5df19792ad35ce893af028eca9bfaf6ad92e52095b01e1",
+    "files": 80,
+    "location": "runtime/vendor/quarks.core"
+  }
+]
