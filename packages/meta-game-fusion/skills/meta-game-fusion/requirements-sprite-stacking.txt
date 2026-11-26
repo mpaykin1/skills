@@ -1,0 +1,6 @@
+# Offline authored 3D-slice packing only; not needed to run the game.
+Pillow>=10,<13
+numpy>=1.26,<3
+# Optional static watertight GLB to true volume slices (preview colors require approval)
+trimesh>=4.9,<5
+scipy>=1.13,<2

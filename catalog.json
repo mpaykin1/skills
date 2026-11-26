@@ -212,15 +212,22 @@
     },
     {
       "name": "meta-game-fusion",
-      "version": "2.4.0",
-      "files": 20,
+      "version": "2.4.6",
+      "files": 116,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/meta-game-fusion/skills/animated-world-guard/SKILL.md",
-        "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md"
-      ]
+        "packages/meta-game-fusion/skills/animation-layers-hybrid/SKILL.md",
+        "packages/meta-game-fusion/skills/effekseer-combat/SKILL.md",
+        "packages/meta-game-fusion/skills/freemocap-hybrid/SKILL.md",
+        "packages/meta-game-fusion/skills/mantaflow-fire/SKILL.md",
+        "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
+        "packages/meta-game-fusion/skills/png-multiview-meta-game-fusion/SKILL.md",
+        "packages/meta-game-fusion/skills/rigify-hybrid/SKILL.md",
+        "packages/meta-game-fusion/skills/sprite-stacking-primary/SKILL.md"
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "blender-model-animation-enhancer",

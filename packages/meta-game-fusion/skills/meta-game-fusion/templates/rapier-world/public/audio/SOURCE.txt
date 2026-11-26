@@ -1,0 +1,1 @@
+Original deterministic synthesized MGF demo audio; created with scripts/audio_synthesis.py. No third-party recordings.

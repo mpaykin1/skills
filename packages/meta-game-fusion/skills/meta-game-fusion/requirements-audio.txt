@@ -1,0 +1,2 @@
+# Optional only for generating new original CPU sound assets; existing game ships all sounds.
+numpy>=1.24,<3
