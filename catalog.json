@@ -117,24 +117,11 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "1.1.0",
-      "files": 28,
+      "version": "1.2.0",
+      "files": 44,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; automation oversight requires authorized Automations tools and actual run evidence; isolated OSS installer needs approved hash-locked requirements; CLI-Anything dispatcher and pinned registry added, backend execution pending",
-      "additional_skills": [
-        "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
-        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
-        "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
-        "packages/skill-synergy-manager/skills/nexus-cli-anything/SKILL.md"
-      ],
-      "scripts": [
-        "packages/skill-synergy-manager/scripts/oss_upgrade_gate.py",
-        "packages/skill-synergy-manager/scripts/nexus_catalog_sync.py",
-        "packages/skill-synergy-manager/scripts/nexus_automation_audit.py",
-        "packages/skill-synergy-manager/scripts/nexus_oss_venv.py",
-        "packages/skill-synergy-manager/scripts/nexus_cli.py"
-      ]
+      "status": "Author skill text and scripts; external dependencies and runtime not verified"
     },
     {
       "name": "meta-game-fusion",
