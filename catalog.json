@@ -131,8 +131,8 @@
     },
     {
       "name": "seo-site-engineer",
-      "version": "1.1.0",
-      "files": 4,
+      "version": "1.2.0",
+      "files": 6,
       "skill": "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md",
       "skills": [
         "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md"
@@ -357,8 +357,8 @@
     },
     {
       "name": "music-skill",
-      "version": "0.20.0",
-      "files": 38,
+      "version": "0.21.0",
+      "files": 40,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "skills": [
         "packages/music-skill/skills/music-audacity-bridge/SKILL.md",
@@ -383,8 +383,8 @@
     },
     {
       "name": "animation-quality",
-      "version": "0.11.1",
-      "files": 44,
+      "version": "0.12.0",
+      "files": 47,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "skills": [
         "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
@@ -395,6 +395,7 @@
         "packages/animation-quality/skills/gltf-quality-gate/SKILL.md",
         "packages/animation-quality/skills/mantaflow-fire-quality/SKILL.md",
         "packages/animation-quality/skills/mediapipe-pose-quality/SKILL.md",
+        "packages/animation-quality/skills/mujoco-motion-quality/SKILL.md",
         "packages/animation-quality/skills/opensim-motion-quality/SKILL.md",
         "packages/animation-quality/skills/opensubdiv-hybrid/SKILL.md",
         "packages/animation-quality/skills/openvdb-fire/SKILL.md",
