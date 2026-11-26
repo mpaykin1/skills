@@ -1,0 +1,58 @@
+name: Nexus MuseScore CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-musescore.yml'
+      - 'packages/skill-synergy-manager/scripts/install_musescore_cli.sh'
+permissions:
+  contents: read
+jobs:
+  musescore:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install MuseScore and pinned CLI
+        run: bash packages/skill-synergy-manager/scripts/install_musescore_cli.sh "$RUNNER_TEMP/nexus-musescore"
+      - name: Export original score to MIDI
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/nexus-musescore-job"
+          mkdir -p "$dir"
+          export JOB_DIR="$dir"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import xml.etree.ElementTree as E
+          root=E.Element("score-partwise",version="4.0")
+          pl=E.SubElement(root,"part-list")
+          sp=E.SubElement(pl,"score-part",id="P1")
+          E.SubElement(sp,"part-name").text="Piano"
+          p=E.SubElement(root,"part",id="P1")
+          for i,notes in enumerate([["C","E","G","E"],["D","F","A","G"]],1):
+              m=E.SubElement(p,"measure",number=str(i))
+              if i==1:
+                  a=E.SubElement(m,"attributes")
+                  E.SubElement(a,"divisions").text="1"
+                  k=E.SubElement(a,"key"); E.SubElement(k,"fifths").text="0"
+                  t=E.SubElement(a,"time"); E.SubElement(t,"beats").text="4"; E.SubElement(t,"beat-type").text="4"
+                  c=E.SubElement(a,"clef"); E.SubElement(c,"sign").text="G"; E.SubElement(c,"line").text="2"
+              for step in notes:
+                  n=E.SubElement(m,"note"); pitch=E.SubElement(n,"pitch")
+                  E.SubElement(pitch,"step").text=step; E.SubElement(pitch,"octave").text="4"
+                  E.SubElement(n,"duration").text="1"; E.SubElement(n,"type").text="quarter"
+          E.ElementTree(root).write(Path(os.environ["JOB_DIR"])/"motif.musicxml",encoding="utf-8",xml_declaration=True)
+          PY
+          dispatcher="$GITHUB_WORKSPACE/packages/skill-synergy-manager/scripts/nexus_cli.py"
+          xvfb-run -a python3 "$dispatcher" run --workspace "$dir" --timeout 180 musescore -- --json export midi -i "$dir/motif.musicxml" -o "$dir/motif.mid"
+          python - <<'PY'
+          import os, mido
+          from pathlib import Path
+          p=Path(os.environ["JOB_DIR"])/"motif.mid"
+          notes=[m.note for t in mido.MidiFile(p).tracks for m in t if m.type=="note_on" and m.velocity]
+          assert notes == [60,64,67,64,62,65,69,67], notes
+          PY
