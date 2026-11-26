@@ -277,15 +277,15 @@
     {
       "name": "voxel-atmosphere-engine",
       "version": "0.10.2",
-      "files": 3,
+      "files": 91,
       "skill": "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/voxel-atmosphere-engine/skills/animated-world-guard/SKILL.md",
         "packages/voxel-atmosphere-engine/skills/png-multiview-voxel-atmosphere-engine/SKILL.md",
         "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; vendor sources, external dependencies, binary resources and execution not verified"
     },
     {
       "name": "casual-game-studio",
