@@ -83,13 +83,13 @@
     {
       "name": "location-photo-to-3d",
       "version": "0.4.0",
-      "files": 12,
+      "files": 15,
       "skill": "packages/location-photo-to-3d/skills/location/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/location-photo-to-3d/skills/location/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "godot-game-to-html",
@@ -290,15 +290,15 @@
     {
       "name": "casual-game-studio",
       "version": "1.2.3",
-      "files": 20,
+      "files": 61,
       "skill": "packages/casual-game-studio/skills/casual-game-studio/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/casual-game-studio/skills/animated-world-guard/SKILL.md",
         "packages/casual-game-studio/skills/casual-game-studio/SKILL.md",
         "packages/casual-game-studio/skills/png-multiview-casual-game-studio/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "voxel-game-creator",
