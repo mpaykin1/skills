@@ -7,7 +7,10 @@
       "files": 2,
       "skill": "packages/sprite-stacking-grunge/skills/sprite-stacking-grunge/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/sprite-stacking-grunge/skills/sprite-stacking-grunge/SKILL.md"
+      ]
     },
     {
       "name": "gif-asset-animator",
@@ -15,7 +18,10 @@
       "files": 2,
       "skill": "packages/gif-asset-animator/skills/gif-asset-animator/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/gif-asset-animator/skills/gif-asset-animator/SKILL.md"
+      ]
     },
     {
       "name": "grange",
@@ -25,7 +31,10 @@
       "excluded": [
         "references/car-style.png (binary, rights not checked)"
       ],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/grange/skills/grange/SKILL.md"
+      ]
     },
     {
       "name": "gif-outside",
@@ -33,7 +42,10 @@
       "files": 2,
       "skill": "packages/gif-outside/skills/gif-outside/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/gif-outside/skills/gif-outside/SKILL.md"
+      ]
     },
     {
       "name": "ghost-gif-interior",
@@ -41,7 +53,10 @@
       "files": 2,
       "skill": "packages/ghost-gif-interior/skills/ghost-gif-interior/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/ghost-gif-interior/skills/ghost-gif-interior/SKILL.md"
+      ]
     },
     {
       "name": "gif-space",
@@ -49,7 +64,10 @@
       "files": 2,
       "skill": "packages/gif-space/skills/gif-space/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/gif-space/skills/gif-space/SKILL.md"
+      ]
     },
     {
       "name": "fantasy-weapon-gif",
@@ -57,7 +75,10 @@
       "files": 3,
       "skill": "packages/fantasy-weapon-gif/skills/fantasy-weapon-gif/SKILL.md",
       "excluded": [],
-      "status": "source snapshot"
+      "status": "source snapshot",
+      "skills": [
+        "packages/fantasy-weapon-gif/skills/fantasy-weapon-gif/SKILL.md"
+      ]
     },
     {
       "name": "location-photo-to-3d",
@@ -65,7 +86,10 @@
       "files": 12,
       "skill": "packages/location-photo-to-3d/skills/location/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/location-photo-to-3d/skills/location/SKILL.md"
+      ]
     },
     {
       "name": "godot-game-to-html",
@@ -73,7 +97,26 @@
       "files": 103,
       "skill": "packages/godot-game-to-html/skills/godot-game-to-html/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified",
+      "skills": [
+        "packages/godot-game-to-html/skills/basis-universal-offline/SKILL.md",
+        "packages/godot-game-to-html/skills/browser-parity-capture/SKILL.md",
+        "packages/godot-game-to-html/skills/gltf-asset-guard/SKILL.md",
+        "packages/godot-game-to-html/skills/godot-game-to-html/SKILL.md",
+        "packages/godot-game-to-html/skills/godot-shader-stacker-bridge/SKILL.md",
+        "packages/godot-game-to-html/skills/manifold-sprite-geometry/SKILL.md",
+        "packages/godot-game-to-html/skills/open3d-source-volume/SKILL.md",
+        "packages/godot-game-to-html/skills/pixi-original-sprites/SKILL.md",
+        "packages/godot-game-to-html/skills/sprite-in-the-round-bridge/SKILL.md",
+        "packages/godot-game-to-html/skills/sprite-sheet-helper-bridge/SKILL.md",
+        "packages/godot-game-to-html/skills/sprite-stacking-four-views/SKILL.md",
+        "packages/godot-game-to-html/skills/sprite-stacking-priority/SKILL.md",
+        "packages/godot-game-to-html/skills/sprite-stacking-scene-parts/SKILL.md",
+        "packages/godot-game-to-html/skills/three-glb-visual-runtime/SKILL.md",
+        "packages/godot-game-to-html/skills/unity-il2cpp-code-recovery/SKILL.md",
+        "packages/godot-game-to-html/skills/unity-mono-code-recovery/SKILL.md",
+        "packages/godot-game-to-html/skills/visual-parity-guard/SKILL.md"
+      ]
     },
     {
       "name": "meta-games-catalog-updater",
@@ -81,7 +124,10 @@
       "files": 7,
       "skill": "packages/meta-games-catalog-updater/skills/meta-games-catalog-updater/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified",
+      "skills": [
+        "packages/meta-games-catalog-updater/skills/meta-games-catalog-updater/SKILL.md"
+      ]
     },
     {
       "name": "seo-site-engineer",
@@ -89,7 +135,10 @@
       "files": 2,
       "skill": "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md"
+      ]
     },
     {
       "name": "monster-anatomy-3d",
@@ -97,7 +146,10 @@
       "files": 83,
       "skill": "packages/monster-anatomy-3d/skills/monster-anatomy-3d/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; binary assets, vendor sources, external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; binary assets, vendor sources, external dependencies and runtime not verified",
+      "skills": [
+        "packages/monster-anatomy-3d/skills/monster-anatomy-3d/SKILL.md"
+      ]
     },
     {
       "name": "png-living-3d-city",
@@ -105,7 +157,10 @@
       "files": 5,
       "skill": "packages/png-living-3d-city/skills/png-living-3d-city/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/png-living-3d-city/skills/png-living-3d-city/SKILL.md"
+      ]
     },
     {
       "name": "living-image-animator",
@@ -113,15 +168,47 @@
       "files": 181,
       "skill": "packages/living-image-animator/skills/living-image-animator/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; vendor sources, external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; vendor sources, external dependencies and runtime not verified",
+      "skills": [
+        "packages/living-image-animator/skills/antopilo-spritestacker/SKILL.md",
+        "packages/living-image-animator/skills/apngasm-transparent-export/SKILL.md",
+        "packages/living-image-animator/skills/danielwh2-sprite-stacking/SKILL.md",
+        "packages/living-image-animator/skills/living-image-animator/SKILL.md",
+        "packages/living-image-animator/skills/nipplejs-mobile-controls/SKILL.md",
+        "packages/living-image-animator/skills/png-multiview-living-image-animator/SKILL.md",
+        "packages/living-image-animator/skills/shader-stacker-godot/SKILL.md",
+        "packages/living-image-animator/skills/sprite-in-the-round/SKILL.md",
+        "packages/living-image-animator/skills/sprite-stacking-3d/SKILL.md",
+        "packages/living-image-animator/skills/sprite-stacking-priority/SKILL.md",
+        "packages/living-image-animator/skills/spritestack2d-godot/SKILL.md"
+      ]
     },
     {
       "name": "skill-synergy-manager",
       "version": "1.2.0",
-      "files": 44,
+      "files": 46,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; two repository-only files retained from earlier revisions, not part of plugin release 1.2.0; external dependencies and runtime not verified",
+      "skills": [
+        "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-atmosphere/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-blender/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-casual/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-forge/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-fusion/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-hero/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-bridge-voxel/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-cli-anything/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
+        "packages/skill-synergy-manager/skills/png-architecture-multiview-guard/SKILL.md",
+        "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md"
+      ],
+      "repository_only": [
+        "packages/skill-synergy-manager/assets/nexus-cli-registry.json",
+        "packages/skill-synergy-manager/scripts/nexus_cli.py"
+      ]
     },
     {
       "name": "meta-game-fusion",
@@ -129,7 +216,11 @@
       "files": 20,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/meta-game-fusion/skills/animated-world-guard/SKILL.md",
+        "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md"
+      ]
     },
     {
       "name": "blender-model-animation-enhancer",
@@ -137,7 +228,12 @@
       "files": 20,
       "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/blender-model-animation-enhancer/skills/animated-world-guard/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/png-multiview-blender-model-animation-enhancer/SKILL.md"
+      ]
     },
     {
       "name": "game-style-forge",
@@ -145,7 +241,12 @@
       "files": 12,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
+        "packages/game-style-forge/skills/game-style-forge/SKILL.md",
+        "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
+      ]
     },
     {
       "name": "voxel-atmosphere-engine",
@@ -153,7 +254,12 @@
       "files": 3,
       "skill": "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/voxel-atmosphere-engine/skills/animated-world-guard/SKILL.md",
+        "packages/voxel-atmosphere-engine/skills/png-multiview-voxel-atmosphere-engine/SKILL.md",
+        "packages/voxel-atmosphere-engine/skills/voxel-atmosphere-engine/SKILL.md"
+      ]
     },
     {
       "name": "casual-game-studio",
@@ -161,7 +267,12 @@
       "files": 20,
       "skill": "packages/casual-game-studio/skills/casual-game-studio/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/casual-game-studio/skills/animated-world-guard/SKILL.md",
+        "packages/casual-game-studio/skills/casual-game-studio/SKILL.md",
+        "packages/casual-game-studio/skills/png-multiview-casual-game-studio/SKILL.md"
+      ]
     },
     {
       "name": "voxel-game-creator",
@@ -169,7 +280,12 @@
       "files": 20,
       "skill": "packages/voxel-game-creator/skills/voxel-game-creator/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/voxel-game-creator/skills/animated-world-guard/SKILL.md",
+        "packages/voxel-game-creator/skills/png-multiview-voxel-game-creator/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator/SKILL.md"
+      ]
     },
     {
       "name": "hero-animator",
@@ -177,7 +293,13 @@
       "files": 20,
       "skill": "packages/hero-animator/skills/hero-animator/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "skills": [
+        "packages/hero-animator/skills/animated-world-guard/SKILL.md",
+        "packages/hero-animator/skills/anti-jerk-animation/SKILL.md",
+        "packages/hero-animator/skills/frame-by-frame-characters/SKILL.md",
+        "packages/hero-animator/skills/hero-animator/SKILL.md"
+      ]
     },
     {
       "name": "sprite-stacking-cover-pack",
@@ -185,7 +307,10 @@
       "files": 11,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Infinigen exporter bridge and textured mesh CPU slicing/merge verified on authored GLB fixtures; Infinigen, Open3D, OpenVDB and GPU inference runtimes unverified"
+      "status": "Infinigen exporter bridge and textured mesh CPU slicing/merge verified on authored GLB fixtures; Infinigen, Open3D, OpenVDB and GPU inference runtimes unverified",
+      "skills": [
+        "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
+      ]
     },
     {
       "name": "music-skill",
@@ -193,7 +318,10 @@
       "files": 28,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified",
+      "skills": [
+        "packages/music-skill/skills/music/SKILL.md"
+      ]
     },
     {
       "name": "blockwild-evolution",
@@ -203,7 +331,10 @@
       "excluded": [
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
-      "status": "author skill, read-only diagnosis verified on source ZIP and HTML v9; optional OSS dependencies not installed"
+      "status": "author skill, read-only diagnosis verified on source ZIP and HTML v9; optional OSS dependencies not installed",
+      "skills": [
+        "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md"
+      ]
     },
     {
       "name": "animation-quality",
@@ -211,7 +342,10 @@
       "files": 10,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "excluded": [],
-      "status": "Author skill text and scripts; external dependencies and runtime not verified"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified",
+      "skills": [
+        "packages/animation-quality/skills/animation-quality/SKILL.md"
+      ]
     }
   ]
 }
