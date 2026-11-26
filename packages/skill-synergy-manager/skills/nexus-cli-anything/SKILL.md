@@ -16,3 +16,7 @@ The canonical dispatcher and registry live in https://github.com/mpaykin1/skills
 6. Promote only actual outputs through existing lab/FINISH gates, never alter meta6. Keep original files immutable. Update the registry and GitHub/ChatGPT parity only after verification.
 
 Stages: architecture = dispatcher and registry; installation = separate pinned dependencies per worker; integration = successful real artifact chain; automation readiness = actual successful automation run. Do not conflate stages.
+
+
+## RenderDoc native GPU diagnostics
+Use renderdoc-gpu-bridge in Game Style Forge; registry key renderdoc; install via scripts/install_renderdoc_cli.sh. Native replay and browser performance are separate. Use compatible authorized captures; never promote merely on CLI help. Feedback to Blender, GIMP, Sprite Stacking, Godot, Three.js and existing visual guards.
