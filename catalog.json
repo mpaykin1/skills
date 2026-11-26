@@ -217,7 +217,7 @@
     },
     {
       "name": "meta-game-fusion",
-      "version": "2.4.9",
+      "version": "2.4.10",
       "files": 130,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
       "skills": [
