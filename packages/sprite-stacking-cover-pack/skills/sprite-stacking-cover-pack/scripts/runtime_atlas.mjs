@@ -1,5 +1,6 @@
 // Uses the host game's exact Three.js release and its matching Basis transcoder.
 import * as THREE from 'three';
+import { applyTextureRole } from './runtime_color.mjs';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 
 export async function loadRuntimeAtlas(manifestURL, renderer, {transcoderPath, approvedKtx2 = false} = {}) {
@@ -18,7 +19,7 @@ export async function loadRuntimeAtlas(manifestURL, renderer, {transcoderPath, a
       }
       texture ??= await png.loadAsync(new URL(page.png,url).href);
       if (texture.image.width !== page.size[0] || texture.image.height !== page.size[1]) { texture.dispose(); throw Error('Atlas dimensions differ'); }
-      texture.flipY = false; texture.colorSpace = THREE.SRGBColorSpace;
+      texture.flipY = false; applyTextureRole(texture,'base-color');
       texture.minFilter = texture.magFilter = THREE.NearestFilter; texture.generateMipmaps = false;
       texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping; texture.needsUpdate = true;
       textures.push(texture);
