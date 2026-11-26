@@ -240,7 +240,7 @@
     },
     {
       "name": "blender-model-animation-enhancer",
-      "version": "1.9.11",
+      "version": "1.9.12",
       "files": 84,
       "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
       "skills": [
