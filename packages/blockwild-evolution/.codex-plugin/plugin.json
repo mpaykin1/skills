@@ -7,12 +7,12 @@
     "capabilities": [
       "Interactive"
     ],
-    "defaultPrompt": "\u0423\u043b\u0443\u0447\u0448\u0438 BLOCKWILD \u043d\u0430 \u043e\u0434\u0438\u043d \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0451\u043d\u043d\u044b\u0439 \u0448\u0430\u0433: \u043d\u0430\u0439\u0434\u0438 \u0441\u0430\u043c\u043e\u0435 \u0443\u0437\u043a\u043e\u0435 \u043c\u0435\u0441\u0442\u043e, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 \u043d\u0430\u0448\u0438 \u0441\u043a\u0438\u043b\u043b\u044b \u0438 \u043f\u043e\u0434\u0445\u043e\u0434\u044f\u0449\u0438\u0439 open-source, \u0441\u043e\u0437\u0434\u0430\u0439 \u043e\u0431\u043d\u043e\u0432\u043b\u0451\u043d\u043d\u044b\u0439 \u0430\u0432\u0442\u043e\u043d\u043e\u043c\u043d\u044b\u0439 HTML.",
+    "defaultPrompt": "\u0423\u043b\u0443\u0447\u0448\u0438 BLOCKWILD \u0440\u0435\u0430\u043b\u044c\u043d\u044b\u043c\u0438 \u043e\u0431\u044a\u0451\u043c\u043d\u044b\u043c\u0438 Sprite Stacking \u043c\u043e\u0434\u0435\u043b\u044f\u043c\u0438, \u0432\u043e\u0441\u0435\u043c\u044c\u044e \u0440\u0430\u043a\u0443\u0440\u0441\u0430\u043c\u0438, \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e\u0439 \u0430\u043d\u0438\u043c\u0430\u0446\u0438\u0435\u0439 \u0438 \u0438\u0437\u043c\u0435\u0440\u0438\u043c\u043e\u0439 \u0432\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u043e\u0439 \u0441\u0440\u0430\u0432\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u043c\u0435\u0442\u0440\u0438\u043a\u043e\u0439.",
     "developerName": "META GAMES"
   },
   "name": "blockwild-evolution",
-  "version": "0.3.0",
-  "description": "BLOCKWILD Evolution v0.3: source-preserving native-world HTML enhancement; real volumetric RGBA source-slice stacks, Golden Garden spatial materials/caustics/lighting, OpenCV reference benchmarking, one renderer and one RAF.",
+  "version": "0.4.0",
+  "description": "BLOCKWILD Evolution v0.4: 8-direction coherent RGBA volume character atlases, source-world preserving offline HTML pipeline, OpenCV matched-frame benchmarking, Scipy voxel rotation; integrates authored skills and interop.",
   "author": {
     "name": "META GAMES"
   },
