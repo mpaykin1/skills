@@ -323,11 +323,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.7.0",
-      "files": 13,
+      "version": "0.8.0",
+      "files": 15,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Material Maker PBR map adapter; CPU map import and geometry/alpha preservation checked on authored fixture; Material Maker exporter and prior external runtimes unverified",
+      "status": "LPIPS feedback adapter; CPU preprocessing, alpha and duplicate routing checked; pretrained LPIPS inference and previous external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
