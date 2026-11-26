@@ -14,7 +14,7 @@ def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
-def load_manifest(path):
+def load_manifest(path, *, allow_unreviewed_oidn=False):
     path = Path(path).resolve()
     spec = json.loads(path.read_text(encoding='utf-8'))
     root = path.parent
@@ -45,6 +45,12 @@ def load_manifest(path):
         raise ValueError('Unsupported cover dimensions')
     if len(set(hashes)) == 1 or all(np.array_equal(np.asarray(f),np.asarray(frames[0])) for f in frames):
         raise ValueError('Static sequence is not an animated cover')
+    if spec.get('renderSettings',{}).get('denoise')=='oidn' and not allow_unreviewed_oidn:
+        gate=spec.get('denoiseGate',{})
+        if (gate.get('status')!='accepted' or gate.get('candidateHashes')!=hashes
+            or gate.get('sceneSHA256')!=spec['sceneSHA256'] or not gate.get('calibrationId')
+            or not gate.get('visualApprovalId') or gate.get('metric',{}).get('metric')!='LPIPS'):
+            raise ValueError('OIDN candidate needs paired LPIPS, alpha, temporal and visual approval before encoding')
     return spec, frames, durations, hashes
 
 
