@@ -1,0 +1,54 @@
+name: Nexus GIMP CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-gimp.yml'
+      - 'packages/skill-synergy-manager/scripts/install_gimp_cli.sh'
+permissions:
+  contents: read
+jobs:
+  gimp:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install GIMP and pinned CLI
+        run: bash packages/skill-synergy-manager/scripts/install_gimp_cli.sh "$RUNNER_TEMP/nexus-gimp"
+      - name: Export transparent RGBA layer
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/nexus-gimp-job"
+          mkdir -p "$dir"
+          export JOB_DIR="$dir"
+          python - <<'PY'
+          import os
+          from PIL import Image, ImageDraw
+          from pathlib import Path
+          p=Path(os.environ["JOB_DIR"])
+          im=Image.new("RGBA",(64,64),(0,0,0,0))
+          ImageDraw.Draw(im).rectangle((16,16,47,47), fill=(160,80,40,255))
+          im.save(p/"source.png")
+          PY
+          dispatcher="$GITHUB_WORKSPACE/packages/skill-synergy-manager/scripts/nexus_cli.py"
+          run_cli() { xvfb-run -a python3 "$dispatcher" run --workspace "$dir" --timeout 120 gimp -- "$@"; }
+          run_cli --json project new --width 64 --height 64 --mode RGBA --background transparent -o "$dir/project.json"
+          run_cli --json --project "$dir/project.json" layer add-from-file "$dir/source.png"
+          run_cli --json --project "$dir/project.json" export render "$dir/output.png" | tee "$dir/export.json"
+          python - <<'PY'
+          import json, os
+          from PIL import Image, ImageChops
+          from pathlib import Path
+          p=Path(os.environ["JOB_DIR"])
+          a=Image.open(p/"source.png").convert("RGBA")
+          b=Image.open(p/"output.png").convert("RGBA")
+          assert a.size==b.size and not ImageChops.difference(a.getchannel("A"),b.getchannel("A")).getbbox(), "Alpha mask changed"
+          assert b.getpixel((32,32))[:3]==a.getpixel((32,32))[:3], "RGB changed"
+          result=json.loads((p/"export.json").read_text())
+          method=result.get("method","unknown")
+          print("renderer:",method)
+          assert method.startswith("gimp"), "Native GIMP not verified; fallback is not native success"
+          PY

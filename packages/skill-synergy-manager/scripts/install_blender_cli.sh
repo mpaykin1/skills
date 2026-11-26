@@ -9,8 +9,14 @@ cd "$work"
 version=4.2.0
 archive="blender-${version}-linux-x64.tar.xz"
 url="https://download.blender.org/release/Blender4.2"
-curl --fail --location --retry 2 -o "$archive" "$url/$archive"
-curl --fail --location --retry 2 -o blender.sha256 "$url/blender-${version}.sha256"
+mirror="https://mirror.blender.org/release/Blender4.2"
+fetch_release() {
+  local name="$1" out="$2"
+  curl --fail --location --retry 2 --connect-timeout 20 -o "$out" "$url/$name" ||
+  curl --fail --location --retry 2 --connect-timeout 20 -o "$out" "$mirror/$name"
+}
+fetch_release "$archive" "$archive"
+fetch_release "blender-${version}.sha256" blender.sha256
 awk -v f="$archive" '$2==f || $2=="*"f {print $1 "  " f}' blender.sha256 > selected.sha256
 test -s selected.sha256
 sha256sum -c selected.sha256
