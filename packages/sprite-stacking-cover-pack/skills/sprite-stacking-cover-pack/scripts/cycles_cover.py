@@ -1,5 +1,5 @@
 """Render actual Sprite Stacking slices with Blender Cycles; validate using ordinary Python."""
-import argparse, hashlib, json, math, struct, sys
+import argparse, hashlib, json, math, struct, sys, time
 from pathlib import Path
 
 
@@ -82,14 +82,21 @@ def load(scene_path):
     return source,s,assets,inputs
 
 
-def render(source,s,assets,inputs,out):
+def render(source,s,assets,inputs,out,denoise="off",samples=None):
     import bpy
     from mathutils import Vector
     if bpy.app.version<(4,5,0):raise RuntimeError('Blender 4.5+ required')
     root=source.parent;out=Path(out).resolve();manifest=root/(out.name+'-frames.json')
     if out.parent!=root or out.exists() or manifest.exists():raise ValueError('Output must be a new direct child of scene directory')
     out.mkdir();bpy.ops.wm.read_factory_settings(use_empty=True);sc=bpy.context.scene
-    sc.render.engine='CYCLES';sc.cycles.device='CPU';sc.cycles.samples=int(s.get('samples',32));sc.cycles.use_denoising=True;sc.cycles.transparent_max_bounces=64
+    sc.render.engine='CYCLES';sc.cycles.device='CPU';sc.cycles.samples=int(samples if samples is not None else s.get('samples',32));sc.cycles.use_denoising=(denoise=='oidn');sc.cycles.transparent_max_bounces=64
+    sc.cycles.seed=42;sc.cycles.use_animated_seed=False;sc.cycles.use_adaptive_sampling=False
+    if denoise=='oidn':
+        # Fail if this Blender build lacks OIDN or its guided quality settings.
+        sc.cycles.denoiser='OPENIMAGEDENOISE';sc.cycles.denoising_use_gpu=False
+        sc.cycles.denoising_input_passes='RGB_ALBEDO_NORMAL';sc.cycles.denoising_prefilter='ACCURATE';sc.cycles.denoising_quality='HIGH'
+    render_settings={'denoise':denoise,'samples':sc.cycles.samples,'seed':42,'adaptiveSampling':False,'device':'CPU','viewTransform':'AgX','denoiser':'OPENIMAGEDENOISE' if denoise=='oidn' else None,'guides':'RGB_ALBEDO_NORMAL' if denoise=='oidn' else None,'prefilter':'ACCURATE' if denoise=='oidn' else None,'quality':'HIGH' if denoise=='oidn' else None}
+    started=time.perf_counter()
     sc.render.resolution_x,sc.render.resolution_y=s['resolution'];sc.render.resolution_percentage=100;sc.render.fps=s['fps'];sc.render.image_settings.file_format='PNG';sc.render.image_settings.color_mode='RGBA';sc.render.image_settings.color_depth='8';sc.render.film_transparent=bool(s.get('transparent',False));sc.view_settings.view_transform='AgX'
     world=bpy.data.worlds.new('Cover world');sc.world=world;world.use_nodes=True;bg=world.node_tree.nodes.get('Background');bg.inputs['Color'].default_value=(*s.get('worldColor',[.04,.04,.06]),1);bg.inputs['Strength'].default_value=s.get('worldStrength',.25)
     def aim(o,t):o.rotation_euler=(Vector(t)-o.location).to_track_quat('-Z','Y').to_euler()
@@ -130,12 +137,12 @@ def render(source,s,assets,inputs,out):
         p=out/f'{i:04d}.png';sc.render.filepath=str(p);bpy.ops.render.render(write_still=True);frames.append({'path':str(p.relative_to(root)),'sha256':sha(p),'durationMs':round((i+1)*1000/fps)-round(i*1000/fps)})
     if len({f['sha256'] for f in frames})<2:raise RuntimeError('Rendered frames are identical')
     if any(sha(root/p)!=h for p,h in inputs.items()):raise RuntimeError('Source changed during render')
-    manifest.write_text(json.dumps({'scene':source.name,'sceneSHA256':inputs[source.name],'frames':frames,'inputSHA256':inputs,'renderer':'Blender Cycles','blenderVersion':bpy.app.version_string,'status':'rendered; visual and browser review required'},indent=2)+'\n');return manifest
+    manifest.write_text(json.dumps({'scene':source.name,'sceneSHA256':inputs[source.name],'frames':frames,'inputSHA256':inputs,'renderer':'Blender Cycles','blenderVersion':bpy.app.version_string,'renderSettings':render_settings,'wallSeconds':time.perf_counter()-started,'status':'rendered; visual and browser review required'},indent=2)+'\n');return manifest
 
 
 def main():
-    argv=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else sys.argv[1:];p=argparse.ArgumentParser(description=__doc__);p.add_argument('--scene',required=True);p.add_argument('--out');p.add_argument('--validate-only',action='store_true');a=p.parse_args(argv);source,s,assets,inputs=load(a.scene)
+    argv=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else sys.argv[1:];p=argparse.ArgumentParser(description=__doc__);p.add_argument('--scene',required=True);p.add_argument('--out');p.add_argument('--validate-only',action='store_true');p.add_argument('--denoise',choices=['off','oidn'],default='off');p.add_argument('--samples',type=int,choices=range(1,513),metavar='1..512');a=p.parse_args(argv);source,s,assets,inputs=load(a.scene)
     if a.validate_only:print(f'Validated {len(assets)} scene instances and {len(inputs)} input files; no render performed');return
     if not a.out:p.error('--out required for rendering')
-    print(render(source,s,assets,inputs,a.out))
+    print(render(source,s,assets,inputs,a.out,a.denoise,a.samples))
 if __name__=='__main__':main()
