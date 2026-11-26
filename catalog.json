@@ -235,8 +235,8 @@
     },
     {
       "name": "blender-model-animation-enhancer",
-      "version": "1.9.8",
-      "files": 64,
+      "version": "1.9.10",
+      "files": 73,
       "skill": "packages/blender-model-animation-enhancer/skills/blender-model-animation-enhancer/SKILL.md",
       "skills": [
         "packages/blender-model-animation-enhancer/skills/animated-world-guard/SKILL.md",
@@ -245,8 +245,10 @@
         "packages/blender-model-animation-enhancer/skills/effekseer-combat/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/freemocap-hybrid/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/mantaflow-fire/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/opensubdiv-hybrid/SKILL.md",
         "packages/blender-model-animation-enhancer/skills/png-multiview-blender-model-animation-enhancer/SKILL.md",
-        "packages/blender-model-animation-enhancer/skills/rigify-hybrid/SKILL.md"
+        "packages/blender-model-animation-enhancer/skills/rigify-hybrid/SKILL.md",
+        "packages/blender-model-animation-enhancer/skills/rokoko-retarget/SKILL.md"
       ],
       "excluded": [],
       "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
