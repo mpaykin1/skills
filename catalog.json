@@ -186,7 +186,7 @@
     {
       "name": "skill-synergy-manager",
       "version": "1.3.0",
-      "files": 52,
+      "files": 53,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "skills": [
         "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
@@ -211,7 +211,8 @@
         "packages/skill-synergy-manager/scripts/install_blender_cli.sh",
         "packages/skill-synergy-manager/scripts/install_gimp_cli.sh",
         "packages/skill-synergy-manager/scripts/install_musescore_cli.sh",
-        "packages/skill-synergy-manager/scripts/nexus_cli.py"
+        "packages/skill-synergy-manager/scripts/nexus_cli.py",
+        "packages/skill-synergy-manager/scripts/install_audacity_cli.sh"
       ]
     },
     {
@@ -342,14 +343,15 @@
     {
       "name": "music-skill",
       "version": "0.18.0",
-      "files": 35,
+      "files": 36,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "skills": [
         "packages/music-skill/skills/music-musescore-bridge/SKILL.md",
-        "packages/music-skill/skills/music/SKILL.md"
+        "packages/music-skill/skills/music/SKILL.md",
+        "packages/music-skill/skills/music-audacity-bridge/SKILL.md"
       ],
       "excluded": [],
-      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified; Audacity-style WAV harness runtime pending"
     },
     {
       "name": "blockwild-evolution",

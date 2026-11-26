@@ -1,0 +1,47 @@
+name: Nexus Audacity CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-audacity.yml'
+      - 'packages/skill-synergy-manager/scripts/install_audacity_cli.sh'
+permissions:
+  contents: read
+jobs:
+  audio:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned Audacity-style harness (Python WAV backend)
+        run: bash packages/skill-synergy-manager/scripts/install_audacity_cli.sh "$RUNNER_TEMP/nexus-audacity"
+      - name: Export aligned stereo PCM
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/nexus-audacity-job"
+          mkdir -p "$dir"
+          export JOB_DIR="$dir"
+          python - <<'PY'
+          import wave, math, struct, os
+          from pathlib import Path
+          p=Path(os.environ["JOB_DIR"])
+          with wave.open(str(p/"source.wav"),"wb") as f:
+              f.setparams((2,2,48000,0,"NONE","not compressed"))
+              f.writeframes(b"".join(struct.pack("<hh",v,v) for i in range(24000) for v in [int(5000*math.sin(2*math.pi*440*i/48000))]))
+          PY
+          dispatcher="$GITHUB_WORKSPACE/packages/skill-synergy-manager/scripts/nexus_cli.py"
+          run_cli() { python3 "$dispatcher" run --workspace "$dir" --timeout 120 audacity -- "$@"; }
+          run_cli --json project new --sample-rate 48000 --channels 2 -o "$dir/project.json"
+          run_cli --json --project "$dir/project.json" track add --name SFX
+          run_cli --json --project "$dir/project.json" clip add 0 "$dir/source.wav" --start 0.25
+          run_cli --json --project "$dir/project.json" export render "$dir/mix.wav" --preset wav
+          python - <<'PY'
+          import wave, os, struct
+          from pathlib import Path
+          with wave.open(str(Path(os.environ["JOB_DIR"])/"mix.wav"),"rb") as f:
+              assert (f.getframerate(),f.getnchannels(),f.getsampwidth(),f.getnframes())==(48000,2,2,36000)
+              a=struct.unpack("<72000h",f.readframes(36000))
+              assert max(map(abs,a[:24000]))==0 and 1000<max(map(abs,a[24000:]))<32767
+          PY
