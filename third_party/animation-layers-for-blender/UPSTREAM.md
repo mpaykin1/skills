@@ -1,0 +1,1 @@
+Unmodified GPL-3.0 source from https://github.com/evilmushroom/Animation-Layers-for-Blender/tree/7e9ac93dcc0ecf185c1d9883f71ef36e5235efa9. Optional legacy UI add-on, not verified on Blender 4.5. Our headless adapter uses Blender's native NLA independently. See LICENSE.
