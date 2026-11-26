@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "blockwild-evolution",
-  "version": "0.3.0",
-  "description": "BLOCKWILD Evolution v0.3: source-preserving native-world HTML enhancement; real volumetric RGBA source-slice stacks, Golden Garden spatial materials/caustics/lighting, OpenCV reference benchmarking, one renderer and one RAF.",
+  "version": "0.4.0",
+  "description": "BLOCKWILD Evolution v0.4: 8-direction coherent RGBA volume character atlases, source-world preserving offline HTML pipeline, OpenCV matched-frame benchmarking, Scipy voxel rotation; integrates authored skills and interop.",
   "author": {
     "name": "META GAMES"
   },
@@ -26,7 +26,7 @@
         "capabilities": [
           "Interactive"
         ],
-        "defaultPrompt": "Улучши BLOCKWILD на один подтверждённый шаг: найди самое узкое место, используй наши скиллы и подходящий open-source, создай обновлённый автономный HTML."
+        "defaultPrompt": "Улучши BLOCKWILD реальными объёмными Sprite Stacking моделями, восемью ракурсами, корректной анимацией и измеримой визуальной сравнительной метрикой."
       }
     }
   }

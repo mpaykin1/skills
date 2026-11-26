@@ -376,13 +376,13 @@
     },
     {
       "name": "blockwild-evolution",
-      "version": "0.3.0",
-      "files": 17,
+      "version": "0.4.0",
+      "files": 21,
       "skill": "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md",
       "excluded": [
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
-      "status": "source snapshot and reproducible Golden Garden v13 authored volumetric-sprite render upgrade; full Unity native game runtime not verified",
+      "status": "source snapshot with build-time SciPy 8-view 5-pose coherent RGBA source volumes; separate art renderer tested portrait/landscape; native full HTML/WebGL2 boot unverified; no Unity original characters recovered",
       "skills": [
         "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md"
       ]
