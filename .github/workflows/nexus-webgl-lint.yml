@@ -1,0 +1,34 @@
+name: Nexus WebGL Lint bootstrap
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/webgl-lint-bridge/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: packages/skill-synergy-manager/skills/webgl-lint-bridge/scripts
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npx --no-install playwright install --with-deps chromium
+      - name: Verify real WebGL good and invalid calls
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/lint-fixture"
+          mkdir -p "$dir"
+          printf '%s' '<link rel="icon" href="data:,"><canvas id="game"></canvas><script>const gl=document.querySelector("canvas").getContext("webgl2");gl.clearColor(.2,.4,.6,1);gl.clear(gl.COLOR_BUFFER_BIT);</script>' > "$dir/index.html"
+          printf '%s' '<link rel="icon" href="data:,"><canvas id="game"></canvas><script>const gl=document.querySelector("canvas").getContext("webgl2");gl.clearColor(NaN,0,0,1);</script>' > "$dir/bad.html"
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "$dir" >/dev/null 2>&1 &
+          trap 'kill $!' EXIT
+          sleep 1
+          node lint.mjs http://127.0.0.1:8765/ '#game'
+          if node lint.mjs http://127.0.0.1:8765/bad.html '#game' > "$dir/negative.json"; then exit 1; fi
+          python3 -c 'import json,sys; x=json.load(open(sys.argv[1])); assert x["active"] and any("nan" in e["message"].lower() for e in x["errors"]), x' "$dir/negative.json"
