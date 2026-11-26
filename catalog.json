@@ -117,19 +117,22 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "1.0.0",
-      "files": 22,
+      "version": "1.3.0",
+      "files": 27,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; actual project execution needs fresh repo access, installed skills and runtime verification",
+      "status": "partial source snapshot; anti-stall guard and manifests from installed 1.3.0; XState dependency pinned, npm unavailable in current runner; fallback executed",
       "additional_skills": [
         "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
-        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md"
+        "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-progress-guard/SKILL.md"
       ],
       "scripts": [
         "packages/skill-synergy-manager/scripts/oss_upgrade_gate.py",
-        "packages/skill-synergy-manager/scripts/nexus_catalog_sync.py"
-      ]
+        "packages/skill-synergy-manager/scripts/nexus_catalog_sync.py",
+        "packages/skill-synergy-manager/scripts/progress-guard/progress-guard.mjs"
+      ],
+      "installed_release_id": "pluginrel_6b07e4b7d8148191ab89c634c9d31af0"
     },
     {
       "name": "meta-game-fusion",

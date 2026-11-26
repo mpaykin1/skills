@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "skill-synergy-manager",
+  "version": "1.3.0",
+  "description": "Skill Nexus: live skill inventory, automation supervision, active game repairs, evidence-gated OSS tools and ChatGPT/GitHub release parity. CLI-Anything execution layer.",
+  "author": {
+    "name": "Plugin owner"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "capabilities": [
+          "Interactive"
+        ],
+        "category": "Productivity",
+        "defaultPrompt": [
+          "Обнови полный список наших авторских скилов и версий.",
+          "Найди лучшие связки наших скилов, которые взаимно усиливают друг друга.",
+          "Составь единый технологический конвейер для новой игры из наших скилов.",
+          "Найди новые скилы, обнови каталог, продолжи активный игровой проект и исправь одно узкое место.",
+          "Проверь все включённые автозадачи: какие скилы они фактически используют, исправь холостой прогон и улучши общий инструмент."
+        ],
+        "developerName": "Plugin owner",
+        "displayName": "Скилл Скилов — Skill Nexus",
+        "longDescription": "С каждым запуском обновляет перечень всех авторских скилов, обнаруживает новые скилы и активные игровые проекты; исправляет по одной реальной проблеме, интегрирует совместимые open-source решения и синхронизирует проверенные версии ChatGPT/GitHub. Дополнительный модуль контролирует реальные запуски автозадач, выявляет ошибки и устанавливает только проверенные OSS-инструменты в изолированную среду при доступности.",
+        "shortDescription": "Авторазвитие скилов и надзор автозадач"
+      }
+    }
+  }
+}
