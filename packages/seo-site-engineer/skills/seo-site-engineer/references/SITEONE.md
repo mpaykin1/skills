@@ -1,0 +1,11 @@
+# SiteOne Crawler — интеграция
+Upstream: https://github.com/janreges/siteone-crawler ; CLI: https://crawler.siteone.io/configuration/command-line-options/ . Использовать официальный проверенный релиз, фиксировать версию и SHA256; не скачивать и не запускать непроверенные скрипты. Установка зависит от окружения; отсутствие бинарника или сети — BLOCKED, не PASS. Бесплатный режим без AI/API ключей.
+
+Запуск из каталога скилла: `python3 scripts/siteone-audit.py https://mpaykin1.github.io/meta6/killklan/ --output /tmp/killklan-before.json`.
+Обход ограничен корнем сайта, 2 запросами/с, 2 workers, 300 URL. Robots.txt не игнорировать. Не отправлять приватный контент внешним сервисам. Сканирование внешних доменов отдельно только с разрешением.
+
+1. Снять baseline на живом production, сохранить версию и scope. Сопоставить JSON с фактическими HTTP, canonical, noindex, заголовками, OG, ссылками и sitemap. Не считать общий score эквивалентом позиции в Google.
+2. SEO Site Engineer исправляет первопричины в разрешённом репозитории; Web Performance проверяет мобильный рендер и ресурсы, если доступен. Данные SiteOne определяют приоритеты. Для JS сравнить сырой HTML с браузерным режимом upstream (`--browser` при поддержке версии), а не подменять им проверку индексируемого HTML.
+3. После публикации повторить обход с тем же scope. Для KILLKLAN после публикации 11 URL: `python3 scripts/siteone-audit.py https://mpaykin1.github.io/meta6/killklan/ --output /tmp/killklan-after.json --gate --min-pages 11 --baseline /tmp/killklan-before.json`. Baseline только от той же версии и конфигурации; рост числа страниц отдельно проверять по ожидаемым URL. Gate не заменяет существующий CI; не менять охрану. Ненулевой exit, неполный обход, HTTP 403/429, DNS и timeout — не PASS. JSON проверять на реальное покрытие и статус каждого ожидаемого URL.
+4. Sitemap строить только из проверенных живых canonical URL существующим генератором. SiteOne не заменяет Search Console и Bing. Не генерировать массовые тонкие страницы, не обещать позиции и трафик.
+5. KILLKLAN: перед очередным PR проверить перенос #451 и публикацию #338. Не накапливать изменения при блокировке публикации, использовать существующий ZADACHI/DLYA_CLAUDE. Не писать в meta6/killklan без разрешения владельца. При повторном запросе завершать доступную публикацию, затем оптимизировать на основании измерений.

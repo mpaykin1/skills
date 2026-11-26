@@ -131,14 +131,14 @@
     },
     {
       "name": "seo-site-engineer",
-      "version": "1.0.0",
-      "files": 2,
+      "version": "1.1.0",
+      "files": 4,
       "skill": "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/seo-site-engineer/skills/seo-site-engineer/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
     },
     {
       "name": "monster-anatomy-3d",
@@ -390,8 +390,8 @@
     },
     {
       "name": "cinematic-scene-director",
-      "version": "1.1.0",
-      "files": 8,
+      "version": "1.2.0",
+      "files": 10,
       "skill": "packages/cinematic-scene-director/skills/cinematic-scene-director/SKILL.md",
       "skills": [
         "packages/cinematic-scene-director/skills/cinematic-scene-director/SKILL.md"
