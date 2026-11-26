@@ -3,7 +3,7 @@ name: blockwild-evolution
 description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOCKWILD → standalone HTML game using existing authored skills; identify bottlenecks, research compatible open-source, integrate real improvements, improve this skill's own reproducible pipeline. Sprite stacking first, original-content protection and measurable progress."
 ---
 
-# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.2.0
+# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.3.0
 
 ## Триггеры
 «Улучши BLOCKWILD», «продолжи перенос ZIP в HTML», «сделай максимум через sprite stacking», «найди следующий open-source для BLOCKWILD», «повышай процент», «развивай свой скилл». Используй самые свежие исходные ZIP, HTML и правки владельца. Не создавай новую игрушку с тем же названием вместо восстановления текущей.
@@ -12,7 +12,7 @@ description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOC
 Проверять реальные источники → находить главное узкое место → привлекать **наши существующие авторские скиллы** → при нехватке возможностей исследовать новый open-source → воспроизводимо интегрировать и улучшать BLOCKWILD, а затем обновлять **этот же** скилл, если новая функция помогает будущим итерациям. **Каждый вызов должен завершаться готовым применённым улучшением, если доступны исходники/инструменты**, а не рекомендацией. При блокере прямо сообщать, что именно не удалось; не имитировать внедрение.
 
 ## Источники и текущая база (перепроверять при каждом вызове)
-- Вход: пользовательский `BLOCKWILD_v0.22.1_Windows(2).zip` и наиболее поздний `BLOCKWILD_v9_NATIVE_BLOCKS_STACKING_OFFLINE.html` либо более поздние файлы. Пользовательская прикреплённая версия приоритетнее любой версии GitHub.
+- Вход: пользовательский `BLOCKWILD_v0.32.1_Windows(2).zip` и наиболее поздний `BLOCKWILD_v9_NATIVE_BLOCKS_STACKING_OFFLINE.html` либо более поздние файлы. Пользовательская прикреплённая версия приоритетнее любой версии GitHub.
 - В Windows ZIP присутствует `BLOCKWILD/BLOCKWILD_Data/Managed/BW.Runtime.dll`. Есть Unity `resources.assets` и исходные бинарные данные мира. Не путать этот ZIP с одноимённым публичным OSS `RedLynx101/Blockwild`: они **не взаимозаменяемы**.
 - В v9: 14 505 исходных участков проиндексированы; блоки доступны из встроенных данных; отрисовывается подмножество. «100% встроенных данных» ≠ «100% геймплея». C# оригинальной игры и Unity-персонажи в HTML пока не восстановлены.
 - Исходное состояние измерять повторно: `python scripts/diagnose.py --zip INPUT.zip --html GAME.html --json OUT.json`. Не объявлять проценты по неоценённым компонентам.
@@ -48,5 +48,13 @@ description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOC
 - Один реальный герой, управляется игроком; действующие NPC, отдельная фаза каждого, без подмены фигурами и без паттернов. Мобильный UI заполняет viewport, joystick закреплён на экране.
 - Только обоснованные проценты: `source files archived`, `voxel records addressable`, `assets actually extracted`, `playable logic restored`, `sprite-stacking coverage`, `browser-verified behavior` — независимые величины.
 
-## Визуальный конвейер Sunlit Courtyard (v0.2.0)
+## Визуальный конвейер Sunlit Courtyard (v0.3.0)
 При запросах «улучши графику под солнечную изометрическую диораму» прочитай `references/SUNLIT_SPRITE_STACKING.md`. Его исполняемые стадии: `scripts/build_sunlit_volume_sprites.py` (оригинальные послойные объёмы), `scripts/stackstrip_bridge.py` (реальный PNG slice strip interop с `danielwh2/sprite-stacking`), `templates/sunlit_courtyard.js` (сцена без внешних CDN), `scripts/assemble_sunlit_html.py` (исходный HTML + слои → новая автономная версия). **Графический стиль v12 отличается от оригинала Unity; это дополнительный режим, а не реконструкция исходных персонажей.** Не заменять встроенные исходные бинарные данные или код. Процент 18.0 относится только к расстоянию цветового распределения до предоставленного пользователем эскиза. Для следующего этапа рекомендуется оригинальная GLB/мультиракурсная авторская графика и реальная реконструкция срезов четырёх видов — пока не реализовано.
+
+
+## BLOCKWILD v13 Golden Garden — deterministic source-preserving graphic upgrade
+- Use `python skills/blockwild-evolution/scripts/upgrade_golden_garden.py --source BLOCKWILD_v12_SUNLIT_COURTYARD_SPRITE_STACKING_OFFLINE.html --out BLOCKWILD_v13_GOLDEN_GARDEN_STACKED_ATMOSPHERE_OFFLINE.html`. Needs only Python standard library. The original entire v12 HTML, original compressed world geometry, world switch, animations, and source sprite layers remain in the output.
+- The upgrade enhances the existing **authored** Sunlit Courtyard, not restored Unity renderer. Renderer ownership unchanged: 3D source-volume RGBA baked sprite stacks are source of architecture/characters; Canvas2D renders these perspective stacks and 3D-projected walkable floor; single original RAF and inputs; no additional downloaded runtime libraries.
+- Changes: deterministic fine paving grout/gold medallions and ground moss, additional existing volumetric vegetation objects, tree-cast light-shaft shadows, water-plane-clipped animated caustics, cinematic grading. All changes are in the existing art renderer, not a separate bitmap over gameplay.
+- Benchmark via official BLOCKWILD Visual Benchmark LPIPS only if official model weights are actually available; otherwise use OpenCV matched-frame captures and **name the metric**. Example Chromium art-renderer results: detailed texture Laplacian variance +26.43% portrait, +22.06% landscape (mean +24.2%) against v12 at same scene/camera; Lab palette reference distance decrease +0.90% portrait only. Neither number equals objective overall graphics improvement. Browser full native 45MB startup/WebGL2 unverified, do not call full game PASS.
+- Highest-impact next task is recover user-authorized original Unity texture/mesh/rig data, then Blender + Hero Animator identity-locked eight-view authored character rigs, bake true multi-pose RGBA slices, and swap into **same** display pipeline; avoid false four-view hallucinations and preserve original collision logic.
