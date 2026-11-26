@@ -1,0 +1,2 @@
+soundfile==0.13.1
+numpy>=1.26,<3

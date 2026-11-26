@@ -1,0 +1,13 @@
+{
+  "name": "meta-multiplayer-server",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "colyseus": "0.17.11",
+    "@dimforge/rapier3d-compat": "0.19.3"
+  }
+}

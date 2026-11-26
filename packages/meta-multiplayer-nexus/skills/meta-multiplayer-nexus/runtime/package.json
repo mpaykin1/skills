@@ -1,0 +1,11 @@
+{
+  "name": "meta-multiplayer-transport",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "trystero": "0.27.0",
+    "@colyseus/sdk": "0.17.39",
+    "@dimforge/rapier3d-compat": "0.19.3"
+  }
+}

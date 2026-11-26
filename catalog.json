@@ -334,10 +334,11 @@
     },
     {
       "name": "music-skill",
-      "version": "0.15.0",
-      "files": 29,
+      "version": "0.18.0",
+      "files": 35,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "skills": [
+        "packages/music-skill/skills/music-musescore-bridge/SKILL.md",
         "packages/music-skill/skills/music/SKILL.md"
       ],
       "excluded": [],
@@ -358,18 +359,43 @@
     },
     {
       "name": "animation-quality",
-      "version": "0.9.1",
-      "files": 30,
+      "version": "0.10.1",
+      "files": 38,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "skills": [
         "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
         "packages/animation-quality/skills/animation-quality/SKILL.md",
+        "packages/animation-quality/skills/deeplabcut-motion-quality/SKILL.md",
         "packages/animation-quality/skills/effekseer-combat/SKILL.md",
         "packages/animation-quality/skills/freemocap-hybrid/SKILL.md",
         "packages/animation-quality/skills/gltf-quality-gate/SKILL.md",
         "packages/animation-quality/skills/mantaflow-fire-quality/SKILL.md",
         "packages/animation-quality/skills/mediapipe-pose-quality/SKILL.md",
-        "packages/animation-quality/skills/rigify-hybrid/SKILL.md"
+        "packages/animation-quality/skills/opensubdiv-hybrid/SKILL.md",
+        "packages/animation-quality/skills/rigify-hybrid/SKILL.md",
+        "packages/animation-quality/skills/rokoko-retarget/SKILL.md"
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
+    },
+    {
+      "name": "cinematic-scene-director",
+      "version": "1.1.0",
+      "files": 8,
+      "skill": "packages/cinematic-scene-director/skills/cinematic-scene-director/SKILL.md",
+      "skills": [
+        "packages/cinematic-scene-director/skills/cinematic-scene-director/SKILL.md"
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
+    },
+    {
+      "name": "meta-multiplayer-nexus",
+      "version": "1.2.0",
+      "files": 9,
+      "skill": "packages/meta-multiplayer-nexus/skills/meta-multiplayer-nexus/SKILL.md",
+      "skills": [
+        "packages/meta-multiplayer-nexus/skills/meta-multiplayer-nexus/SKILL.md"
       ],
       "excluded": [],
       "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
