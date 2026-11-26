@@ -312,8 +312,8 @@
     },
     {
       "name": "hero-animator",
-      "version": "0.19.3",
-      "files": 132,
+      "version": "0.19.4",
+      "files": 134,
       "skill": "packages/hero-animator/skills/hero-animator/SKILL.md",
       "skills": [
         "packages/hero-animator/skills/animated-world-guard/SKILL.md",
@@ -325,6 +325,7 @@
         "packages/hero-animator/skills/hero-interop/SKILL.md",
         "packages/hero-animator/skills/png-multiview-hero-animator/SKILL.md",
         "packages/hero-animator/skills/rigify-hybrid/SKILL.md",
+        "packages/hero-animator/skills/rokoko-retarget/SKILL.md",
         "packages/hero-animator/skills/smooth-pixel-animation/SKILL.md"
       ],
       "excluded": [],
