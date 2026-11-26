@@ -7,16 +7,19 @@ const [url, selector, out]=process.argv.slice(2);
 if(!url||!selector||!out) throw Error("usage: capture.mjs local-url canvas-selector output.json");
 const u=new URL(url);
 if(!["http:","https:"].includes(u.protocol)||!["127.0.0.1","localhost","[::1]"].includes(u.hostname)||u.username||u.password) throw Error("authorized local development URL only");
-const bundle=await readFile(require.resolve("spectorjs"),"utf8");
+const bundle=await readFile(require.resolve("spectorjs/dist/spector.bundle.js"),"utf8");
 const browser=await chromium.launch({headless:true});
 try {
- const context=await browser.newContext({viewport:{width:844,height:390}});
+ const context=await browser.newContext({viewport:{width:844,height:390},serviceWorkers:"block"});
  const page=await context.newPage();
  // Prevent accidental external network and redirects during isolated capture.
  await page.route("**/*",route=>{let v=new URL(route.request().url());return v.origin===u.origin?route.continue():route.abort()});
- await page.addInitScript({content:bundle+"\n;window.__nexusSpector=new SPECTOR.Spector();window.__nexusSpector.spyCanvases();"});
+ page.on("pageerror", e=>console.error("page error:",e.message));
  await page.goto(u.href,{waitUntil:"domcontentloaded",timeout:30000});
  await page.locator(selector).waitFor({state:"visible",timeout:20000});
+ // Follow upstream MCP injection after DOM initialization; initial texture uploads may be absent.
+ await page.addScriptTag({content:bundle});
+ await page.evaluate(()=>{if(!window.SPECTOR?.Spector)throw Error("Spector bundle did not expose API");window.__nexusSpector=new window.SPECTOR.Spector();});
  await page.waitForTimeout(1000);
  const capture=await page.evaluate(({selector})=>new Promise((ok,fail)=>{
   const canvas=document.querySelector(selector),s=window.__nexusSpector;
