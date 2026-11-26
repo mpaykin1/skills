@@ -317,11 +317,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.6.0",
-      "files": 11,
+      "version": "0.7.0",
+      "files": 13,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Infinigen exporter bridge and textured mesh CPU slicing/merge verified on authored GLB fixtures; Infinigen, Open3D, OpenVDB and GPU inference runtimes unverified",
+      "status": "Material Maker PBR map adapter; CPU map import and geometry/alpha preservation checked on authored fixture; Material Maker exporter and prior external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
