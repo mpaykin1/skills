@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.15.0",
-      "files": 32,
+      "version": "0.16.0",
+      "files": 35,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Explicit Cycles CPU OIDN adapter and matched-frame LPIPS/alpha/temporal residual approval gate; syntax and alpha/residual checks verified; actual Blender/OIDN/LPIPS and previous external runtimes unverified",
+      "status": "OCIO color contract, CPU conversion adapter and Three.js texture roles; profile hash rejection and lossless WebP encode verified on structural fixture; actual OCIO/Blender and external ML runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
