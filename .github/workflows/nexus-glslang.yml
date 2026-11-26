@@ -1,0 +1,66 @@
+name: Nexus glslang CPU shader validation
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/glslang-shader-bridge/**'
+      - '.github/workflows/nexus-glslang.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  glslang:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install signed CPU shader compiler
+        run: |
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends glslang-tools
+          dpkg-query -W glslang-tools
+          glslangValidator --version
+      - name: Validate ESSL pairs and reject invalid source
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/glslang-fixture"
+          mkdir -p "$dir"
+          cat > "$dir/scene.vert" <<'GLSL'
+          #version 300 es
+          precision highp float;
+          in vec3 position;
+          out vec2 uv;
+          void main(){uv=position.xy;gl_Position=vec4(position,1.0);}
+          GLSL
+          cat > "$dir/scene.frag" <<'GLSL'
+          #version 300 es
+          precision highp float;
+          in vec2 uv;
+          out vec4 color;
+          void main(){float fog=exp(-dot(uv,uv));color=vec4(vec3(fog),1.0);}
+          GLSL
+          printf '%s' '{"pairs":[{"id":"scene","vertex":"scene.vert","fragment":"scene.frag","profile":"300 es"}]}' > "$dir/pairs.json"
+          runner="$GITHUB_WORKSPACE/packages/skill-synergy-manager/skills/glslang-shader-bridge/scripts/validate_shaders.py"
+          python3 "$runner" "$dir/pairs.json"
+          sed -i 's/vec3(fog)/unknown_symbol/' "$dir/scene.frag"
+          set +e
+          python3 "$runner" "$dir/pairs.json" > "$dir/bad.json"
+          rc=$?
+          set -e
+          test "$rc" = 1
+          python3 -c 'import json,sys; r=json.load(open(sys.argv[1])); assert r["pairs"][0]["pass"] is False and "unknown_symbol" in r["pairs"][0]["diagnostic"]' "$dir/bad.json"
+          cat > "$dir/scene.frag" <<'GLSL'
+          #version 300 es
+          precision highp float;
+          in vec3 uv;
+          out vec4 color;
+          void main(){color=vec4(uv,1.0);}
+          GLSL
+          set +e
+          python3 "$runner" "$dir/pairs.json" > "$dir/link.json"
+          rc=$?
+          set -e
+          test "$rc" = 1
+          python3 -c 'import json,sys; r=json.load(open(sys.argv[1])); assert r["pairs"][0]["pass"] is False' "$dir/link.json"
