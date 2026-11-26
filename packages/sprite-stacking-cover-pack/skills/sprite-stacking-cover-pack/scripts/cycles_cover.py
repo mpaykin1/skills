@@ -1,6 +1,8 @@
 """Render actual Sprite Stacking slices with Blender Cycles; validate using ordinary Python."""
 import argparse, hashlib, json, math, struct, sys, time
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ocio_color import read_contract, check_blender
 
 
 def sha(p):
@@ -79,6 +81,8 @@ def load(scene_path):
         planes+=sum(a['d'] for _,a in poses) if poses else st['d'];assets.append((obj,st,poses))
     if not assets or not animated:raise ValueError('Require actual object movement or different full pose stacks; camera-only/static rejected')
     if planes>8192:raise ValueError('Offline render slice budget exceeded; reduce verified LOD or split scene')
+    contract, color_files = read_contract(s, root)
+    inputs.update(color_files)
     return source,s,assets,inputs
 
 
@@ -97,7 +101,13 @@ def render(source,s,assets,inputs,out,denoise="off",samples=None):
         sc.cycles.denoising_input_passes='RGB_ALBEDO_NORMAL';sc.cycles.denoising_prefilter='ACCURATE';sc.cycles.denoising_quality='HIGH'
     render_settings={'denoise':denoise,'samples':sc.cycles.samples,'seed':42,'adaptiveSampling':False,'device':'CPU','viewTransform':'AgX','denoiser':'OPENIMAGEDENOISE' if denoise=='oidn' else None,'guides':'RGB_ALBEDO_NORMAL' if denoise=='oidn' else None,'prefilter':'ACCURATE' if denoise=='oidn' else None,'quality':'HIGH' if denoise=='oidn' else None}
     started=time.perf_counter()
-    sc.render.resolution_x,sc.render.resolution_y=s['resolution'];sc.render.resolution_percentage=100;sc.render.fps=s['fps'];sc.render.image_settings.file_format='PNG';sc.render.image_settings.color_mode='RGBA';sc.render.image_settings.color_depth='8';sc.render.film_transparent=bool(s.get('transparent',False));sc.view_settings.view_transform='AgX'
+    sc.render.resolution_x,sc.render.resolution_y=s['resolution'];sc.render.resolution_percentage=100;sc.render.fps=s['fps'];sc.render.image_settings.file_format='PNG';sc.render.image_settings.color_mode='RGBA';sc.render.image_settings.color_depth='8';sc.render.film_transparent=bool(s.get('transparent',False))
+    contract, _ = read_contract(s, root)
+    if contract is None: sc.view_settings.view_transform='AgX'
+    color = check_blender(sc, contract, root)
+    render_settings['viewTransform']=sc.view_settings.view_transform
+    render_settings['colorManagement']=color
+    render_settings['outputEncoding']='sRGB' if color else 'legacy-unverified'
     world=bpy.data.worlds.new('Cover world');sc.world=world;world.use_nodes=True;bg=world.node_tree.nodes.get('Background');bg.inputs['Color'].default_value=(*s.get('worldColor',[.04,.04,.06]),1);bg.inputs['Strength'].default_value=s.get('worldStrength',.25)
     def aim(o,t):o.rotation_euler=(Vector(t)-o.location).to_track_quat('-Z','Y').to_euler()
     def link(name,data):o=bpy.data.objects.new(name,data);sc.collection.objects.link(o);return o
@@ -108,7 +118,7 @@ def render(source,s,assets,inputs,out,denoise="off",samples=None):
     def mat(p,obj):
         key=(str(p),obj.get('roughness',.6),obj.get('metallic',0),obj.get('emission',0))
         if key in cache:return cache[key]
-        m=bpy.data.materials.new(p.stem);m.use_nodes=True;n=m.node_tree.nodes;ls=m.node_tree.links;n.clear();o=n.new('ShaderNodeOutputMaterial');bs=n.new('ShaderNodeBsdfPrincipled');tex=n.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(p),check_existing=True);tex.image.alpha_mode='STRAIGHT';tex.interpolation='Closest';tex.extension='CLIP';bs.inputs['Roughness'].default_value=key[1];bs.inputs['Metallic'].default_value=key[2];bs.inputs['Emission Strength'].default_value=key[3];ls.new(tex.outputs['Color'],bs.inputs['Base Color']);ls.new(tex.outputs['Color'],bs.inputs['Emission Color']);ls.new(tex.outputs['Alpha'],bs.inputs['Alpha']);ls.new(bs.outputs['BSDF'],o.inputs['Surface']);cache[key]=m;return m
+        m=bpy.data.materials.new(p.stem);m.use_nodes=True;n=m.node_tree.nodes;ls=m.node_tree.links;n.clear();o=n.new('ShaderNodeOutputMaterial');bs=n.new('ShaderNodeBsdfPrincipled');tex=n.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(p),check_existing=True);tex.image.alpha_mode='STRAIGHT';tex.image.colorspace_settings.name='sRGB';tex.interpolation='Closest';tex.extension='CLIP';bs.inputs['Roughness'].default_value=key[1];bs.inputs['Metallic'].default_value=key[2];bs.inputs['Emission Strength'].default_value=key[3];ls.new(tex.outputs['Color'],bs.inputs['Base Color']);ls.new(tex.outputs['Color'],bs.inputs['Emission Color']);ls.new(tex.outputs['Alpha'],bs.inputs['Alpha']);ls.new(bs.outputs['BSDF'],o.inputs['Surface']);cache[key]=m;return m
     def group(st,parent,obj,label):
         w,h,d=st['w'],st['h'],st['d'];sx,sy,sz=st['spacing'];a=w*sx/2;b=h*sy/2;result=[]
         for i,(p,uv) in enumerate(st['entries']):
