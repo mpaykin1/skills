@@ -88,3 +88,6 @@ The builder separates the objective from sound/pause controls on desktop and fro
 
 
 
+
+## Tween.js 25.0.0 — scene transitions (source snapshot)
+Original MIT upstream release v25.0.0, blob e87520da73c650af5bdbf098745f50919b40f096. `runtime/transitions/chapter-transition.js` imports local `vendor/tween.esm.js`; use createTransition().start(durationMs,onComplete), tick(dtSeconds), reset(). Existing RAF owns time; no second RAF, pause sends dt=0. Tween camera position, environment transforms, fog opacity only; never interpolate approved character poses, skin, silhouette, collision position or user actions. The original game input initiates the transition. Coordinate FastNoiseLite fog and Meta Game Fusion Ink/Nit chapter state without replacing physics or Sprite Stacking assets. SYMPHONIA PR #450 uses the real tween for camera descent/fog. Isolated monotonicity, completion and cancellation verified; no browser or installed-plugin PASS.

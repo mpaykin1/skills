@@ -189,10 +189,13 @@
     {
       "name": "hero-animator",
       "version": "0.19.0",
-      "files": 20,
+      "files": 23,
       "skill": "packages/hero-animator/skills/hero-animator/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "partial source snapshot; additional files and dependencies not imported",
+      "pending_source_modules": [
+        "Tween.js 25.0.0 — local MIT runtime, one RAF camera/fog transition; installed release not updated"
+      ]
     },
     {
       "name": "sprite-stacking-cover-pack",
