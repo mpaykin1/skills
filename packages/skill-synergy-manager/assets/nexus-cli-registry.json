@@ -1,0 +1,88 @@
+{
+  "schema": "nexus-cli/1",
+  "upstream": "https://github.com/HKUDS/CLI-Anything",
+  "revision": "34f519533bc175d2fe287ab8316b0dd99bb9cc43",
+  "tools": {
+    "blender": {
+      "native": [
+        "blender"
+      ],
+      "skills": [
+        "blender-model-animation-enhancer",
+        "monster-anatomy-3d",
+        "sprite-stacking-cover-pack"
+      ],
+      "output": "GLB, RGBA slices"
+    },
+    "gimp": {
+      "native": [
+        "gimp"
+      ],
+      "skills": [
+        "sprite-stacking-grunge",
+        "gif-asset-animator",
+        "sprite-stacking-cover-pack"
+      ],
+      "output": "RGBA PNG"
+    },
+    "musescore": {
+      "native": [
+        "mscore",
+        "musescore",
+        "musescore4"
+      ],
+      "skills": [
+        "music-skill"
+      ],
+      "output": "MusicXML, MIDI, WAV"
+    },
+    "godot": {
+      "native": [
+        "godot",
+        "godot4"
+      ],
+      "skills": [
+        "godot-game-to-html",
+        "blockwild-evolution"
+      ],
+      "output": "scene, web export"
+    },
+    "audacity": {
+      "native": [
+        "audacity"
+      ],
+      "skills": [
+        "music-skill"
+      ],
+      "output": "audio"
+    },
+    "inkscape": {
+      "native": [
+        "inkscape"
+      ],
+      "skills": [
+        "sprite-stacking-cover-pack",
+        "game-style-forge"
+      ],
+      "output": "SVG, PNG"
+    },
+    "comfyui": {
+      "native": [],
+      "skills": [
+        "monster-anatomy-3d",
+        "sprite-stacking-cover-pack"
+      ],
+      "output": "images; requires authorized running backend and model rights"
+    },
+    "kdenlive": {
+      "native": [
+        "kdenlive",
+        "melt"
+      ],
+      "skills": [
+        "animation-quality"
+      ],
+      "output": "video"
+    }
+  }
+}
