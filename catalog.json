@@ -262,8 +262,8 @@
     },
     {
       "name": "game-style-forge",
-      "version": "1.10.8",
-      "files": 58,
+      "version": "1.11.0",
+      "files": 59,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
       "skills": [
         "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
@@ -273,7 +273,8 @@
         "packages/game-style-forge/skills/nanovdb-fire/SKILL.md",
         "packages/game-style-forge/skills/opensubdiv-hybrid/SKILL.md",
         "packages/game-style-forge/skills/openvdb-fire/SKILL.md",
-        "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
+        "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md",
+        "packages/game-style-forge/skills/renderdoc-gpu-bridge/SKILL.md"
       ],
       "excluded": [],
       "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
@@ -387,8 +388,8 @@
     },
     {
       "name": "animation-quality",
-      "version": "0.12.0",
-      "files": 51,
+      "version": "0.13.0",
+      "files": 54,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "skills": [
         "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
@@ -404,6 +405,7 @@
         "packages/animation-quality/skills/opensim-motion-quality/SKILL.md",
         "packages/animation-quality/skills/opensubdiv-hybrid/SKILL.md",
         "packages/animation-quality/skills/openvdb-fire/SKILL.md",
+        "packages/animation-quality/skills/pinocchio-motion-quality/SKILL.md",
         "packages/animation-quality/skills/rigify-hybrid/SKILL.md",
         "packages/animation-quality/skills/rokoko-retarget/SKILL.md"
       ],
