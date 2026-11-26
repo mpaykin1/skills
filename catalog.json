@@ -303,15 +303,25 @@
     {
       "name": "voxel-game-creator",
       "version": "0.19.2",
-      "files": 20,
+      "files": 96,
       "skill": "packages/voxel-game-creator/skills/voxel-game-creator/SKILL.md",
-      "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported",
       "skills": [
         "packages/voxel-game-creator/skills/animated-world-guard/SKILL.md",
         "packages/voxel-game-creator/skills/png-multiview-voxel-game-creator/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-blockwild/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-fastnoise/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-mineclonia/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-minecraft/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-postfx/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-recast/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-veloren/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-vesper/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-visual-fidelity/SKILL.md",
+        "packages/voxel-game-creator/skills/voxel-game-creator-voxelcraft/SKILL.md",
         "packages/voxel-game-creator/skills/voxel-game-creator/SKILL.md"
-      ]
+      ],
+      "excluded": [],
+      "status": "Author source snapshot; vendor sources, external dependencies, binary resources and execution not verified"
     },
     {
       "name": "hero-animator",
