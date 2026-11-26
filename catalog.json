@@ -406,6 +406,19 @@
       ],
       "excluded": [],
       "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
+    },
+    {
+      "name": "blockwild-visual-benchmark",
+      "version": "0.1.0",
+      "files": 6,
+      "skill": "packages/blockwild-visual-benchmark/skills/blockwild-visual-benchmark/SKILL.md",
+      "skills": [
+        "packages/blockwild-visual-benchmark/skills/blockwild-visual-benchmark/SKILL.md"
+      ],
+      "excluded": [
+        "PyTorch, pretrained backbone weights, native Unity binaries and screenshots"
+      ],
+      "status": "native author LPIPS integration; CLI/doctor implemented, official LPIPS runtime dependency not installed in current container"
     }
   ]
 }

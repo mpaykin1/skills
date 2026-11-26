@@ -1,0 +1,5 @@
+# Pin the official LPIPS adapter package; PyTorch and torchvision need an environment-specific compatible pair.
+lpips==0.1.4
+Pillow>=10,<13
+numpy>=1.26,<3
+# torch and torchvision are transitive LPIPS requirements, use official CPU/CUDA-compatible wheels.
