@@ -216,8 +216,8 @@
     },
     {
       "name": "meta-game-fusion",
-      "version": "2.4.6",
-      "files": 116,
+      "version": "2.4.8",
+      "files": 121,
       "skill": "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
       "skills": [
         "packages/meta-game-fusion/skills/animated-world-guard/SKILL.md",
@@ -226,8 +226,10 @@
         "packages/meta-game-fusion/skills/freemocap-hybrid/SKILL.md",
         "packages/meta-game-fusion/skills/mantaflow-fire/SKILL.md",
         "packages/meta-game-fusion/skills/meta-game-fusion/SKILL.md",
+        "packages/meta-game-fusion/skills/opensubdiv-hybrid/SKILL.md",
         "packages/meta-game-fusion/skills/png-multiview-meta-game-fusion/SKILL.md",
         "packages/meta-game-fusion/skills/rigify-hybrid/SKILL.md",
+        "packages/meta-game-fusion/skills/rokoko-retarget/SKILL.md",
         "packages/meta-game-fusion/skills/sprite-stacking-primary/SKILL.md"
       ],
       "excluded": [],
