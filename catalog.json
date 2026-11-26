@@ -330,11 +330,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.9.0",
-      "files": 17,
+      "version": "0.10.0",
+      "files": 19,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "libwebp 1.6.0 lossless animation encode/decode verified on CPU fixture; alpha, visible RGB and timing exact; LPIPS lossy search and previous external runtimes unverified",
+      "status": "Cycles renderer adapter; CPU native layer/atlas input validation checked; Blender/Cycles rendering and external ML inference unverified; per-voxel PBR sidecars retained but not shaded",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
