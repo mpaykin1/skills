@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.13.0",
-      "files": 27,
+      "version": "0.14.0",
+      "files": 30,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "glTF Transform animated GLB adapter; exact accessor and animation mutation guard verified on synthetic structural fixture; CLI, Meshopt compression, browser and previous external runtimes unverified",
+      "status": "Official Khronos validator adapter and fail-closed mesh optimization gates; report/hash checks verified with synthetic fixtures; actual validator npm dependency unavailable due DNS; prior external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
