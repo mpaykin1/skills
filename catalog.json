@@ -185,11 +185,9 @@
     },
     {
       "name": "skill-synergy-manager",
-      "version": "1.2.0",
-      "files": 48,
+      "version": "1.3.0",
+      "files": 52,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
-      "excluded": [],
-      "status": "Author skill text and scripts; two repository-only files retained from earlier revisions, not part of plugin release 1.2.0; external dependencies and runtime not verified",
       "skills": [
         "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-bridge-atmosphere/SKILL.md",
@@ -201,12 +199,18 @@
         "packages/skill-synergy-manager/skills/nexus-bridge-voxel/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-cli-anything/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-oss-evolution/SKILL.md",
+        "packages/skill-synergy-manager/skills/nexus-progress-guard/SKILL.md",
         "packages/skill-synergy-manager/skills/nexus-project-operator/SKILL.md",
         "packages/skill-synergy-manager/skills/png-architecture-multiview-guard/SKILL.md",
         "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md"
       ],
+      "excluded": [],
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified",
       "repository_only": [
         "packages/skill-synergy-manager/assets/nexus-cli-registry.json",
+        "packages/skill-synergy-manager/scripts/install_blender_cli.sh",
+        "packages/skill-synergy-manager/scripts/install_gimp_cli.sh",
+        "packages/skill-synergy-manager/scripts/install_musescore_cli.sh",
         "packages/skill-synergy-manager/scripts/nexus_cli.py"
       ]
     },
@@ -249,14 +253,15 @@
     },
     {
       "name": "game-style-forge",
-      "version": "1.10.6",
-      "files": 46,
+      "version": "1.10.7",
+      "files": 49,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
       "skills": [
         "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
         "packages/game-style-forge/skills/effekseer-combat/SKILL.md",
         "packages/game-style-forge/skills/game-style-forge/SKILL.md",
         "packages/game-style-forge/skills/mantaflow-fire/SKILL.md",
+        "packages/game-style-forge/skills/opensubdiv-hybrid/SKILL.md",
         "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
       ],
       "excluded": [],
