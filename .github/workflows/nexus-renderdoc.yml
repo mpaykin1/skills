@@ -1,0 +1,27 @@
+name: Nexus RenderDoc CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-renderdoc.yml'
+      - 'packages/skill-synergy-manager/scripts/install_renderdoc_cli.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/nexus-renderdoc.yml'
+      - 'packages/skill-synergy-manager/scripts/install_renderdoc_cli.sh'
+permissions:
+  contents: read
+jobs:
+  renderdoc:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install native bindings and pinned CLI
+        run: bash packages/skill-synergy-manager/scripts/install_renderdoc_cli.sh "$RUNNER_TEMP/nexus-renderdoc"
+      - name: Discover dispatcher backend
+        run: |
+          python3 packages/skill-synergy-manager/scripts/nexus_cli.py inventory
+          python3 packages/skill-synergy-manager/scripts/nexus_cli.py help-tool renderdoc

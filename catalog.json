@@ -186,7 +186,7 @@
     {
       "name": "skill-synergy-manager",
       "version": "1.3.0",
-      "files": 52,
+      "files": 53,
       "skill": "packages/skill-synergy-manager/skills/skill-synergy-manager/SKILL.md",
       "skills": [
         "packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md",
@@ -211,7 +211,8 @@
         "packages/skill-synergy-manager/scripts/install_blender_cli.sh",
         "packages/skill-synergy-manager/scripts/install_gimp_cli.sh",
         "packages/skill-synergy-manager/scripts/install_musescore_cli.sh",
-        "packages/skill-synergy-manager/scripts/nexus_cli.py"
+        "packages/skill-synergy-manager/scripts/nexus_cli.py",
+        "packages/skill-synergy-manager/scripts/install_renderdoc_cli.sh"
       ]
     },
     {
@@ -260,7 +261,7 @@
     {
       "name": "game-style-forge",
       "version": "1.10.8",
-      "files": 53,
+      "files": 54,
       "skill": "packages/game-style-forge/skills/game-style-forge/SKILL.md",
       "skills": [
         "packages/game-style-forge/skills/animated-world-guard/SKILL.md",
@@ -269,10 +270,11 @@
         "packages/game-style-forge/skills/mantaflow-fire/SKILL.md",
         "packages/game-style-forge/skills/opensubdiv-hybrid/SKILL.md",
         "packages/game-style-forge/skills/openvdb-fire/SKILL.md",
-        "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md"
+        "packages/game-style-forge/skills/png-multiview-game-style-forge/SKILL.md",
+        "packages/game-style-forge/skills/renderdoc-gpu-bridge/SKILL.md"
       ],
       "excluded": [],
-      "status": "Author source snapshot; external dependencies, binary resources and execution not verified"
+      "status": "Author source snapshot; external dependencies, binary resources and execution not verified; RenderDoc native replay pending"
     },
     {
       "name": "voxel-atmosphere-engine",

@@ -71,3 +71,7 @@ On "скачай следующий" after v1.8, use `install-bundled-csg --work
 - Route NPC agents with Recast NavMeshQuery; install corresponding kinematic NPC colliders in the existing Rapier world. If WASM generation fails, use openly labeled grid routing with the SAME authored obstacles/doorway; never claim Recast executed.
 - All ambient NPCs must move on asynchronous, independent patrol loops with visible breathing, arm/head motion and lamp light modulation; hero still moves or attacks ONLY on input. Preserve their identity and previous visual style. Do not replace user-approved art.
 - Preserve the fullscreen portrait/landscape and animated world guard. `npm install --ignore-scripts` is necessary in a networked game build environment; the source-only plugin does not install runtime packages.
+
+
+## Native GPU diagnostics
+Read ../renderdoc-gpu-bridge/SKILL.md when native capture analysis is available. Keep existing WebGL and animation guards. Do not equate native replay with browser FPS.

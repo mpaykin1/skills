@@ -83,6 +83,19 @@
         "animation-quality"
       ],
       "output": "video"
+    },
+    "renderdoc": {
+      "native": [
+        "renderdoccmd"
+      ],
+      "skills": [
+        "game-style-forge",
+        "godot-game-to-html",
+        "blender-model-animation-enhancer",
+        "meta-game-fusion",
+        "animation-quality"
+      ],
+      "output": "native capture inspection: .rdc, pipeline state, textures; actual GPU replay required"
     }
   }
 }
