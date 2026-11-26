@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.12.0",
-      "files": 25,
+      "version": "0.13.0",
+      "files": 27,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "Meshoptimizer static GLB adapter and Three.js source fallback; GLB preflight and animation rejection verified; gltfpack encoding, browser, LPIPS and prior external runtimes unverified",
+      "status": "glTF Transform animated GLB adapter; exact accessor and animation mutation guard verified on synthetic structural fixture; CLI, Meshopt compression, browser and previous external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
