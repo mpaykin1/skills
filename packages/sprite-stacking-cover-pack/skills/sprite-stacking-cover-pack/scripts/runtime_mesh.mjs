@@ -18,7 +18,13 @@ export async function loadRuntimeMesh(manifestURL, {approvedSHA256, ktx2Loader} 
     } else if (record===m.candidate) throw Error('Cannot verify candidate hash');
     return loader.parseAsync(bytes,new URL('.',asset).href);
   }
-  if (approvedSHA256 && approvedSHA256===m.candidate?.sha256 && MeshoptDecoder.supported) {
+  function validated(proof, record) {
+    const r=proof?.report, i=r?.issues;
+    if (!record || proof?.schema!=='cover-pack-khronos-validation/1' || proof.sha256!==record.sha256 || proof.bytes!==record.bytes || !r?.validatorVersion || i?.truncated!==false || i.numErrors!==0 || i.numWarnings!==0) return false;
+    return Number.isInteger(i.numInfos) && i.numInfos>=0 && Number.isInteger(i.numHints) && i.numHints>=0 && Array.isArray(i.messages) && i.messages.length===i.numInfos+i.numHints && i.messages.every(x=>typeof x.code==='string' && x.code && [2,3].includes(x.severity) && !/UNSUPPORTED|UNVALIDATED|NOT_VALIDATED|UNKNOWN_EXTENSION|NOT_SUPPORTED/i.test(x.code));
+  }
+  const proof=m.khronosValidation;
+  if (approvedSHA256 && approvedSHA256===m.candidate?.sha256 && MeshoptDecoder.supported && validated(proof?.source,m.source) && validated(proof?.candidate,m.candidate)) {
     try { await MeshoptDecoder.ready; return {gltf:await load(m.candidate),variant:'optimized'}; } catch { /* canonical fallback */ }
   }
   return {gltf:await load(m.source),variant:'source'};
