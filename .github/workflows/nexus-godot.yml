@@ -1,0 +1,51 @@
+name: Nexus Godot CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-godot.yml'
+      - 'packages/skill-synergy-manager/scripts/install_godot_cli.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/nexus-godot.yml'
+      - 'packages/skill-synergy-manager/scripts/install_godot_cli.sh'
+permissions:
+  contents: read
+jobs:
+  godot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install Godot and pinned CLI
+        run: bash packages/skill-synergy-manager/scripts/install_godot_cli.sh "$RUNNER_TEMP/nexus-godot" --web
+      - name: Native scene load and Web export
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/godot-job"
+          mkdir -p "$dir/out"
+          export JOB_DIR="$dir"
+          dispatcher="$GITHUB_WORKSPACE/packages/skill-synergy-manager/scripts/nexus_cli.py"
+          run_cli() { python3 "$dispatcher" run --workspace "$dir" --timeout 300 godot -- --json "$@"; }
+          run_cli project create "$dir/project" --name NexusFixture
+          run_cli -p "$dir/project" scene create scenes/Fixture.tscn --root-type Node3D
+          run_cli -p "$dir/project" scene add-node scenes/Fixture.tscn --name SpriteStackAssets --type Node3D
+          run_cli -p "$dir/project" script inline 'var scene = load("res://scenes/Fixture.tscn").instantiate(); print("NEXUS_NODE:", scene.get_node("SpriteStackAssets").name); scene.free()' > "$dir/native.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["JOB_DIR"])
+          r=json.loads((p/"native.json").read_text())
+          assert r["status"]=="ok" and r["returncode"]==0 and "NEXUS_NODE:SpriteStackAssets" in r["stdout"], r
+          cfg=p/"project/project.godot"
+          cfg.write_text(cfg.read_text().replace('[application]', '[application]\nrun/main_scene="res://scenes/Fixture.tscn"'))
+          (p/"project/export_presets.cfg").write_text('[preset.0]\nname="Web"\nplatform="Web"\nrunnable=true\nexport_filter="all_resources"\nexport_path="../out/index.html"\n[preset.0.options]\nvariant/thread_support=false\n')
+          PY
+          run_cli -p "$dir/project" project reimport
+          run_cli -p "$dir/project" export build --preset Web --output "$dir/out/index.html"
+          test -s "$dir/out/index.html"
+          test -s "$dir/out/index.wasm"
+          test -s "$dir/out/index.pck"

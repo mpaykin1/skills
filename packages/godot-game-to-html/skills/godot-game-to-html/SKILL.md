@@ -33,3 +33,7 @@ See `skills/sprite-stacking-scene-parts/SKILL.md` and `skills/sprite-stacking-pr
 ## Runtime and rights
 
 Only authored/rights-approved original game files, stable SHA256 provenance, unchanged animation/camera identities. Source art and author rights must persist. WebGL2 is required for 3D stack textures; fallback to actual original native WebGL/GLB/Pixi when absent, not to approximate Canvas cubes. No third-party executables are vendored in this plugin. Scene viewer ≠ full Godot/Unity game. Do not claim public deployment without actual URL. No unsolicited reports, handoff, test/evidence artifacts.
+
+
+## Godot CLI integration
+Use ../godot-cli-bridge/SKILL.md for pinned native scene inspection and Web export in a disposable source copy; all previous routes remain authoritative.
