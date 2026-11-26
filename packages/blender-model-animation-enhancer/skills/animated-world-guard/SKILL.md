@@ -32,3 +32,7 @@ Every time this plugin creates or modifies a PLAYABLE GAME, apply this contract.
 - Keep a visible compatible renderer during GPU initialization. On unavailable WebGL, shader/asset failure, blank frame, context loss or startup timeout, switch automatically to a playable fallback built from the SAME approved artwork and full action poses; use the same gameplay state and input. Clearly label degraded 2.5D mode, never claim it is full 3D. If fallback is not feasible show actionable error and block release. No primitive character replacements.
 - Bound texture/memory budgets; decode big embedded base64 in chunks or typed-array loops, never Array.from/Uint8Array.from(atob(...)) for huge assets. Watchdog must cover initialization and runtime; recheck actual frames after resize, resume and renderer switching. Keep original assets immutable.
 - Before delivery check real browser rendering, changing animation frames, movement/attack, normal and disabled GPU, context loss, desktop, portrait 390x844 and landscape 844x390. For standalone HTML check actual file:// where allowed. If unavailable mark that path unverified; do not claim release PASS. No reports unless requested.
+
+
+## Animated fire — Mantaflow bridge
+For burning scenes use the mantaflow-fire skill and verify actual changing flame frames in both rendering paths. Never use a still flame photograph. Preserve Black Screen Guard and approved art.

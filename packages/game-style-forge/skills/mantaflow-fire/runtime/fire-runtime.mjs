@@ -1,0 +1,12 @@
+// One external animation clock. No new physics, renderer or RAF loop.
+export function verifyFireMeta(m){
+ if(m.schema!=='mantaflow-flipbook-v1'||m.source!=='blender-mantaflow'||!Number.isInteger(m.frames)||m.frames<16||m.frames>64||m.fps!==24||m.tile?.[0]!==192||m.tile?.[1]!==256||m.stride?.[0]!==194||m.stride?.[1]!==258||!Number.isInteger(m.cols)||m.cols<1||m.rows!==Math.ceil(m.frames/m.cols)||m.size?.[0]!==m.cols*194||m.size?.[1]!==m.rows*258||m.size.some(x=>x>2048)||!Array.isArray(m.light)||m.light.length!==m.frames||m.light.some(x=>!Number.isFinite(x)||x<0)||!/^[a-f0-9]{64}$/.test(m.sha256))throw Error('Invalid fire atlas');return m;
+}
+export async function verifyFireBytes(bytes,m){verifyFireMeta(m);const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');if(hash!==m.sha256)throw Error('Fire atlas hash mismatch');}
+export function frameRect(m,seconds,phase=0){const f=((Math.floor((seconds+phase)*m.fps)%m.frames)+m.frames)%m.frames;return {f,x:(f%m.cols)*m.stride[0]+1,y:Math.floor(f/m.cols)*m.stride[1]+1,w:m.tile[0],h:m.tile[1]};}
+export function createFire(THREE,scene,texture,m,position,{scale=1,phase=0,light=true}={}){
+ verifyFireMeta(m); if(texture.image?.width!==m.size[0]||texture.image?.height!==m.size[1])throw Error('Fire atlas size mismatch');const tex=texture.clone();tex.colorSpace=THREE.SRGBColorSpace;tex.generateMipmaps=false;tex.minFilter=THREE.LinearFilter;tex.magFilter=THREE.LinearFilter;tex.needsUpdate=true;
+ const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false,depthTest:true,toneMapped:false});const sprite=new THREE.Sprite(mat);sprite.center.set(.5,0);sprite.scale.set(m.width_m*scale,m.height_m*scale,1);sprite.position.copy(position);scene.add(sprite);const lamp=light?new THREE.PointLight(0xff742e,0,5*scale,2):null;if(lamp){lamp.position.copy(position);lamp.position.y+=.6*scale;scene.add(lamp);}let previous=-1;
+ return {update(seconds){const r=frameRect(m,seconds,phase);if(r.f===previous)return;previous=r.f;tex.repeat.set(r.w/m.size[0],r.h/m.size[1]);tex.offset.set(r.x/m.size[0],1-(r.y+r.h)/m.size[1]);if(lamp)lamp.intensity=m.light[r.f]*5;},dispose(){scene.remove(sprite);if(lamp)scene.remove(lamp);mat.dispose();tex.dispose();lamp?.dispose();}};
+}
+export function drawFire2D(ctx,image,m,seconds,phase,x,y,w,h){const r=frameRect(m,seconds,phase);ctx.drawImage(image,r.x,r.y,r.w,r.h,x,y,w,h);}
