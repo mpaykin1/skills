@@ -344,10 +344,11 @@
     },
     {
       "name": "music-skill",
-      "version": "0.18.0",
-      "files": 35,
+      "version": "0.20.0",
+      "files": 38,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "skills": [
+        "packages/music-skill/skills/music-audacity-bridge/SKILL.md",
         "packages/music-skill/skills/music-musescore-bridge/SKILL.md",
         "packages/music-skill/skills/music/SKILL.md"
       ],
@@ -369,8 +370,8 @@
     },
     {
       "name": "animation-quality",
-      "version": "0.10.1",
-      "files": 38,
+      "version": "0.11.0",
+      "files": 41,
       "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
       "skills": [
         "packages/animation-quality/skills/animation-layers-hybrid/SKILL.md",
@@ -381,6 +382,7 @@
         "packages/animation-quality/skills/gltf-quality-gate/SKILL.md",
         "packages/animation-quality/skills/mantaflow-fire-quality/SKILL.md",
         "packages/animation-quality/skills/mediapipe-pose-quality/SKILL.md",
+        "packages/animation-quality/skills/opensim-motion-quality/SKILL.md",
         "packages/animation-quality/skills/opensubdiv-hybrid/SKILL.md",
         "packages/animation-quality/skills/rigify-hybrid/SKILL.md",
         "packages/animation-quality/skills/rokoko-retarget/SKILL.md"
