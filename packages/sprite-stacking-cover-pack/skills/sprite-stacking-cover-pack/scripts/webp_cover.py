@@ -21,6 +21,14 @@ def load_manifest(path, *, allow_unreviewed_oidn=False):
     scene = (root / spec['scene']).resolve()
     if not scene.is_relative_to(root) or sha(scene) != spec['sceneSHA256']:
         raise ValueError('Missing or changed source scene')
+    from ocio_color import read_contract
+    expected, color_files = read_contract(json.loads(scene.read_text(encoding='utf-8')), root)
+    if expected is not None:
+        settings=spec.get('renderSettings',{})
+        if settings.get('colorManagement')!=expected or settings.get('outputEncoding')!='sRGB':
+            raise ValueError('Missing or changed color-managed render; no double conversion')
+        if any(spec.get('inputSHA256',{}).get(k)!=v for k,v in color_files.items()):
+            raise ValueError('OCIO config/LUT changed since render')
     frames, durations, hashes = [], [], []
     for item in spec['frames']:
         p = (root / item['path']).resolve()
@@ -127,7 +135,7 @@ def optimize(manifest, out, device='cpu', max_lpips=None, calibration_id=None, b
     frames[0].save(out/'cover.png')
     result={'schema':'cover-pack-webp/1','sceneSHA256':spec['sceneSHA256'],'sourceFrameSHA256':hashes,
             'sourceDurationMs':durations,'loop':0,'size':list(frames[0].size),'encoder':'Pillow/libwebp',
-            'libwebpVersion':features.version('webp'),'alphaPreserved':True,'timingPreserved':True,
+            'libwebpVersion':features.version('webp'),'colorManagement':spec.get('renderSettings',{}).get('colorManagement'),'outputEncoding':spec.get('renderSettings',{}).get('outputEncoding','legacy-unverified'),'alphaPreserved':True,'timingPreserved':True,
             'lpipsCalibrationId':calibration_id,'lpipsThreshold':max_lpips,'lpipsModel':metric.provenance if metric else None,
             **best,'cover':'cover.webp','poster':'cover.png','coverSHA256':sha(out/'cover.webp'),
             'posterSHA256':sha(out/'cover.png'),'status':'encoding-verified; visual and browser review required'}
