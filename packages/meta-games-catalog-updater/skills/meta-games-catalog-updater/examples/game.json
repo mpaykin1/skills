@@ -1,0 +1,17 @@
+{
+  "title": "Название новой игры — заполнить по фактам",
+  "slug": "replace-with-actual-slug",
+  "playgama_url": "https://playgama.ai/play/REPLACE_WITH_VERIFIED_SITE_ID",
+  "genres": ["action"],
+  "verification": "Ссылка предоставлена владельцем; статус кабинета проверяется отдельно",
+  "locales": {
+    "en": {"tag": "Action · Co-op", "description": "Accurate game description in English.", "alt": "Actual cover description", "aria": "Play the game on Playgama", "seo": "Accurate English catalog meta description."},
+    "ru": {"tag": "Экшен · Кооператив", "description": "Точное описание игры на русском.", "alt": "Что изображено на обложке", "aria": "Играть на Playgama", "seo": "Правдивое русское метаописание каталога."},
+    "de": {"tag": "Action · Koop", "description": "Tatsächliche Spielbeschreibung.", "alt": "Tatsächliches Motiv der Titelseite", "aria": "Auf Playgama spielen", "seo": "Korrekte deutsche Metabeschreibung."},
+    "fr": {"tag": "Action · Coop", "description": "Description exacte du jeu.", "alt": "Visuel réel de la couverture", "aria": "Jouer sur Playgama", "seo": "Description exacte du catalogue."},
+    "ja": {"tag": "アクション", "description": "確認済みのゲーム説明。", "alt": "実際の表紙の説明", "aria": "Playgamaでプレイ", "seo": "正確なカタログ説明。"},
+    "ko": {"tag": "액션", "description": "확인된 게임 설명.", "alt": "실제 표지의 설명", "aria": "Playgama에서 플레이", "seo": "정확한 카탈로그 설명."},
+    "es": {"tag": "Acción · Cooperativo", "description": "Descripción verificada del juego.", "alt": "Descripción real de la portada", "aria": "Jugar en Playgama", "seo": "Descripción exacta del catálogo."},
+    "pt-BR": {"tag": "Ação · Cooperativo", "description": "Descrição confirmada do jogo.", "alt": "Descrição verdadeira da capa", "aria": "Jogar na Playgama", "seo": "Descrição precisa do catálogo."}
+  }
+}

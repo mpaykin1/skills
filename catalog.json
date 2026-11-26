@@ -77,11 +77,11 @@
     },
     {
       "name": "meta-games-catalog-updater",
-      "version": "1.1.0",
-      "files": 5,
+      "version": "1.2.0",
+      "files": 7,
       "skill": "packages/meta-games-catalog-updater/skills/meta-games-catalog-updater/SKILL.md",
       "excluded": [],
-      "status": "partial source snapshot; additional files and dependencies not imported"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified"
     },
     {
       "name": "seo-site-engineer",
@@ -202,11 +202,11 @@
     },
     {
       "name": "music-skill",
-      "version": "0.5.0",
-      "files": 10,
+      "version": "0.14.0",
+      "files": 28,
       "skill": "packages/music-skill/skills/music/SKILL.md",
       "excluded": [],
-      "status": "Complete skill instructions and author scripts; external engines, weights and dependencies must be acquired as documented; execution not verified in automations"
+      "status": "Author skill text and scripts; external dependencies and runtime not verified"
     },
     {
       "name": "blockwild-evolution",
@@ -217,6 +217,14 @@
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
       "status": "author skill, read-only diagnosis verified on source ZIP and HTML v9; optional OSS dependencies not installed"
+    },
+    {
+      "name": "animation-quality",
+      "version": "0.7.0",
+      "files": 10,
+      "skill": "packages/animation-quality/skills/animation-quality/SKILL.md",
+      "excluded": [],
+      "status": "Author skill text and scripts; external dependencies and runtime not verified"
     }
   ]
 }

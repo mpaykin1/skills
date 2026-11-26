@@ -1,0 +1,10 @@
+{
+  "name": "meta-music-dependencies",
+  "version": "0.9.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "tonal": "6.9.0",
+    "tone": "14.9.17"
+  }
+}
