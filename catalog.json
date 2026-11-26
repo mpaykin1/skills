@@ -376,13 +376,13 @@
     },
     {
       "name": "blockwild-evolution",
-      "version": "0.2.0",
-      "files": 16,
+      "version": "0.3.0",
+      "files": 17,
       "skill": "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md",
       "excluded": [
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
-      "status": "source snapshot plus verified Sunlit v12 sprite-strip bridge and HTML pipeline; upstream four-view slicer referenced not vendored; original Unity logic not restored",
+      "status": "source snapshot and reproducible Golden Garden v13 authored volumetric-sprite render upgrade; full Unity native game runtime not verified",
       "skills": [
         "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md"
       ]
