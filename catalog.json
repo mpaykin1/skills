@@ -323,11 +323,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.8.0",
-      "files": 15,
+      "version": "0.9.0",
+      "files": 17,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "LPIPS feedback adapter; CPU preprocessing, alpha and duplicate routing checked; pretrained LPIPS inference and previous external runtimes unverified",
+      "status": "libwebp 1.6.0 lossless animation encode/decode verified on CPU fixture; alpha, visible RGB and timing exact; LPIPS lossy search and previous external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
