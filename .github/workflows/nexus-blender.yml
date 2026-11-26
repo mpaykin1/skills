@@ -1,0 +1,33 @@
+name: Nexus Blender CLI bootstrap
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nexus-blender.yml'
+      - 'packages/skill-synergy-manager/scripts/install_blender_cli.sh'
+permissions:
+  contents: read
+jobs:
+  blender:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install real Blender and pinned CLI harness
+        run: bash packages/skill-synergy-manager/scripts/install_blender_cli.sh "$RUNNER_TEMP/nexus-blender"
+      - name: Produce a real Blender scene and render
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/nexus-blender-job"
+          mkdir -p "$dir"
+          dispatcher="$GITHUB_WORKSPACE/packages/skill-synergy-manager/scripts/nexus_cli.py"
+          run_cli() { python3 "$dispatcher" run --workspace "$dir" --timeout 300 blender -- "$@"; }
+          run_cli --json scene new -o "$dir/scene.json"
+          run_cli --json --project "$dir/scene.json" object add cube --name RuntimeFixture
+          run_cli --json --project "$dir/scene.json" camera add -l 7,-6,5 -r 63,0,46 --active
+          run_cli --json --project "$dir/scene.json" light add sun -r -45,0,30
+          run_cli --json --project "$dir/scene.json" preview capture --recipe quick
+          find "$dir" -type f -name '*.png' -size +100c | grep -q .

@@ -16,3 +16,7 @@ The canonical dispatcher and registry live in https://github.com/mpaykin1/skills
 6. Promote only actual outputs through existing lab/FINISH gates, never alter meta6. Keep original files immutable. Update the registry and GitHub/ChatGPT parity only after verification.
 
 Stages: architecture = dispatcher and registry; installation = separate pinned dependencies per worker; integration = successful real artifact chain; automation readiness = actual successful automation run. Do not conflate stages.
+
+
+## Blender worker
+Use `scripts/install_blender_cli.sh` only on a disposable Linux x86_64 worker. Blender 4.2.0 comes from blender.org with vendor SHA256 verification; harness source is pinned to the registry revision. Python dependencies are version-pinned, not hash-locked yet; do not promote as a hardened production runtime. The free public GitHub Actions workflow `.github/workflows/nexus-blender.yml` installs and invokes actual preview rendering on a temporary runner. Installation disappears after the job. The fixture is not a game asset. For actual approved characters keep native .blend/GLB sources immutable; upstream CLI works on its JSON scene format and does not replace Blender bpy for existing rigged models, Rigify, animation retargeting, GLB export or volumetric RGBA slicing. Use the existing Blender enhancer and Sprite Stacking modules for those operations, with the same approved source and shared animation timeline. Do not claim an automation is connected merely because this workflow exists.
