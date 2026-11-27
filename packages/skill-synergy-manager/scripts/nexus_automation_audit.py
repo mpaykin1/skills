@@ -23,17 +23,23 @@ def digest(a, now):
     rd = a.get('run_details') or {}
     run = rd.get('last_run') or {}
     result = rd.get('latest_result') or {}
-    text = str(result.get('content_text') or '')
     status = run.get('recorded_status') or 'unknown'
     issues = []
     if not a.get('is_enabled'):
         return None
+    # A result from a different run cannot describe the current run.
+    if run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
+        issues.append({'kind': 'stale_result', 'certainty': 'observed'})
+        result = {}
+    text = str(result.get('content_text') or '')
     if not run:
         issues.append({'kind': 'no_last_run', 'certainty': 'observed'})
     if status == 'failed' or result.get('is_failure_message'):
         issues.append({'kind': 'failed', 'certainty': 'observed'})
     if result.get('requires_user_action'):
         issues.append({'kind': 'requires_user_action', 'certainty': 'observed'})
+    if status == 'completed' and not result:
+        issues.append({'kind': 'completed_without_result', 'certainty': 'observed'})
     if status == 'no_update':
         issues.append({'kind': 'no_update', 'certainty': 'observed'})
     if result.get('content_truncated'):
