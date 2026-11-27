@@ -1,0 +1,58 @@
+name: Nexus independent runner pilot
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/nexus-independent-pilot.yml'
+permissions:
+  contents: read
+jobs:
+  skill-source-pilot:
+    if: github.head_ref == 'nexus/pilot-independent-runner-20261127'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Load exact GitHub skill sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Check actual catalog and execute Nexus skill script
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, subprocess, tempfile
+          root = pathlib.Path.cwd()
+          catalog = json.loads((root / 'catalog.json').read_text())
+          packages = catalog['packages']
+          nexus = next(x for x in packages if x['name'] == 'skill-synergy-manager')
+          path = root / 'packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md'
+          skill = path.read_text(encoding='utf-8')
+          assert 'nexus_automation_audit.py' in skill
+          print('Nexus source loaded:', path.relative_to(root), 'version:', nexus['version'])
+          missing = []
+          total = 0
+          for package in packages:
+              paths = set(package.get('skills') or [])
+              if package.get('skill'): paths.add(package['skill'])
+              for name in sorted(paths):
+                  total += 1
+                  if not (root / name).is_file(): missing.append((package['name'], name))
+          print('Actual catalog:', len(packages), 'packages;', total, 'declared skill paths;', len(missing), 'missing')
+          for name, path in missing: print('Missing catalog source:', name, path)
+          # Controlled smoke fixture, not historical automation evidence.
+          snapshot = {'automations': [
+              {'id':'pilot-idle','is_enabled':True,'run_details':{'last_run':{'id':'1','recorded_status':'completed'},'latest_result':{'content_text':'0 п.п.'}}},
+              {'id':'pilot-fail','is_enabled':True,'run_details':{'last_run':{'id':'2','recorded_status':'failed'}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)
+              (p/'snapshot.json').write_text(json.dumps(snapshot), encoding='utf-8')
+              subprocess.run(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p/'snapshot.json'),'--out',str(p/'audit.json')],check=True)
+              result = json.loads((p/'audit.json').read_text())
+              assert result['active_tasks_checked'] == 2
+              kinds = {i['kind'] for t in result['tasks'] for i in t['issues']}
+              assert {'possibly_idle_run','failed'} <= kinds, result
+              print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
+          print('SOURCE_RUNNER_PASS; native ChatGPT skill access and full autonomous agent operation not tested')
+          PY
