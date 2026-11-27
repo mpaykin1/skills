@@ -34,6 +34,8 @@ def digest(a, now):
         issues.append({'kind': 'failed', 'certainty': 'observed'})
     if result.get('requires_user_action'):
         issues.append({'kind': 'requires_user_action', 'certainty': 'observed'})
+    if status == 'completed' and not result:
+        issues.append({'kind': 'completed_without_result', 'certainty': 'observed'})
     if status == 'no_update':
         issues.append({'kind': 'no_update', 'certainty': 'observed'})
     if result.get('content_truncated'):
