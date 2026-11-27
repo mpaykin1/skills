@@ -73,11 +73,23 @@ def variant(args):
     maps={}
     for key,rel in spec['maps'].items():
         if key not in ('baseColor','roughness','metallic','normal','height','ao','emission'): raise ValueError('Unsupported map '+key)
-        p=resolve(rel); inputs[key]=p
-        if key in ('normal','height','ao','emission'): continue # retain originals, not falsely bake into albedo
-        a=np.asarray(Image.open(p).convert('RGB' if key=='baseColor' else 'L'),dtype=np.float32)/255
-        if a.ndim==2:a=a[:,:,None]
-        if key=='baseColor':a=linear(a)
+        if isinstance(rel,dict):
+            from oiio_maps import load_bound_map
+            manifest=resolve(rel['floatManifest']); a,entry,p=load_bound_map(manifest,key)
+            inputs[key+'FloatManifest']=manifest; inputs[key+'Master']=manifest.parent/'master.exr'; inputs[key]=p
+            if key in ('normal','height','ao','emission'): continue
+            if key=='baseColor':
+                if entry['colorSpace']=='sRGB': a=linear(a[:,:,:3])
+                elif entry['colorSpace']=='linear-sRGB': a=a[:,:,:3]
+                else: raise ValueError('Convert baseColor to linear-sRGB or sRGB with explicit OCIO first')
+                if np.any((a<0)|(a>1)): raise ValueError('HDR baseColor needs reviewed gamut mapping before LDR slices')
+            elif entry['colorSpace']!='Non-Color' or np.any((a<0)|(a>1)): raise ValueError('Invalid float data map')
+        else:
+            p=resolve(rel); inputs[key]=p
+            if key in ('normal','height','ao','emission'): continue # retain originals, not falsely bake into albedo
+            a=np.asarray(Image.open(p).convert('RGB' if key=='baseColor' else 'L'),dtype=np.float32)/255
+            if a.ndim==2:a=a[:,:,None]
+            if key=='baseColor':a=linear(a)
         if weights is None: v=sample(a,q[:,pairs[proj]])
         else:v=sum(sample(a,q[:,pair])*weights[:,i:i+1] for i,pair in enumerate(((1,2),(0,2),(0,1))))
         maps[key]=v
