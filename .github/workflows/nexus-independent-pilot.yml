@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/quad-pilot-1-20261127'
+    if: github.head_ref == 'nexus/quad-pilot-1-retry-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -172,5 +172,23 @@ jobs:
                   assert all(i['certainty'] == 'observed' for i in items[key]['issues'])
               assert items['healthy']['has_result']
           print('MALFORMED_FIELDS_GUARD_PASS: six CLI cases')
+          # Mixed top-level entries must be counted without leaking their values.
+          mixed = {'automations': paused_snapshot['automations'] + [None, False, 42, [], 'private-sentinel']}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(mixed), encoding='utf-8')
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              for flags, active, paused, issues in [([],1,0,5),(['--include-paused'],1,2,6)]:
+                  output = subprocess.check_output(cmd + flags, text=True)
+                  report = json.loads(output)
+                  assert report['invalid_task_entries'] == 5
+                  assert report['snapshot_issues'] == [{'kind':'invalid_task_entries','certainty':'observed','count':5}]
+                  assert report['active_tasks_checked'] == active and report['paused_tasks_checked'] == paused
+                  assert report['issues'] == issues and 'private-sentinel' not in output
+                  assert not next(t for t in report['tasks'] if t['task_id']=='active')['issues']
+              p.write_text(json.dumps(paused_snapshot), encoding='utf-8')
+              clean = json.loads(subprocess.check_output(cmd, text=True))
+              assert clean['invalid_task_entries'] == 0 and clean['snapshot_issues'] == []
+          print('INVALID_TASK_ENTRIES_GUARD_PASS: mixed and clean snapshots')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
