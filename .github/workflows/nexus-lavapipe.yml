@@ -1,0 +1,24 @@
+name: Nexus Lavapipe CPU Vulkan
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/lavapipe-vulkan-bridge/**'
+      - '.github/workflows/nexus-lavapipe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lavapipe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install signed Vulkan CPU packages
+        run: |
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends mesa-vulkan-drivers libvulkan-dev glslang-tools spirv-tools gcc
+          dpkg-query -W mesa-vulkan-drivers libvulkan-dev glslang-tools spirv-tools
+      - name: Compile shaders and rasterize actual triangle on CPU
+        run: bash packages/skill-synergy-manager/skills/lavapipe-vulkan-bridge/scripts/run_cpu_vulkan.sh
