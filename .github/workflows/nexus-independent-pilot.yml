@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/dual-pilot-a-20261127'
+    if: github.head_ref == 'nexus/dual-pilot-b-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -65,14 +65,16 @@ jobs:
               {'id':'pilot-idle','is_enabled':True,'run_details':{'last_run':{'id':'1','recorded_status':'completed'},'latest_result':{'content_text':'0 п.п.'}}},
               {'id':'pilot-fail','is_enabled':True,'run_details':{'last_run':{'id':'2','recorded_status':'failed'}}},
               {'id':'pilot-no-result','is_enabled':True,'run_details':{'last_run':{'id':'3','recorded_status':'completed'}}},
-              {'id':'pilot-with-result','is_enabled':True,'run_details':{'last_run':{'id':'4','recorded_status':'completed'},'latest_result':{'content_text':'done'}}}
+              {'id':'pilot-with-result','is_enabled':True,'run_details':{'last_run':{'id':'4','recorded_status':'completed'},'latest_result':{'content_text':'done'}}},
+              {'id':'pilot-stale','is_enabled':True,'run_details':{'last_run':{'id':'5','recorded_status':'completed'},'latest_result':{'run_id':'old','content_text':'no commits','is_failure_message':True,'requires_user_action':True,'content_truncated':True}}},
+              {'id':'pilot-fresh','is_enabled':True,'run_details':{'last_run':{'id':'6','recorded_status':'completed'},'latest_result':{'run_id':'6','content_text':'no commits','requires_user_action':True}}}
           ]}
           with tempfile.TemporaryDirectory() as tmp:
               p = pathlib.Path(tmp)
               (p/'snapshot.json').write_text(json.dumps(snapshot), encoding='utf-8')
               subprocess.run(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p/'snapshot.json'),'--out',str(p/'audit.json')],check=True)
               result = json.loads((p/'audit.json').read_text())
-              assert result['active_tasks_checked'] == 4
+              assert result['active_tasks_checked'] == 6
               kinds = {i['kind'] for t in result['tasks'] for i in t['issues']}
               assert {'possibly_idle_run','failed'} <= kinds, result
               by_id = {t['task_id']: t for t in result['tasks']}
@@ -80,6 +82,13 @@ jobs:
               assert by_id['pilot-no-result']['code_change'] == 'unverified'
               assert not by_id['pilot-with-result']['issues']
               print('COMPLETED_WITHOUT_RESULT_PASS')
+              stale = by_id['pilot-stale']
+              assert {i['kind'] for i in stale['issues']} == {'stale_result','completed_without_result'}, stale
+              assert not stale['has_result'] and stale['code_change'] == 'unverified'
+              assert {'kind':'stale_result','certainty':'observed'} in stale['issues']
+              fresh = by_id['pilot-fresh']
+              assert fresh['has_result'] and {i['kind'] for i in fresh['issues']} == {'possibly_idle_run','requires_user_action'}, fresh
+              print('STALE_RESULT_GUARD_PASS')
               print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
