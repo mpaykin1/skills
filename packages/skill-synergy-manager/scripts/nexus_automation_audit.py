@@ -28,7 +28,10 @@ def digest(a, now):
     if not a.get('is_enabled'):
         return None
     # A result from a different run cannot describe the current run.
-    if run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
+    if result and not (run.get('id') and result.get('run_id')):
+        issues.append({'kind': 'unlinked_result', 'certainty': 'observed'})
+        result = {}
+    elif run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
         issues.append({'kind': 'stale_result', 'certainty': 'observed'})
         result = {}
     text = str(result.get('content_text') or '')
