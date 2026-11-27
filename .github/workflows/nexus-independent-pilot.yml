@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/triple-pilot-1-20261127'
+    if: github.head_ref == 'nexus/triple-pilot-2-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -101,5 +101,26 @@ jobs:
               assert linked['has_result'] and {i['kind'] for i in linked['issues']} == {'failed','possibly_idle_run'}, linked
               print('UNLINKED_RESULT_GUARD_PASS')
               print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
+          # Deterministic time diagnostics using the actual audit module.
+          import runpy
+          from datetime import datetime, timezone, timedelta
+          digest = runpy.run_path(str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'))['digest']
+          now = datetime(2026, 11, 27, 12, tzinfo=timezone.utc)
+          cases = [
+              (None, {'missing_or_invalid_started_at':'observed'}),
+              ('not-a-date', {'missing_or_invalid_started_at':'observed'}),
+              ((now + timedelta(minutes=6)).isoformat(), {'future_started_at':'observed'}),
+              ((now + timedelta(minutes=5)).isoformat(), {}),
+              ((now - timedelta(minutes=10)).isoformat(), {}),
+              ((now - timedelta(hours=2)).isoformat(), {}),
+              ((now - timedelta(hours=3)).isoformat(), {'long_running':'suspected'}),
+          ]
+          for started, expected in cases:
+              run = {'id':'time-test','recorded_status':'in_progress'}
+              if started is not None: run['started_at'] = started
+              task = {'id':'time-test','is_enabled':True,'run_details':{'last_run':run}}
+              actual = {i['kind']:i['certainty'] for i in digest(task, now)['issues']}
+              assert actual == expected, (started, actual, expected)
+          print('STARTED_AT_GUARD_PASS: seven deterministic cases')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
