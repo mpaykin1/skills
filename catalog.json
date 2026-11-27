@@ -376,13 +376,13 @@
     },
     {
       "name": "blockwild-evolution",
-      "version": "0.4.0",
-      "files": 21,
+      "version": "0.5.0",
+      "files": 28,
       "skill": "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md",
       "excluded": [
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
-      "status": "source snapshot with build-time SciPy 8-view 5-pose coherent RGBA source volumes; separate art renderer tested portrait/landscape; native full HTML/WebGL2 boot unverified; no Unity original characters recovered",
+      "status": "v15 source-preserving CPU ray-relight scripts and coherent 8-view art renderer; 178 sprite sets verified in browser portrait/landscape; native full 49MB HTML boot unverified due browser policy",
       "skills": [
         "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md"
       ]
