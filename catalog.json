@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.17.0",
-      "files": 37,
+      "version": "0.18.0",
+      "files": 39,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "OpenImageIO EXR float adapter and Material Maker float sampling; HDR channel extraction, alpha and technical color-role checks verified on synthetic arrays; actual OIIO, OCIO and previous external runtimes unverified",
+      "status": "xatlas static UV adapter and bounded nearest surface CPU material raster; 2304 synthetic UV texels checked, winding and interior overlap rejection verified; actual xatlas runtime unavailable; external runtimes remain unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
