@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "blockwild-evolution",
-  "version": "0.6.0",
-  "description": "BLOCKWILD Evolution v0.6: source-preserving 3D sprite-stack volumes, 189 real RGBA assets, reference-sampled stone albedo, dynamic 3D fountain/courtyard FX, reproducible full offline HTML and visual benchmarks.",
+  "version": "0.7.0",
+  "description": "BLOCKWILD Evolution v0.7: 193 genuine CPU-sampled source-volume sprite projections, live alpha-silhouette shadows, water caustics and deterministic reference benchmark; original game archives protected.",
   "author": {
     "name": "META GAMES"
   },
@@ -29,7 +29,7 @@
       "interface": {
         "displayName": "BLOCKWILD Evolution",
         "shortDescription": "Улучшает BLOCKWILD и самостоятельно находит усиления",
-        "longDescription": "BLOCKWILD v0.6: provenance-protected 3D volume sprite stacks, owner-approved reference stone albedo, offline v16 builder and browser-verified input, alpha art and original fallback world.",
+        "longDescription": "BLOCKWILD Evolution v0.7: 193 genuine CPU-sampled source-volume sprite projections, live alpha-silhouette shadows, water caustics and deterministic reference benchmark; original game archives protected.",
         "category": "Productivity",
         "capabilities": [
           "Interactive"
