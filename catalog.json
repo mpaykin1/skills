@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.18.0",
-      "files": 39,
+      "version": "0.19.0",
+      "files": 42,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "xatlas static UV adapter and bounded nearest surface CPU material raster; 2304 synthetic UV texels checked, winding and interior overlap rejection verified; actual xatlas runtime unavailable; external runtimes remain unverified",
+      "status": "OpenSubdiv Far Loop CPU bridge source and hash-bound xatlas candidate adapter; topology/winding/shift guards verified on synthetic mesh; native OpenSubdiv bridge not compiled or run because dependency unavailable; prior external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
