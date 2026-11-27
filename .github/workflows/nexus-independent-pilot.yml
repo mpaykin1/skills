@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/quad-pilot-1-retry-20261127'
+    if: github.head_ref == 'nexus/quad-pilot-2-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -190,5 +190,29 @@ jobs:
               clean = json.loads(subprocess.check_output(cmd, text=True))
               assert clean['invalid_task_entries'] == 0 and clean['snapshot_issues'] == []
           print('INVALID_TASK_ENTRIES_GUARD_PASS: mixed and clean snapshots')
+          # Strict flags only after result correlation; unknown status is observed.
+          flags = ('is_failure_message','requires_user_action','content_truncated')
+          def strict_case(status, values, linked='r'):
+              return digest({'id':'strict','is_enabled':True,'run_details':{
+                  'last_run':{'id':'r','recorded_status':status},
+                  'latest_result':dict(values, **({'run_id':linked} if linked else {}))
+              }}, now)
+          bad = strict_case('completed', dict.fromkeys(flags,'false'))
+          assert {i['kind'] for i in bad['issues']} == {'invalid_result_flag'}, bad
+          assert {i['field'] for i in bad['issues']} == set(flags)
+          assert all(i['certainty']=='observed' for i in bad['issues'])
+          good = strict_case('completed', dict.fromkeys(flags,True))
+          assert {i['kind'] for i in good['issues']} == {'failed','requires_user_action','truncated_result'}, good
+          assert not strict_case('completed', dict.fromkeys(flags,False))['issues']
+          for value in (None, 0, 1, [], {}):
+              item = strict_case('completed', {'is_failure_message':value})
+              assert {i['kind'] for i in item['issues']} == {'invalid_result_flag'}, item
+          for status in ('unexpected', ['unexpected']):
+              item = strict_case(status, dict.fromkeys(flags,False))
+              assert item['status']=='unknown' and {i['kind'] for i in item['issues']} == {'unknown_run_status'}, item
+          for link, kind in [('old','stale_result'),(None,'unlinked_result')]:
+              item = strict_case('completed', dict.fromkeys(flags,'false'), link)
+              assert {i['kind'] for i in item['issues']} == {kind,'completed_without_result'}, item
+          print('STRICT_STATUS_FLAGS_GUARD_PASS')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
