@@ -3,7 +3,7 @@ name: blockwild-evolution
 description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOCKWILD → standalone HTML game using existing authored skills; identify bottlenecks, research compatible open-source, integrate real improvements, improve this skill's own reproducible pipeline. Sprite stacking first, original-content protection and measurable progress."
 ---
 
-# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.3.0
+# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.6.0
 
 ## Триггеры
 «Улучши BLOCKWILD», «продолжи перенос ZIP в HTML», «сделай максимум через sprite stacking», «найди следующий open-source для BLOCKWILD», «повышай процент», «развивай свой скилл». Используй самые свежие исходные ZIP, HTML и правки владельца. Не создавай новую игрушку с тем же названием вместо восстановления текущей.
@@ -78,3 +78,11 @@ description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOC
 For BLOCKWILD v15 and comparable authored 3D sprite-stacking games, read `references/V15_VOLUME_RELIGHT.md`. Reuse the same single-identity eight-direction source volumes and batch-bake 3D ambient/diffuse normals with `scripts/volumetric_relight.py`. Blend source voxels back into relit sprites to preserve facial details and leaf material texture, then use `scripts/build_v15_relief_atlas.py` and `scripts/assemble_v15.py` to publish one offline HTML without touching the original source-world header or gzip chunks. Existing skills retain ownership of rig, sprite canon, visual style and benchmark; do not create a competing game loop.
 
 Measurements must be real matched Chromium portrait/landscape frames. Reference histogram distance is not a percentage of subjective artistic quality. Do not claim full standalone native/WebGL2 validated when browser policy blocks opening 49MB source HTML. Latest tested **art-only** renderer loaded 178 RGBA sets in both orientations without JS errors; full HTML browser startup remains unverified.
+
+
+## v0.6 — Royal Volume Garden: verified full runtime
+
+Use `references/V16_MATERIAL_WORLD.md` before upgrading any newer BLOCKWILD project.
+Actual generated pipelines: `build_v16_volume_props.py` creates 11 wholly source-volume authored RGBA props; `make_stone_albedo.py` samples only stones from the owner-authorized art reference, never retains the original screenshot in the skill; `assemble_v16.py` embeds this albedo and props into the preserved standalone v15 source HTML and can reproduce the exact v16 artifact. 189 RGBA sprite atlases include 160 previous identity-preserved hero/NPC pose views and 11 new object families (178→189). Single animation loop. Source game binaries remain owner-only.
+
+Full game was actually loaded in Chromium's software 2.5D mode, with actual keyboard player movement, world-style toggle, zero JS errors and all 189 sprites ready. **Original WebGL2 3D pipeline and source chunk streaming not fully verified**. Measured matched screenshot Laplacian-variance change +29.37% averaged across portrait and landscape; this is only image detail change, not artistic improvement percent. Do not claim source Unity Mesh/Texture2D were extracted: AssetRipper and UnityPy were not available in the build environment. Next external source recovery requires both a source-rights gate and actual tool execution.
