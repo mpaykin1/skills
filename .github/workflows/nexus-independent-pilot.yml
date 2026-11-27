@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/autonomous-catalog-guard-20261127'
+    if: github.head_ref == 'nexus/dual-pilot-a-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -63,16 +63,23 @@ jobs:
           # Controlled smoke fixture, not historical automation evidence.
           snapshot = {'automations': [
               {'id':'pilot-idle','is_enabled':True,'run_details':{'last_run':{'id':'1','recorded_status':'completed'},'latest_result':{'content_text':'0 п.п.'}}},
-              {'id':'pilot-fail','is_enabled':True,'run_details':{'last_run':{'id':'2','recorded_status':'failed'}}}
+              {'id':'pilot-fail','is_enabled':True,'run_details':{'last_run':{'id':'2','recorded_status':'failed'}}},
+              {'id':'pilot-no-result','is_enabled':True,'run_details':{'last_run':{'id':'3','recorded_status':'completed'}}},
+              {'id':'pilot-with-result','is_enabled':True,'run_details':{'last_run':{'id':'4','recorded_status':'completed'},'latest_result':{'content_text':'done'}}}
           ]}
           with tempfile.TemporaryDirectory() as tmp:
               p = pathlib.Path(tmp)
               (p/'snapshot.json').write_text(json.dumps(snapshot), encoding='utf-8')
               subprocess.run(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p/'snapshot.json'),'--out',str(p/'audit.json')],check=True)
               result = json.loads((p/'audit.json').read_text())
-              assert result['active_tasks_checked'] == 2
+              assert result['active_tasks_checked'] == 4
               kinds = {i['kind'] for t in result['tasks'] for i in t['issues']}
               assert {'possibly_idle_run','failed'} <= kinds, result
+              by_id = {t['task_id']: t for t in result['tasks']}
+              assert {'kind':'completed_without_result','certainty':'observed'} in by_id['pilot-no-result']['issues']
+              assert by_id['pilot-no-result']['code_change'] == 'unverified'
+              assert not by_id['pilot-with-result']['issues']
+              print('COMPLETED_WITHOUT_RESULT_PASS')
               print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
