@@ -91,10 +91,14 @@ def main():
     if not isinstance(raw, dict) or not isinstance(raw.get('automations'), list):
         raise SystemExit('Expected object with automations list')
     now = datetime.now(timezone.utc)
+    invalid_task_entries = sum(not isinstance(a, dict) for a in raw['automations'])
     tasks = [x for a in raw['automations'] if isinstance(a, dict) if (x := digest(a, now, include_paused=args.include_paused))]
-    issues = sum(len(t['issues']) for t in tasks)
+    issues = sum(len(t['issues']) for t in tasks) + invalid_task_entries
     report = {'active_tasks_checked': sum(t['is_enabled'] for t in tasks),
               'paused_tasks_checked': sum(not t['is_enabled'] for t in tasks), 'issues': issues,
+              'invalid_task_entries': invalid_task_entries,
+              'snapshot_issues': ([{'kind': 'invalid_task_entries', 'certainty': 'observed',
+                                    'count': invalid_task_entries}] if invalid_task_entries else []),
               'notes': 'Diagnostics only; no skill usage or code changes verified',
               'tasks': tasks}
     encoded = json.dumps(report, ensure_ascii=False, indent=2) + '\n'
