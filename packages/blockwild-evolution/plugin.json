@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "blockwild-evolution",
-  "version": "0.4.0",
-  "description": "BLOCKWILD Evolution v0.4: 8-direction coherent RGBA volume character atlases, source-world preserving offline HTML pipeline, OpenCV matched-frame benchmarking, Scipy voxel rotation; integrates authored skills and interop.",
+  "version": "0.5.0",
+  "description": "BLOCKWILD Evolution v0.5: 3D source-volume CPU relighting via NumPy/SciPy/Numba, coherent 8-view animation, original-data-preserving standalone HTML, reference color benchmark and OSS/skill interoperability.",
   "author": {
     "name": "META GAMES"
   },
@@ -13,7 +13,11 @@
     "Three.js",
     "game optimization",
     "open source research",
-    "skill nexus"
+    "skill nexus",
+    "Numba CPU raycaster",
+    "3D volume relief",
+    "OpenCV Lab benchmark",
+    "8-view sprite stacking"
   ],
   "skills": "./skills",
   "extensions": {
