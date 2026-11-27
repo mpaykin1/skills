@@ -49,8 +49,15 @@ def digest(a, now):
         issues.append({'kind': 'truncated_result', 'certainty': 'observed'})
     if status == 'in_progress':
         t = parse_dt(run.get('started_at'))
-        if t and (now - t).total_seconds() > 7200:
-            issues.append({'kind': 'long_running', 'certainty': 'suspected'})
+        if t is None:
+            issues.append({'kind': 'missing_or_invalid_started_at', 'certainty': 'observed'})
+        else:
+            age = (now - t).total_seconds()
+            # Allow up to five minutes of clock skew.
+            if age < -300:
+                issues.append({'kind': 'future_started_at', 'certainty': 'observed'})
+            elif age > 7200:
+                issues.append({'kind': 'long_running', 'certainty': 'suspected'})
     # Results are prose, not execution traces: only suspect zero-value progress.
     needles = ('новых изменений не внесено', '0 п.п.', 'ничего не изменено', 'no changes made', 'no commits')
     if any(x in text.lower() for x in needles):
