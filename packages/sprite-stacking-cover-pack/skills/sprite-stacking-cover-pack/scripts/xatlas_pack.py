@@ -49,10 +49,16 @@ def raster(v,f,uv,mapping,indices,xyz,maps,step,width,height,padding):
     return result,coverage,peak
 
 
-def run(asset,out,resolution,padding):
+def run(asset,out,resolution,padding,subdiv=None):
     root=Path(asset).resolve(); out=Path(out).resolve()
     if out.exists() or root in out.parents or out in root.parents: raise ValueError('Separate new output required')
     meta,v,f,xyz,rgba,step=load_inputs(root)
+    subdiv_binding=None
+    if subdiv is not None:
+        from opensubdiv_pack import load_candidate
+        if np.any(rgba[:,3]<1-1e-6): raise ValueError('Subdivision candidate requires opaque static asset')
+        v,f,m=load_candidate(root,subdiv,v,f,xyz,step)
+        subdiv_binding={'manifestSHA256':digest(Path(subdiv)/'subdiv.json'),'meshSHA256':m['meshSHA256'],'level':m['level']}
     if len(f)>1_000_000 or not np.all((rgba>=0)&(rgba<=1)): raise ValueError('Invalid material range or mesh budget')
     maps={'baseColor':rgba}
     with np.load(root/'native_grid.npz',allow_pickle=False) as g:
@@ -86,8 +92,8 @@ def run(asset,out,resolution,padding):
         Image.fromarray(np.rint(maps['baseColor']*255).astype(np.uint8),'RGBA').save(stage/'baseColor.png')
         sources={n:digest(root/n) for n in ('native_grid.npz','native_mesh.npz','stack.json')}
         if any(sources[n]!=json.loads((root/'geometry-source.json').read_text())[n] for n in ('native_grid.npz','native_mesh.npz')): raise ValueError('Source changed')
-        (stage/'uv-atlas.json').write_text(json.dumps({'schema':'cover-pack-xatlas/1','sourceSHA256':sources,'sourceNativeUp':meta['nativeUp'],'pivot':meta['pivot'],'gridOrigin':meta['gridOrigin'],'xatlasVersion':importlib.metadata.version('xatlas'),'atlasSize':[w,h],'padding':padding,'maps':entries,'meshSHA256':digest(obj),'mappingSHA256':digest(stage/'uv-mapping.npz'),'maxNativeSampleDistance':peak,'coverageTexels':int(coverage.sum()),'status':'review-required; nearest surface approximation, not original UV/PBR recovery; static only'},indent=2)+'\n')
+        (stage/'uv-atlas.json').write_text(json.dumps({'schema':'cover-pack-xatlas/1','sourceSHA256':sources,'subdivisionCandidate':subdiv_binding,'sourceNativeUp':meta['nativeUp'],'pivot':meta['pivot'],'gridOrigin':meta['gridOrigin'],'xatlasVersion':importlib.metadata.version('xatlas'),'atlasSize':[w,h],'padding':padding,'maps':entries,'meshSHA256':digest(obj),'mappingSHA256':digest(stage/'uv-mapping.npz'),'maxNativeSampleDistance':peak,'coverageTexels':int(coverage.sum()),'status':'review-required; nearest surface approximation, not original UV/PBR recovery; static only'},indent=2)+'\n')
         stage.rename(out)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--asset',required=True);p.add_argument('--out',required=True);p.add_argument('--resolution',type=int,choices=[256,512,1024,2048],default=1024);p.add_argument('--padding',type=int,choices=range(2,17),default=8);a=p.parse_args();run(a.asset,a.out,a.resolution,a.padding)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--asset',required=True);p.add_argument('--out',required=True);p.add_argument('--resolution',type=int,choices=[256,512,1024,2048],default=1024);p.add_argument('--padding',type=int,choices=range(2,17),default=8);p.add_argument('--subdiv',help='Separate reviewed OpenSubdiv candidate directory');a=p.parse_args();run(a.asset,a.out,a.resolution,a.padding,a.subdiv)
