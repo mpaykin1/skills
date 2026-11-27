@@ -107,6 +107,16 @@ def main():
     raw = json.loads(args.snapshot.read_text(encoding='utf-8'))
     if not isinstance(raw, dict) or not isinstance(raw.get('automations'), list):
         raise SystemExit('Expected object with automations list')
+    # Validate identity across the entire snapshot before filtering or counting.
+    seen_ids = set()
+    for entry in raw['automations']:
+        if not isinstance(entry, dict):
+            continue
+        task_id = entry.get('id')
+        if isinstance(task_id, str) and task_id:
+            if task_id in seen_ids:
+                raise SystemExit('Invalid snapshot: duplicate nonempty task ID')
+            seen_ids.add(task_id)
     now = datetime.now(timezone.utc)
     invalid_task_entries = sum(not isinstance(a, dict) for a in raw['automations'])
     tasks = [x for a in raw['automations'] if isinstance(a, dict) if (x := digest(a, now, include_paused=args.include_paused))]
