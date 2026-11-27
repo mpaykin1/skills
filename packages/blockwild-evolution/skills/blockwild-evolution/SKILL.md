@@ -3,7 +3,7 @@ name: blockwild-evolution
 description: "BLOCKWILD Evolution: improve the user-supplied compiled Unity BLOCKWILD → standalone HTML game using existing authored skills; identify bottlenecks, research compatible open-source, integrate real improvements, improve this skill's own reproducible pipeline. Sprite stacking first, original-content protection and measurable progress."
 ---
 
-# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.6.0
+# BLOCKWILD EVOLUTION — адаптивный строитель игры, v0.7.0
 
 ## Триггеры
 «Улучши BLOCKWILD», «продолжи перенос ZIP в HTML», «сделай максимум через sprite stacking», «найди следующий open-source для BLOCKWILD», «повышай процент», «развивай свой скилл». Используй самые свежие исходные ZIP, HTML и правки владельца. Не создавай новую игрушку с тем же названием вместо восстановления текущей.
@@ -86,3 +86,19 @@ Use `references/V16_MATERIAL_WORLD.md` before upgrading any newer BLOCKWILD proj
 Actual generated pipelines: `build_v16_volume_props.py` creates 11 wholly source-volume authored RGBA props; `make_stone_albedo.py` samples only stones from the owner-authorized art reference, never retains the original screenshot in the skill; `assemble_v16.py` embeds this albedo and props into the preserved standalone v15 source HTML and can reproduce the exact v16 artifact. 189 RGBA sprite atlases include 160 previous identity-preserved hero/NPC pose views and 11 new object families (178→189). Single animation loop. Source game binaries remain owner-only.
 
 Full game was actually loaded in Chromium's software 2.5D mode, with actual keyboard player movement, world-style toggle, zero JS errors and all 189 sprites ready. **Original WebGL2 3D pipeline and source chunk streaming not fully verified**. Measured matched screenshot Laplacian-variance change +29.37% averaged across portrait and landscape; this is only image detail change, not artistic improvement percent. Do not claim source Unity Mesh/Texture2D were extracted: AssetRipper and UnityPy were not available in the build environment. Next external source recovery requires both a source-rights gate and actual tool execution.
+
+
+## 27.11.2026 — v0.7 Living Light Garden
+
+New CPU-authored true occupied-volume props, silhouette-based soft sunlight shadows,
+physically projected stone-paving bevels, caustic glints on world-space water,
+and seven independently animated pre-existing 3D-baked butterfly sprites.
+Use `references/V17_LIGHT_VOLUME.md` and scripts `build_v17_volumes.py`,
+`assemble_v17.py` plus `templates/v17_sunlit_volume.js` to reproduce the v17
+standalone HTML. Retain the original archived world/data, the same player ID,
+all 160 character frames, one renderer and one requestAnimationFrame loop.
+The authoring pipeline uses source volumes, while the sunlit display currently
+renders their baked sprite projections via Canvas2D, not an authentic GPU
+three-dimensional renderer. Next priority: actual AssetRipper/UnityPy Unity
+models/textures when accessible; then a genuine GPU sprite-slice renderer with
+normal-based lighting and captured browser comparison. Source art always wins.
