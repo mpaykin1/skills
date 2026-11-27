@@ -74,6 +74,16 @@ def digest(a, now, include_paused=False):
                 issues.append({'kind': 'future_started_at', 'certainty': 'observed'})
             elif age > 7200:
                 issues.append({'kind': 'long_running', 'certainty': 'suspected'})
+    if status == 'completed' and 'completed_at' in run:
+        completed = parse_dt(run['completed_at'])
+        if completed is None:
+            issues.append({'kind': 'invalid_completed_at', 'certainty': 'observed'})
+        else:
+            started = parse_dt(run.get('started_at'))
+            if started is not None and completed < started:
+                issues.append({'kind': 'invalid_run_chronology', 'certainty': 'observed'})
+            if (completed - now).total_seconds() > 300:
+                issues.append({'kind': 'future_completed_at', 'certainty': 'observed'})
     # Results are prose, not execution traces: only suspect zero-value progress.
     needles = ('новых изменений не внесено', '0 п.п.', 'ничего не изменено', 'no changes made', 'no commits')
     if any(x in text.lower() for x in needles):
