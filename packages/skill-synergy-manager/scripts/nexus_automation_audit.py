@@ -23,25 +23,41 @@ def digest(a, now):
     rd = a.get('run_details') or {}
     run = rd.get('last_run') or {}
     result = rd.get('latest_result') or {}
-    text = str(result.get('content_text') or '')
     status = run.get('recorded_status') or 'unknown'
     issues = []
     if not a.get('is_enabled'):
         return None
+    # A result from a different run cannot describe the current run.
+    if result and not (run.get('id') and result.get('run_id')):
+        issues.append({'kind': 'unlinked_result', 'certainty': 'observed'})
+        result = {}
+    elif run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
+        issues.append({'kind': 'stale_result', 'certainty': 'observed'})
+        result = {}
+    text = str(result.get('content_text') or '')
     if not run:
         issues.append({'kind': 'no_last_run', 'certainty': 'observed'})
     if status == 'failed' or result.get('is_failure_message'):
         issues.append({'kind': 'failed', 'certainty': 'observed'})
     if result.get('requires_user_action'):
         issues.append({'kind': 'requires_user_action', 'certainty': 'observed'})
+    if status == 'completed' and not result:
+        issues.append({'kind': 'completed_without_result', 'certainty': 'observed'})
     if status == 'no_update':
         issues.append({'kind': 'no_update', 'certainty': 'observed'})
     if result.get('content_truncated'):
         issues.append({'kind': 'truncated_result', 'certainty': 'observed'})
     if status == 'in_progress':
         t = parse_dt(run.get('started_at'))
-        if t and (now - t).total_seconds() > 7200:
-            issues.append({'kind': 'long_running', 'certainty': 'suspected'})
+        if t is None:
+            issues.append({'kind': 'missing_or_invalid_started_at', 'certainty': 'observed'})
+        else:
+            age = (now - t).total_seconds()
+            # Allow up to five minutes of clock skew.
+            if age < -300:
+                issues.append({'kind': 'future_started_at', 'certainty': 'observed'})
+            elif age > 7200:
+                issues.append({'kind': 'long_running', 'certainty': 'suspected'})
     # Results are prose, not execution traces: only suspect zero-value progress.
     needles = ('новых изменений не внесено', '0 п.п.', 'ничего не изменено', 'no changes made', 'no commits')
     if any(x in text.lower() for x in needles):
