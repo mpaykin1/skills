@@ -35,7 +35,11 @@ def digest(a, now, include_paused=False):
     rd = mapping(a.get('run_details'), 'run_details')
     run = mapping(rd.get('last_run'), 'last_run')
     result = mapping(rd.get('latest_result'), 'latest_result')
-    status = run.get('recorded_status') or 'unknown'
+    raw_status = run.get('recorded_status')
+    status = raw_status or 'unknown'
+    if raw_status and raw_status not in ('completed', 'failed', 'no_update', 'in_progress'):
+        issues.append({'kind': 'unknown_run_status', 'certainty': 'observed'})
+        status = 'unknown'
     # A result from a different run cannot describe the current run.
     if result and not (run.get('id') and result.get('run_id')):
         issues.append({'kind': 'unlinked_result', 'certainty': 'observed'})
@@ -43,18 +47,21 @@ def digest(a, now, include_paused=False):
     elif run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
         issues.append({'kind': 'stale_result', 'certainty': 'observed'})
         result = {}
+    for flag in ('is_failure_message', 'requires_user_action', 'content_truncated'):
+        if flag in result and not isinstance(result[flag], bool):
+            issues.append({'kind': 'invalid_result_flag', 'certainty': 'observed', 'field': flag})
     text = str(result.get('content_text') or '')
     if not run:
         issues.append({'kind': 'no_last_run', 'certainty': 'observed'})
-    if status == 'failed' or result.get('is_failure_message'):
+    if status == 'failed' or result.get('is_failure_message') is True:
         issues.append({'kind': 'failed', 'certainty': 'observed'})
-    if result.get('requires_user_action'):
+    if result.get('requires_user_action') is True:
         issues.append({'kind': 'requires_user_action', 'certainty': 'observed'})
     if status == 'completed' and not result:
         issues.append({'kind': 'completed_without_result', 'certainty': 'observed'})
     if status == 'no_update':
         issues.append({'kind': 'no_update', 'certainty': 'observed'})
-    if result.get('content_truncated'):
+    if result.get('content_truncated') is True:
         issues.append({'kind': 'truncated_result', 'certainty': 'observed'})
     if status == 'in_progress':
         t = parse_dt(run.get('started_at'))
