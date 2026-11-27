@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/pilot-independent-runner-20261127'
+    if: github.head_ref == 'nexus/autonomous-catalog-guard-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Check actual catalog and execute Nexus skill script
         shell: bash
         run: |
@@ -30,16 +31,35 @@ jobs:
           skill = path.read_text(encoding='utf-8')
           assert 'nexus_automation_audit.py' in skill
           print('Nexus source loaded:', path.relative_to(root), 'version:', nexus['version'])
-          missing = []
-          total = 0
-          for package in packages:
-              paths = set(package.get('skills') or [])
-              if package.get('skill'): paths.add(package['skill'])
-              for name in sorted(paths):
-                  total += 1
-                  if not (root / name).is_file(): missing.append((package['name'], name))
-          print('Actual catalog:', len(packages), 'packages;', total, 'declared skill paths;', len(missing), 'missing')
-          for name, path in missing: print('Missing catalog source:', name, path)
+          def check_catalog():
+              missing = []
+              total = 0
+              for package in packages:
+                  paths = set(package.get('skills') or [])
+                  if package.get('skill'): paths.add(package['skill'])
+                  for name in sorted(paths):
+                      total += 1
+                      if not (root / name).is_file(): missing.append((package['name'], name))
+              print('Actual catalog:', len(packages), 'packages;', total, 'declared skill paths;', len(missing), 'missing')
+              for name, source in missing: print('Missing catalog source:', name, source)
+              if missing: raise SystemExit(1)
+          check_catalog()
+          # Negative control in the disposable checkout; always restore.
+          hidden = path.with_name('SKILL.md.pilot-hidden')
+          assert not hidden.exists()
+          path.rename(hidden)
+          try:
+              try:
+                  check_catalog()
+              except SystemExit as exc:
+                  assert exc.code == 1
+                  print('CATALOG_NEGATIVE_CONTROL_PASS: missing source rejected')
+              else:
+                  raise RuntimeError('Missing source was accepted')
+          finally:
+              hidden.rename(path)
+          check_catalog()
+          print('CATALOG_GUARD_PASS')
           # Controlled smoke fixture, not historical automation evidence.
           snapshot = {'automations': [
               {'id':'pilot-idle','is_enabled':True,'run_details':{'last_run':{'id':'1','recorded_status':'completed'},'latest_result':{'content_text':'0 п.п.'}}},
@@ -54,5 +74,5 @@ jobs:
               kinds = {i['kind'] for t in result['tasks'] for i in t['issues']}
               assert {'possibly_idle_run','failed'} <= kinds, result
               print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
-          print('SOURCE_RUNNER_PASS; native ChatGPT skill access and full autonomous agent operation not tested')
+          print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
