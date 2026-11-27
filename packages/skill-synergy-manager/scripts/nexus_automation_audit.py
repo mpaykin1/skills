@@ -19,13 +19,13 @@ def parse_dt(v):
         return None
 
 
-def digest(a, now):
+def digest(a, now, include_paused=False):
     rd = a.get('run_details') or {}
     run = rd.get('last_run') or {}
     result = rd.get('latest_result') or {}
     status = run.get('recorded_status') or 'unknown'
     issues = []
-    if not a.get('is_enabled'):
+    if not a.get('is_enabled') and not include_paused:
         return None
     # A result from a different run cannot describe the current run.
     if result and not (run.get('id') and result.get('run_id')):
@@ -65,6 +65,7 @@ def digest(a, now):
     # Skill evidence must be checked against actual artifacts/commands.
     return {
         'task_id': a.get('id'), 'title': a.get('title'),
+        'is_enabled': bool(a.get('is_enabled')),
         'last_run_id': run.get('id'), 'status': status,
         'has_result': bool(result), 'issues': issues,
         'skill_use': 'unverified', 'code_change': 'unverified',
@@ -75,14 +76,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('snapshot', type=Path)
     ap.add_argument('--out', type=Path)
+    ap.add_argument('--include-paused', action='store_true', help='Inspect paused tasks without activating them')
     args = ap.parse_args()
     raw = json.loads(args.snapshot.read_text(encoding='utf-8'))
     if not isinstance(raw, dict) or not isinstance(raw.get('automations'), list):
         raise SystemExit('Expected object with automations list')
     now = datetime.now(timezone.utc)
-    tasks = [x for a in raw['automations'] if isinstance(a, dict) if (x := digest(a, now))]
+    tasks = [x for a in raw['automations'] if isinstance(a, dict) if (x := digest(a, now, include_paused=args.include_paused))]
     issues = sum(len(t['issues']) for t in tasks)
-    report = {'active_tasks_checked': len(tasks), 'issues': issues,
+    report = {'active_tasks_checked': sum(t['is_enabled'] for t in tasks),
+              'paused_tasks_checked': sum(not t['is_enabled'] for t in tasks), 'issues': issues,
               'notes': 'Diagnostics only; no skill usage or code changes verified',
               'tasks': tasks}
     encoded = json.dumps(report, ensure_ascii=False, indent=2) + '\n'
