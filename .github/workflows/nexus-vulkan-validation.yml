@@ -1,0 +1,32 @@
+name: Nexus Vulkan Validation Layers CPU
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/vulkan-validation-bridge/**'
+      - '.github/workflows/nexus-vulkan-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install signed Vulkan CPU packages and layers
+        run: |
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends mesa-vulkan-drivers libvulkan-dev vulkan-validationlayers glslang-tools spirv-tools gcc
+          dpkg-query -W mesa-vulkan-drivers vulkan-validationlayers libvulkan-dev glslang-tools spirv-tools
+      - name: Reuse exact successful Lavapipe source and validate Vulkan
+        run: |
+          set -euo pipefail
+          sha=2b30e4b58b6529f1fc668adc87f58ef8dd68e838
+          git fetch --depth=1 https://github.com/mpaykin1/skills.git "$sha"
+          test "$(git rev-parse FETCH_HEAD)" = "$sha"
+          source="packages/skill-synergy-manager/skills/lavapipe-vulkan-bridge/scripts"
+          mkdir -p "$RUNNER_TEMP/lavapipe"
+          git archive "$sha" "$source" | tar -x -C "$RUNNER_TEMP/lavapipe"
+          bash packages/skill-synergy-manager/skills/vulkan-validation-bridge/scripts/run_validation.sh "$RUNNER_TEMP/lavapipe/$source"
