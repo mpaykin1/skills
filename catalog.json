@@ -352,11 +352,11 @@
     },
     {
       "name": "sprite-stacking-cover-pack",
-      "version": "0.16.0",
-      "files": 35,
+      "version": "0.17.0",
+      "files": 37,
       "skill": "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md",
       "excluded": [],
-      "status": "OCIO color contract, CPU conversion adapter and Three.js texture roles; profile hash rejection and lossless WebP encode verified on structural fixture; actual OCIO/Blender and external ML runtimes unverified",
+      "status": "OpenImageIO EXR float adapter and Material Maker float sampling; HDR channel extraction, alpha and technical color-role checks verified on synthetic arrays; actual OIIO, OCIO and previous external runtimes unverified",
       "skills": [
         "packages/sprite-stacking-cover-pack/skills/sprite-stacking-cover-pack/SKILL.md"
       ]
