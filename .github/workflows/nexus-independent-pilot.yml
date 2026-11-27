@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/triple-pilot-2-20261127'
+    if: github.head_ref == 'nexus/triple-pilot-3-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -122,5 +122,27 @@ jobs:
               actual = {i['kind']:i['certainty'] for i in digest(task, now)['issues']}
               assert actual == expected, (started, actual, expected)
           print('STARTED_AT_GUARD_PASS: seven deterministic cases')
+          # Exercise both CLI modes on a synthetic snapshot.
+          paused_snapshot = {'automations': [
+              {'id':'active','is_enabled':True,'run_details':{'last_run':{'id':'a','recorded_status':'completed'},'latest_result':{'run_id':'a','content_text':'done'}}},
+              {'id':'paused','is_enabled':False,'run_details':{'last_run':{'id':'p','recorded_status':'completed'}}},
+              {'id':'paused-clean','is_enabled':False,'run_details':{'last_run':{'id':'q','recorded_status':'completed'},'latest_result':{'run_id':'q','content_text':'done'}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(paused_snapshot), encoding='utf-8')
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              default = json.loads(subprocess.check_output(cmd, text=True))
+              assert default['active_tasks_checked'] == 1 and default['paused_tasks_checked'] == 0
+              assert [t['task_id'] for t in default['tasks']] == ['active']
+              full = json.loads(subprocess.check_output(cmd + ['--include-paused'], text=True))
+              assert full['active_tasks_checked'] == 1 and full['paused_tasks_checked'] == 2
+              items = {t['task_id']:t for t in full['tasks']}
+              assert items['active'] == default['tasks'][0]
+              assert not items['paused']['is_enabled']
+              assert {i['kind'] for i in items['paused']['issues']} == {'completed_without_result'}
+              assert not items['paused-clean']['issues']
+              assert full['issues'] == 1
+          print('PAUSED_AUDIT_GUARD_PASS: default and opt-in CLI modes')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
