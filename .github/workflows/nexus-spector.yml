@@ -1,0 +1,35 @@
+name: Nexus Spector WebGL bootstrap
+on:
+  pull_request:
+    paths:
+      - 'packages/skill-synergy-manager/skills/spector-webgl-bridge/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: packages/skill-synergy-manager/skills/spector-webgl-bridge/scripts
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npx --no-install playwright install --with-deps chromium
+      - name: Capture actual WebGL fixture
+        run: |
+          mkdir -p "$RUNNER_TEMP/spector-fixture"
+          cat > "$RUNNER_TEMP/spector-fixture/index.html" <<'HTML'
+          <canvas id="game" width="320" height="180"></canvas><script>
+          const gl=document.querySelector("canvas").getContext("webgl2");
+          function frame(t){gl.clearColor(.2,.4,.6,1);gl.clear(gl.COLOR_BUFFER_BIT);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+          </script>
+          HTML
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "$RUNNER_TEMP/spector-fixture" >/dev/null 2>&1 &
+          trap 'kill $!' EXIT
+          sleep 1
+          node capture.mjs http://127.0.0.1:8765/ '#game' "$RUNNER_TEMP/capture.json"
+          node route.mjs "$RUNNER_TEMP/capture.json"
