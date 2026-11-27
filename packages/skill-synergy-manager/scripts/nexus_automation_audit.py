@@ -20,13 +20,22 @@ def parse_dt(v):
 
 
 def digest(a, now, include_paused=False):
-    rd = a.get('run_details') or {}
-    run = rd.get('last_run') or {}
-    result = rd.get('latest_result') or {}
-    status = run.get('recorded_status') or 'unknown'
-    issues = []
     if not a.get('is_enabled') and not include_paused:
         return None
+    issues = []
+
+    def mapping(value, field):
+        if value is None:
+            return {}
+        if not isinstance(value, dict):
+            issues.append({'kind': 'invalid_' + field, 'certainty': 'observed'})
+            return {}
+        return value
+
+    rd = mapping(a.get('run_details'), 'run_details')
+    run = mapping(rd.get('last_run'), 'last_run')
+    result = mapping(rd.get('latest_result'), 'latest_result')
+    status = run.get('recorded_status') or 'unknown'
     # A result from a different run cannot describe the current run.
     if result and not (run.get('id') and result.get('run_id')):
         issues.append({'kind': 'unlinked_result', 'certainty': 'observed'})
