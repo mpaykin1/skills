@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/triple-pilot-3-20261127'
+    if: github.head_ref == 'nexus/quad-pilot-1-20261127'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -144,5 +144,33 @@ jobs:
               assert not items['paused-clean']['issues']
               assert full['issues'] == 1
           print('PAUSED_AUDIT_GUARD_PASS: default and opt-in CLI modes')
+          # Malformed nested fields must not abort the entire CLI audit.
+          malformed = {'automations': [
+              {'id':'bad-details','is_enabled':True,'run_details':['no commits']},
+              {'id':'bad-run','is_enabled':True,'run_details':{'last_run':'failed','latest_result':{'run_id':'old','is_failure_message':True}}},
+              {'id':'bad-result','is_enabled':True,'run_details':{'last_run':{'id':'r','recorded_status':'completed'},'latest_result':['no commits']}},
+              {'id':'false-types','is_enabled':True,'run_details':{'last_run':False,'latest_result':[]}},
+              {'id':'null-fields','is_enabled':True,'run_details':{'last_run':None,'latest_result':None}},
+              {'id':'healthy','is_enabled':True,'run_details':{'last_run':{'id':'h','recorded_status':'completed'},'latest_result':{'run_id':'h','content_text':'done'}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(malformed), encoding='utf-8')
+              report = json.loads(subprocess.check_output(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)], text=True))
+              assert report['active_tasks_checked'] == 6
+              items = {t['task_id']:t for t in report['tasks']}
+              expected = {
+                  'bad-details': {'invalid_run_details','no_last_run'},
+                  'bad-run': {'invalid_last_run','unlinked_result','no_last_run'},
+                  'bad-result': {'invalid_latest_result','completed_without_result'},
+                  'false-types': {'invalid_last_run','invalid_latest_result','no_last_run'},
+                  'null-fields': {'no_last_run'},
+                  'healthy': set()
+              }
+              for key, kinds in expected.items():
+                  assert {i['kind'] for i in items[key]['issues']} == kinds, items[key]
+                  assert all(i['certainty'] == 'observed' for i in items[key]['issues'])
+              assert items['healthy']['has_result']
+          print('MALFORMED_FIELDS_GUARD_PASS: six CLI cases')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
