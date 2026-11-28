@@ -5,6 +5,7 @@ machine-readable triage, not an assertion that a skill executed.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -98,11 +99,22 @@ def digest(a, now, include_paused=False):
     }
 
 
+def explicit_now(value):
+    # Do not echo invalid input in argparse diagnostics.
+    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)', value):
+        raise argparse.ArgumentTypeError('expected ISO 8601 datetime with explicit timezone')
+    try:
+        return datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(timezone.utc)
+    except (ValueError, OverflowError):
+        raise argparse.ArgumentTypeError('expected valid ISO 8601 datetime with explicit timezone') from None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('snapshot', type=Path)
     ap.add_argument('--out', type=Path)
     ap.add_argument('--include-paused', action='store_true', help='Inspect paused tasks without activating them')
+    ap.add_argument('--now', type=explicit_now, help='Fixed ISO 8601 audit time with explicit timezone')
     args = ap.parse_args()
     raw = json.loads(args.snapshot.read_text(encoding='utf-8'))
     if not isinstance(raw, dict) or not isinstance(raw.get('automations'), list):
@@ -117,7 +129,7 @@ def main():
             if task_id in seen_ids:
                 raise SystemExit('Invalid snapshot: duplicate nonempty task ID')
             seen_ids.add(task_id)
-    now = datetime.now(timezone.utc)
+    now = args.now if args.now is not None else datetime.now(timezone.utc)
     invalid_task_entries = sum(not isinstance(a, dict) for a in raw['automations'])
     tasks = [x for a in raw['automations'] if isinstance(a, dict) if (x := digest(a, now, include_paused=args.include_paused))]
     issues = sum(len(t['issues']) for t in tasks) + invalid_task_entries
