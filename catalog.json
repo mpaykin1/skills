@@ -376,13 +376,13 @@
     },
     {
       "name": "blockwild-evolution",
-      "version": "0.7.0",
-      "files": 38,
+      "version": "0.8.0",
+      "files": 42,
       "skill": "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md",
       "excluded": [
         "Original BLOCKWILD game binaries and source assets (not redistributed)"
       ],
-      "status": "v17 source-preserving 4 new occupied 3D RGBA volumes, 193 sprite assets, alpha-silhouette shadows and animated sun/water; full offline HTML Chromium portrait+landscape/controls/toggle verified; native Unity texture/mesh and native WebGL2 unverified",
+      "status": "v18 GPU atlas scripts: 43 authored physical occupancy models represent 183 of 193 sprite choices (94.8% coverage); Canvas fallback Chromium 390x844/844x390 verified; actual GPU/WebGL2 runtime not verified",
       "skills": [
         "packages/blockwild-evolution/skills/blockwild-evolution/SKILL.md"
       ]
