@@ -102,3 +102,8 @@ renders their baked sprite projections via Canvas2D, not an authentic GPU
 three-dimensional renderer. Next priority: actual AssetRipper/UnityPy Unity
 models/textures when accessible; then a genuine GPU sprite-slice renderer with
 normal-based lighting and captured browser comparison. Source art always wins.
+
+
+## 0.8.0 — GPU source-volume bridge with normal maps
+
+Use `references/V18_WEBGL_VOLUMES.md` for real 43-source atlas generation and 183/193 authored-view coverage. `scripts/build_v18_gpu_atlases.py` and `scripts/assemble_v18.py` are the canonical reproducible tools. Reuse the 193 existing sprite identities and 160 authored full-body poses; do not replace with procedural character impostors or claim these to be original Unity models. Exactly one art RAF, no CDN, WebGL2 `drawArraysInstanced`+depth+GLSL normals, and native Canvas2D fallback. All original chunks/audio remain byte-identical. A graphics-percentage claim requires a common camera/viewport and actual GPU WebGL2 screenshots; 94.8% counts prepared sprite types, not perceived quality. Real GPU rendering has not been verified in headless Chromium (no WebGL2 context). If hardware WebGL2 is unavailable, do not claim success and leave fallback active.
