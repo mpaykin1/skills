@@ -50,7 +50,10 @@ def digest(a, now, include_paused=False):
     for flag in ('is_failure_message', 'requires_user_action', 'content_truncated'):
         if flag in result and not isinstance(result[flag], bool):
             issues.append({'kind': 'invalid_result_flag', 'certainty': 'observed', 'field': flag})
-    text = str(result.get('content_text') or '')
+    raw_text = result.get('content_text')
+    if raw_text is not None and not isinstance(raw_text, str):
+        issues.append({'kind': 'invalid_content_text', 'certainty': 'observed'})
+    text = raw_text if isinstance(raw_text, str) else ''
     if not run:
         issues.append({'kind': 'no_last_run', 'certainty': 'observed'})
     if status == 'failed' or result.get('is_failure_message') is True:
