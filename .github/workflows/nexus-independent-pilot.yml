@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/quad-pilot-4-20261127'
+    if: github.head_ref == 'nexus/adaptive-r1-p4-20261128'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -264,5 +264,27 @@ jobs:
                   report = json.loads(subprocess.check_output(cmd+flags,text=True))
                   assert report['active_tasks_checked']==active and report['paused_tasks_checked']==paused
           print('DUPLICATE_TASK_ID_GUARD_PASS')
+          # All terminal statuses share chronology; running tasks ignore completion.
+          for status in ('completed','failed','no_update','in_progress'):
+              for supplied, end, expected in [
+                  (False,None,set()),
+                  (True,now.isoformat(),set()),
+                  (True,start,set()),
+                  (True,(now-timedelta(minutes=11)).isoformat(),{'invalid_run_chronology'}),
+                  (True,(now+timedelta(seconds=300)).isoformat(),set()),
+                  (True,(now+timedelta(seconds=301)).isoformat(),{'future_completed_at'}),
+                  (True,'bad-date',{'invalid_completed_at'}),
+                  (True,None,{'invalid_completed_at'}),
+                  (True,42,{'invalid_completed_at'}),
+              ]:
+                  run = {'id':'terminal','recorded_status':status,'started_at':start}
+                  if supplied: run['completed_at'] = end
+                  item = digest({'id':'terminal','is_enabled':True,'run_details':{
+                      'last_run':run,'latest_result':{'run_id':'terminal','content_text':'done'}}}, now)
+                  baseline = {status} if status in ('failed','no_update') else set()
+                  wanted = baseline | (expected if status != 'in_progress' else set())
+                  assert {i['kind'] for i in item['issues']} == wanted, (status,end,item)
+                  assert all(i['certainty']=='observed' for i in item['issues'])
+          print('TERMINAL_CHRONOLOGY_GUARD_PASS')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
