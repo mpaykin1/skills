@@ -1,0 +1,288 @@
+name: Nexus independent runner pilot
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/nexus-independent-pilot.yml'
+permissions:
+  contents: read
+jobs:
+  skill-source-pilot:
+    if: github.head_ref == 'nexus/adaptive-r1-p2-20261128'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Load exact GitHub skill sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Check actual catalog and execute Nexus skill script
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, subprocess, tempfile
+          root = pathlib.Path.cwd()
+          catalog = json.loads((root / 'catalog.json').read_text())
+          packages = catalog['packages']
+          nexus = next(x for x in packages if x['name'] == 'skill-synergy-manager')
+          path = root / 'packages/skill-synergy-manager/skills/nexus-automation-supervisor/SKILL.md'
+          skill = path.read_text(encoding='utf-8')
+          assert 'nexus_automation_audit.py' in skill
+          print('Nexus source loaded:', path.relative_to(root), 'version:', nexus['version'])
+          def check_catalog():
+              missing = []
+              total = 0
+              for package in packages:
+                  paths = set(package.get('skills') or [])
+                  if package.get('skill'): paths.add(package['skill'])
+                  for name in sorted(paths):
+                      total += 1
+                      if not (root / name).is_file(): missing.append((package['name'], name))
+              print('Actual catalog:', len(packages), 'packages;', total, 'declared skill paths;', len(missing), 'missing')
+              for name, source in missing: print('Missing catalog source:', name, source)
+              if missing: raise SystemExit(1)
+          check_catalog()
+          # Negative control in the disposable checkout; always restore.
+          hidden = path.with_name('SKILL.md.pilot-hidden')
+          assert not hidden.exists()
+          path.rename(hidden)
+          try:
+              try:
+                  check_catalog()
+              except SystemExit as exc:
+                  assert exc.code == 1
+                  print('CATALOG_NEGATIVE_CONTROL_PASS: missing source rejected')
+              else:
+                  raise RuntimeError('Missing source was accepted')
+          finally:
+              hidden.rename(path)
+          check_catalog()
+          print('CATALOG_GUARD_PASS')
+          # Controlled smoke fixture, not historical automation evidence.
+          snapshot = {'automations': [
+              {'id':'pilot-idle','is_enabled':True,'run_details':{'last_run':{'id':'1','recorded_status':'completed'},'latest_result':{'run_id':'1','content_text':'0 п.п.'}}},
+              {'id':'pilot-fail','is_enabled':True,'run_details':{'last_run':{'id':'2','recorded_status':'failed'}}},
+              {'id':'pilot-no-result','is_enabled':True,'run_details':{'last_run':{'id':'3','recorded_status':'completed'}}},
+              {'id':'pilot-with-result','is_enabled':True,'run_details':{'last_run':{'id':'4','recorded_status':'completed'},'latest_result':{'run_id':'4','content_text':'done'}}},
+              {'id':'pilot-stale','is_enabled':True,'run_details':{'last_run':{'id':'5','recorded_status':'completed'},'latest_result':{'run_id':'old','content_text':'no commits','is_failure_message':True,'requires_user_action':True,'content_truncated':True}}},
+              {'id':'pilot-fresh','is_enabled':True,'run_details':{'last_run':{'id':'6','recorded_status':'completed'},'latest_result':{'run_id':'6','content_text':'no commits','requires_user_action':True}}},
+              {'id':'pilot-unlinked-result','is_enabled':True,'run_details':{'last_run':{'id':'7','recorded_status':'completed'},'latest_result':{'content_text':'no commits','is_failure_message':True,'requires_user_action':True,'content_truncated':True}}},
+              {'id':'pilot-unlinked-run','is_enabled':True,'run_details':{'last_run':{'recorded_status':'completed'},'latest_result':{'run_id':'8','content_text':'no commits','is_failure_message':True}}},
+              {'id':'pilot-linked-failure','is_enabled':True,'run_details':{'last_run':{'id':'9','recorded_status':'completed'},'latest_result':{'run_id':'9','content_text':'no commits','is_failure_message':True}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)
+              (p/'snapshot.json').write_text(json.dumps(snapshot), encoding='utf-8')
+              subprocess.run(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p/'snapshot.json'),'--out',str(p/'audit.json')],check=True)
+              result = json.loads((p/'audit.json').read_text())
+              assert result['active_tasks_checked'] == 9
+              kinds = {i['kind'] for t in result['tasks'] for i in t['issues']}
+              assert {'possibly_idle_run','failed'} <= kinds, result
+              by_id = {t['task_id']: t for t in result['tasks']}
+              assert {'kind':'completed_without_result','certainty':'observed'} in by_id['pilot-no-result']['issues']
+              assert by_id['pilot-no-result']['code_change'] == 'unverified'
+              assert not by_id['pilot-with-result']['issues']
+              print('COMPLETED_WITHOUT_RESULT_PASS')
+              stale = by_id['pilot-stale']
+              assert {i['kind'] for i in stale['issues']} == {'stale_result','completed_without_result'}, stale
+              assert not stale['has_result'] and stale['code_change'] == 'unverified'
+              assert {'kind':'stale_result','certainty':'observed'} in stale['issues']
+              fresh = by_id['pilot-fresh']
+              assert fresh['has_result'] and {i['kind'] for i in fresh['issues']} == {'possibly_idle_run','requires_user_action'}, fresh
+              print('STALE_RESULT_GUARD_PASS')
+              for key in ('pilot-unlinked-result', 'pilot-unlinked-run'):
+                  item = by_id[key]
+                  assert {i['kind'] for i in item['issues']} == {'unlinked_result','completed_without_result'}, item
+                  assert {'kind':'unlinked_result','certainty':'observed'} in item['issues']
+                  assert not item['has_result'] and item['code_change'] == 'unverified'
+              linked = by_id['pilot-linked-failure']
+              assert linked['has_result'] and {i['kind'] for i in linked['issues']} == {'failed','possibly_idle_run'}, linked
+              print('UNLINKED_RESULT_GUARD_PASS')
+              print('Existing Nexus audit executed; controlled fixture classified correctly:', sorted(kinds))
+          # Deterministic time diagnostics using the actual audit module.
+          import runpy
+          from datetime import datetime, timezone, timedelta
+          digest = runpy.run_path(str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'))['digest']
+          now = datetime(2026, 11, 27, 12, tzinfo=timezone.utc)
+          cases = [
+              (None, {'missing_or_invalid_started_at':'observed'}),
+              ('not-a-date', {'missing_or_invalid_started_at':'observed'}),
+              ((now + timedelta(minutes=6)).isoformat(), {'future_started_at':'observed'}),
+              ((now + timedelta(minutes=5)).isoformat(), {}),
+              ((now - timedelta(minutes=10)).isoformat(), {}),
+              ((now - timedelta(hours=2)).isoformat(), {}),
+              ((now - timedelta(hours=3)).isoformat(), {'long_running':'suspected'}),
+          ]
+          for started, expected in cases:
+              run = {'id':'time-test','recorded_status':'in_progress'}
+              if started is not None: run['started_at'] = started
+              task = {'id':'time-test','is_enabled':True,'run_details':{'last_run':run}}
+              actual = {i['kind']:i['certainty'] for i in digest(task, now)['issues']}
+              assert actual == expected, (started, actual, expected)
+          print('STARTED_AT_GUARD_PASS: seven deterministic cases')
+          # Exercise both CLI modes on a synthetic snapshot.
+          paused_snapshot = {'automations': [
+              {'id':'active','is_enabled':True,'run_details':{'last_run':{'id':'a','recorded_status':'completed'},'latest_result':{'run_id':'a','content_text':'done'}}},
+              {'id':'paused','is_enabled':False,'run_details':{'last_run':{'id':'p','recorded_status':'completed'}}},
+              {'id':'paused-clean','is_enabled':False,'run_details':{'last_run':{'id':'q','recorded_status':'completed'},'latest_result':{'run_id':'q','content_text':'done'}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(paused_snapshot), encoding='utf-8')
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              default = json.loads(subprocess.check_output(cmd, text=True))
+              assert default['active_tasks_checked'] == 1 and default['paused_tasks_checked'] == 0
+              assert [t['task_id'] for t in default['tasks']] == ['active']
+              full = json.loads(subprocess.check_output(cmd + ['--include-paused'], text=True))
+              assert full['active_tasks_checked'] == 1 and full['paused_tasks_checked'] == 2
+              items = {t['task_id']:t for t in full['tasks']}
+              assert items['active'] == default['tasks'][0]
+              assert not items['paused']['is_enabled']
+              assert {i['kind'] for i in items['paused']['issues']} == {'completed_without_result'}
+              assert not items['paused-clean']['issues']
+              assert full['issues'] == 1
+          print('PAUSED_AUDIT_GUARD_PASS: default and opt-in CLI modes')
+          # Malformed nested fields must not abort the entire CLI audit.
+          malformed = {'automations': [
+              {'id':'bad-details','is_enabled':True,'run_details':['no commits']},
+              {'id':'bad-run','is_enabled':True,'run_details':{'last_run':'failed','latest_result':{'run_id':'old','is_failure_message':True}}},
+              {'id':'bad-result','is_enabled':True,'run_details':{'last_run':{'id':'r','recorded_status':'completed'},'latest_result':['no commits']}},
+              {'id':'false-types','is_enabled':True,'run_details':{'last_run':False,'latest_result':[]}},
+              {'id':'null-fields','is_enabled':True,'run_details':{'last_run':None,'latest_result':None}},
+              {'id':'healthy','is_enabled':True,'run_details':{'last_run':{'id':'h','recorded_status':'completed'},'latest_result':{'run_id':'h','content_text':'done'}}}
+          ]}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(malformed), encoding='utf-8')
+              report = json.loads(subprocess.check_output(['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)], text=True))
+              assert report['active_tasks_checked'] == 6
+              items = {t['task_id']:t for t in report['tasks']}
+              expected = {
+                  'bad-details': {'invalid_run_details','no_last_run'},
+                  'bad-run': {'invalid_last_run','unlinked_result','no_last_run'},
+                  'bad-result': {'invalid_latest_result','completed_without_result'},
+                  'false-types': {'invalid_last_run','invalid_latest_result','no_last_run'},
+                  'null-fields': {'no_last_run'},
+                  'healthy': set()
+              }
+              for key, kinds in expected.items():
+                  assert {i['kind'] for i in items[key]['issues']} == kinds, items[key]
+                  assert all(i['certainty'] == 'observed' for i in items[key]['issues'])
+              assert items['healthy']['has_result']
+          print('MALFORMED_FIELDS_GUARD_PASS: six CLI cases')
+          # Mixed top-level entries must be counted without leaking their values.
+          mixed = {'automations': paused_snapshot['automations'] + [None, False, 42, [], 'private-sentinel']}
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              p.write_text(json.dumps(mixed), encoding='utf-8')
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              for flags, active, paused, issues in [([],1,0,5),(['--include-paused'],1,2,6)]:
+                  output = subprocess.check_output(cmd + flags, text=True)
+                  report = json.loads(output)
+                  assert report['invalid_task_entries'] == 5
+                  assert report['snapshot_issues'] == [{'kind':'invalid_task_entries','certainty':'observed','count':5}]
+                  assert report['active_tasks_checked'] == active and report['paused_tasks_checked'] == paused
+                  assert report['issues'] == issues and 'private-sentinel' not in output
+                  assert not next(t for t in report['tasks'] if t['task_id']=='active')['issues']
+              p.write_text(json.dumps(paused_snapshot), encoding='utf-8')
+              clean = json.loads(subprocess.check_output(cmd, text=True))
+              assert clean['invalid_task_entries'] == 0 and clean['snapshot_issues'] == []
+          print('INVALID_TASK_ENTRIES_GUARD_PASS: mixed and clean snapshots')
+          # Strict flags only after result correlation; unknown status is observed.
+          flags = ('is_failure_message','requires_user_action','content_truncated')
+          def strict_case(status, values, linked='r'):
+              return digest({'id':'strict','is_enabled':True,'run_details':{
+                  'last_run':{'id':'r','recorded_status':status},
+                  'latest_result':dict(values, **({'run_id':linked} if linked else {}))
+              }}, now)
+          bad = strict_case('completed', dict.fromkeys(flags,'false'))
+          assert {i['kind'] for i in bad['issues']} == {'invalid_result_flag'}, bad
+          assert {i['field'] for i in bad['issues']} == set(flags)
+          assert all(i['certainty']=='observed' for i in bad['issues'])
+          good = strict_case('completed', dict.fromkeys(flags,True))
+          assert {i['kind'] for i in good['issues']} == {'failed','requires_user_action','truncated_result'}, good
+          assert not strict_case('completed', dict.fromkeys(flags,False))['issues']
+          for value in (None, 0, 1, [], {}):
+              item = strict_case('completed', {'is_failure_message':value})
+              assert {i['kind'] for i in item['issues']} == {'invalid_result_flag'}, item
+          for status in ('unexpected', ['unexpected']):
+              item = strict_case(status, dict.fromkeys(flags,False))
+              assert item['status']=='unknown' and {i['kind'] for i in item['issues']} == {'unknown_run_status'}, item
+          for link, kind in [('old','stale_result'),(None,'unlinked_result')]:
+              item = strict_case('completed', dict.fromkeys(flags,'false'), link)
+              assert {i['kind'] for i in item['issues']} == {kind,'completed_without_result'}, item
+          print('STRICT_STATUS_FLAGS_GUARD_PASS')
+          # Completed-run chronology; fixed clock and linked result.
+          def chronology(started, supplied, completed=None):
+              run = {'id':'chronology','recorded_status':'completed','started_at':started}
+              if supplied: run['completed_at'] = completed
+              task = {'id':'chronology','is_enabled':True,'run_details':{
+                  'last_run':run,'latest_result':{'run_id':'chronology','content_text':'done'}}}
+              item = digest(task, now)
+              assert item['code_change']=='unverified' and item['skill_use']=='unverified'
+              assert all(i['certainty']=='observed' for i in item['issues'])
+              return {i['kind'] for i in item['issues']}
+          start = (now-timedelta(minutes=10)).isoformat()
+          for supplied, end, expected in [
+              (False,None,set()),
+              (True,now.isoformat(),set()),
+              (True,start,set()),
+              (True,(now-timedelta(minutes=11)).isoformat(),{'invalid_run_chronology'}),
+              (True,(now+timedelta(seconds=300)).isoformat(),set()),
+              (True,(now+timedelta(seconds=301)).isoformat(),{'future_completed_at'}),
+              (True,'bad-date',{'invalid_completed_at'}),
+              (True,None,{'invalid_completed_at'}),
+              (True,42,{'invalid_completed_at'}),
+          ]:
+              assert chronology(start,supplied,end)==expected, (end,expected)
+          assert chronology('bad-start',True,now.isoformat())==set()
+          assert chronology((now+timedelta(minutes=8)).isoformat(),True,
+                            (now+timedelta(minutes=6)).isoformat())=={'invalid_run_chronology','future_completed_at'}
+          print('COMPLETED_CHRONOLOGY_GUARD_PASS')
+          # Duplicate IDs must fail before any report, including paused entries.
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              out = pathlib.Path(tmp)/'audit.json'
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              secret = 'synthetic-private-id'
+              for states in [(True,True),(True,False),(False,False)]:
+                  p.write_text(json.dumps({'automations':[{'id':secret,'is_enabled':state} for state in states]}), encoding='utf-8')
+                  for flags in ([],['--include-paused']):
+                      result = subprocess.run(cmd+flags+['--out',str(out)],capture_output=True,text=True)
+                      assert result.returncode != 0 and not out.exists()
+                      assert 'duplicate nonempty task ID' in result.stderr
+                      assert secret not in result.stderr and not result.stdout
+              p.write_text(json.dumps({'automations':[
+                  {'id':'unique-a','title':'same','is_enabled':True},
+                  {'id':'unique-b','title':'same','is_enabled':False},
+                  {'id':'','is_enabled':True},{'id':'','is_enabled':True},
+                  {'id':None,'is_enabled':False},{'id':None,'is_enabled':False}
+              ]}), encoding='utf-8')
+              for flags, active, paused in [([],3,0),(['--include-paused'],3,3)]:
+                  report = json.loads(subprocess.check_output(cmd+flags,text=True))
+                  assert report['active_tasks_checked']==active and report['paused_tasks_checked']==paused
+          print('DUPLICATE_TASK_ID_GUARD_PASS')
+          # Strict attribution: malformed IDs must not leak or affect flags/text.
+          import runpy
+          from datetime import datetime, timezone
+          digest = runpy.run_path(str(root / 'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'))['digest']
+          def identity_case(a, b):
+              return digest({'id':'identity-fixture','is_enabled':True,'run_details':{
+                  'last_run':{'id':a,'recorded_status':'completed'},
+                  'latest_result':{'run_id':b,'content_text':'no commits','is_failure_message':True,'requires_user_action':True,'content_truncated':True}}}, datetime.now(timezone.utc))
+          for a,b in [(42,42),(['private-fixture'],['private-fixture']),('   ','   '),(True,True),('ok',42),(42,'ok'),('', ''),(None,None)]:
+              report = identity_case(a,b)
+              kinds = {i['kind'] for i in report['issues']}
+              assert {'invalid_run_identity','unlinked_result'} <= kinds
+              assert not report['has_result']
+              assert not kinds.intersection({'failed','possibly_idle_run','requires_user_action','truncated_result'})
+              assert 'private-fixture' not in json.dumps(report)
+          report = identity_case('valid','valid')
+          assert report['has_result'] and {'failed','possibly_idle_run','requires_user_action','truncated_result'} <= {i['kind'] for i in report['issues']}
+          report = identity_case('valid','old')
+          assert not report['has_result'] and {i['kind'] for i in report['issues']} == {'stale_result','completed_without_result'}
+          print('STRICT_RUN_IDENTITY_GUARD_PASS')
+          print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
+          PY
