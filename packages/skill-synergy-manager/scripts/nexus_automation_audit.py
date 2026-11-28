@@ -74,7 +74,7 @@ def digest(a, now, include_paused=False):
                 issues.append({'kind': 'future_started_at', 'certainty': 'observed'})
             elif age > 7200:
                 issues.append({'kind': 'long_running', 'certainty': 'suspected'})
-    if status == 'completed' and 'completed_at' in run:
+    if status in ('completed', 'failed', 'no_update') and 'completed_at' in run:
         completed = parse_dt(run['completed_at'])
         if completed is None:
             issues.append({'kind': 'invalid_completed_at', 'certainty': 'observed'})
