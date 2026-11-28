@@ -40,11 +40,19 @@ def digest(a, now, include_paused=False):
     if raw_status and raw_status not in ('completed', 'failed', 'no_update', 'in_progress'):
         issues.append({'kind': 'unknown_run_status', 'certainty': 'observed'})
         status = 'unknown'
-    # A result from a different run cannot describe the current run.
-    if result and not (run.get('id') and result.get('run_id')):
+    # Only nonblank string IDs can establish attribution.
+    def valid_id(value):
+        return isinstance(value, str) and bool(value.strip())
+
+    run_id = run.get('id')
+    result_id = result.get('run_id')
+    for field, record, key in (('run_id', run, 'id'), ('result_run_id', result, 'run_id')):
+        if key in record and not valid_id(record[key]):
+            issues.append({'kind': 'invalid_run_identity', 'certainty': 'observed', 'field': field})
+    if result and not (valid_id(run_id) and valid_id(result_id)):
         issues.append({'kind': 'unlinked_result', 'certainty': 'observed'})
         result = {}
-    elif run.get('id') and result.get('run_id') and run['id'] != result['run_id']:
+    elif result and run_id != result_id:
         issues.append({'kind': 'stale_result', 'certainty': 'observed'})
         result = {}
     for flag in ('is_failure_message', 'requires_user_action', 'content_truncated'):
@@ -92,7 +100,7 @@ def digest(a, now, include_paused=False):
     return {
         'task_id': a.get('id'), 'title': a.get('title'),
         'is_enabled': bool(a.get('is_enabled')),
-        'last_run_id': run.get('id'), 'status': status,
+        'last_run_id': run_id if valid_id(run_id) else None, 'status': status,
         'has_result': bool(result), 'issues': issues,
         'skill_use': 'unverified', 'code_change': 'unverified',
     }
