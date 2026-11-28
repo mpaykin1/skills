@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/quad-pilot-4-20261127'
+    if: github.head_ref == 'nexus/adaptive-r1-p3-20261128'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -264,5 +264,24 @@ jobs:
                   report = json.loads(subprocess.check_output(cmd+flags,text=True))
                   assert report['active_tasks_checked']==active and report['paused_tasks_checked']==paused
           print('DUPLICATE_TASK_ID_GUARD_PASS')
+          # Only linked string content may influence idle classification.
+          def text_case(value, link='current', supplied=True):
+              result = {'run_id':link}
+              if supplied: result['content_text'] = value
+              item = digest({'id':'text-case','is_enabled':True,'run_details':{
+                  'last_run':{'id':'current','recorded_status':'completed'},
+                  'latest_result':result}}, now)
+              assert 'synthetic-private-text' not in json.dumps(item)
+              return {(i['kind'],i['certainty']) for i in item['issues']}
+          for value in (['no commits','synthetic-private-text'], {'no commits':'synthetic-private-text'}, [], {}, 0, False):
+              assert text_case(value)=={('invalid_content_text','observed')}
+          assert text_case('no commits')=={('possibly_idle_run','suspected')}
+          for value in ('','done',None):
+              assert not text_case(value)
+          assert not text_case(None,supplied=False)
+          for link,kind in [('old','stale_result'),(None,'unlinked_result')]:
+              for value in ('no commits',['no commits']):
+                  assert text_case(value,link)=={(kind,'observed'),('completed_without_result','observed')}
+          print('STRICT_CONTENT_TEXT_GUARD_PASS')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
