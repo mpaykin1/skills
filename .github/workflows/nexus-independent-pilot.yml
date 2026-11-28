@@ -8,7 +8,7 @@ permissions:
   contents: read
 jobs:
   skill-source-pilot:
-    if: github.head_ref == 'nexus/quad-pilot-4-20261127'
+    if: github.head_ref == 'nexus/adaptive-r1-p5-20261128'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -264,5 +264,29 @@ jobs:
                   report = json.loads(subprocess.check_output(cmd+flags,text=True))
                   assert report['active_tasks_checked']==active and report['paused_tasks_checked']==paused
           print('DUPLICATE_TASK_ID_GUARD_PASS')
+          # Fixed CLI clock: reproducibility, offset equivalence and exact boundaries.
+          with tempfile.TemporaryDirectory() as tmp:
+              p = pathlib.Path(tmp)/'snapshot.json'
+              out = pathlib.Path(tmp)/'audit.json'
+              cmd = ['python3',str(root/'packages/skill-synergy-manager/scripts/nexus_automation_audit.py'),str(p)]
+              fixed = datetime(2026,11,27,12,tzinfo=timezone.utc)
+              cases = [(300,set()),(301,{'future_started_at'}),(-7200,set()),(-7201,{'long_running'})]
+              tasks = [{'id':str(delta),'is_enabled':True,'run_details':{'last_run':{'id':str(delta),'recorded_status':'in_progress','started_at':(fixed+timedelta(seconds=delta)).isoformat()}}} for delta,_ in cases]
+              for delta in (300,301):
+                  tasks.append({'id':'end'+str(delta),'is_enabled':True,'run_details':{'last_run':{'id':'r','recorded_status':'completed','completed_at':(fixed+timedelta(seconds=delta)).isoformat()},'latest_result':{'run_id':'r','content_text':'done'}}})
+              p.write_text(json.dumps({'automations':tasks}),encoding='utf-8')
+              a = subprocess.check_output(cmd+['--now','2026-11-27T12:00:00Z'])
+              assert a == subprocess.check_output(cmd+['--now','2026-11-27T12:00:00Z'])
+              assert a == subprocess.check_output(cmd+['--now','2026-11-27T16:00:00+04:00'])
+              items = {t['task_id']:{i['kind'] for i in t['issues']} for t in json.loads(a)['tasks']}
+              for delta,expected in cases: assert items[str(delta)] == expected
+              assert items['end300']==set() and items['end301']=={'future_completed_at'}
+              assert a != subprocess.check_output(cmd+['--now','2026-11-27T16:00:00Z'])
+              for bad in ('private-sentinel','2026-11-27','2026-11-27T12:00:00','2026-02-30T12:00:00Z','2026-11-27T12:00:00+24:00','2026-11-27T12:00:00+00:99'):
+                  r = subprocess.run(cmd+['--now',bad,'--out',str(out)],capture_output=True,text=True)
+                  assert r.returncode != 0 and not r.stdout and not out.exists()
+                  assert bad not in r.stderr and 'explicit timezone' in r.stderr
+              assert len(json.loads(subprocess.check_output(cmd))['tasks']) == len(tasks)
+          print('FIXED_NOW_CLI_GUARD_PASS')
           print('SOURCE_RUNNER_PASS; native ChatGPT skill access and native installed skill execution not tested')
           PY
